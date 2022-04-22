@@ -1,5 +1,5 @@
-include/glad/CMakeFiles/glad.dir/src/glad.c.obj: \
- C:\Users\Rohan\Desktop\WaffleEngine\include\glad\src\glad.c \
+dependencies/glad/CMakeFiles/glad.dir/src/glad.c.obj: \
+ C:\Users\Rohan\Desktop\WaffleEngine\dependencies\glad\src\glad.c \
  c:\mingw\include\stdio.h c:\mingw\include\_mingw.h \
  c:\mingw\include\msvcrtver.h c:\mingw\include\w32api.h \
  c:\mingw\include\sdkddkver.h c:\mingw\include\features.h \
@@ -9,8 +9,8 @@ include/glad/CMakeFiles/glad.dir/src/glad.c.obj: \
  c:\mingw\include\stdlib.h c:\mingw\include\errno.h \
  c:\mingw\include\alloca.h c:\mingw\include\string.h \
  c:\mingw\include\strings.h c:\mingw\include\wchar.h \
- C:/Users/Rohan/Desktop/WaffleEngine/include/glad/include/glad/glad.h \
- C:/Users/Rohan/Desktop/WaffleEngine/include/glad/include/KHR/khrplatform.h \
+ C:/Users/Rohan/Desktop/WaffleEngine/dependencies/glad/include/glad/glad.h \
+ C:/Users/Rohan/Desktop/WaffleEngine/dependencies/glad/include/KHR/khrplatform.h \
  c:\mingw\lib\gcc\mingw32\9.2.0\include\stdint.h \
  c:\mingw\include\stdint.h c:\mingw\include\windows.h \
  c:\mingw\include\windef.h c:\mingw\include\winnt.h \

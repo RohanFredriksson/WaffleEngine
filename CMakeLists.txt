@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(run)
 
-add_subdirectory(include/glfw/)
-add_subdirectory(include/glad/)
+add_subdirectory(dependencies/glfw/)
+add_subdirectory(dependencies/glad/)
 
 include_directories(include)
 
@@ -11,6 +11,7 @@ set(SOURCE_DIR src)
 set(SOURCE
     ${SOURCE}
     src/main.c
+    src/window.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})

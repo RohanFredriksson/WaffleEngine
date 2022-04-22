@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <GLFW/glfw3.h>
+#include "window.h"
 
 int main() {
-    printf("Hello World\n");
+    window_run();
     return 0;
 }
