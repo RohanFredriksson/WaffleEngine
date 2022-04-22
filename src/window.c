@@ -4,19 +4,10 @@
 
 #include "window.h"
 
-width = 800;
-height = 800;
-fps = -1;
-
-void window_run() {
-
-    if (window_init()) {return;}
-    window_loop();
-    window_exit();
-
-}
-
 int window_init() {
+
+    width = 800;
+    height = 800;
 
     // Initialise GLFW
     if (!glfwInit()) {
@@ -68,5 +59,13 @@ void window_exit() {
 
 	// Terminate GLFW before ending the program
 	glfwTerminate();
+
+}
+
+void window_run() {
+
+    if (window_init()) {return;}
+    window_loop();
+    window_exit();
 
 }
