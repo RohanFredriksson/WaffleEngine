@@ -8,6 +8,7 @@ int window_init() {
 
     width = 800;
     height = 800;
+    fps = -1.0f;
 
     // Initialise GLFW
     if (!glfwInit()) {
@@ -41,12 +42,21 @@ int window_init() {
 
 void window_loop() {
 
+    float beginTime = (float)glfwGetTime();
+    float endTime = (float)glfwGetTime();
+    float dt = -1.0f;
+
     while (!glfwWindowShouldClose(window)) {
 
         glfwPollEvents();
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
+
+        endTime = (float)glfwGetTime();
+        dt = endTime - beginTime;
+        beginTime = endTime;
+        fps = 1/dt;
 
     }
 

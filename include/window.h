@@ -6,6 +6,7 @@
 
 GLFWwindow* window;
 int width, height;
+float fps;
 
 void window_run();
 int window_init();
