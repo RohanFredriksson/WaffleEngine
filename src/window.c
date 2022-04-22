@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
 
 #include "window.h"
 
-int window_init() {
+int width = 800;
+int height = 800;
+vec2 viewportPos = { 0.0f, 0.0f };
+vec2 viewportSize = { 0.0f, 0.0f };
+float fps = -1.0f;
 
-    width = 800;
-    height = 800;
-    fps = -1.0f;
+int Window_Init() {
 
     // Initialise GLFW
     if (!glfwInit()) {
@@ -40,7 +43,7 @@ int window_init() {
 
 }
 
-void window_loop() {
+void Window_Loop() {
 
     float beginTime = (float)glfwGetTime();
     float endTime = (float)glfwGetTime();
@@ -62,7 +65,7 @@ void window_loop() {
 
 }
 
-void window_exit() {
+void Window_Exit() {
 
     // Delete window before ending the program
 	glfwDestroyWindow(window);
@@ -72,10 +75,10 @@ void window_exit() {
 
 }
 
-void window_run() {
+void Window_Run() {
 
-    if (window_init()) {return;}
-    window_loop();
-    window_exit();
+    if (Window_Init()) {return;}
+    Window_Loop();
+    Window_Exit();
 
 }

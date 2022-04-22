@@ -4,6 +4,7 @@ project(run)
 
 add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)
+add_subdirectory(dependencies/cglm/)
 
 include_directories(include)
 
@@ -23,8 +24,10 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 target_include_directories(${PROJECT_NAME} PUBLIC glad)
 target_include_directories(${PROJECT_NAME} PUBLIC glfw)
+target_include_directories(${PROJECT_NAME} PUBLIC cglm)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC glad)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+target_link_libraries(${PROJECT_NAME} PUBLIC cglm)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
