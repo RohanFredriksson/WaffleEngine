@@ -7,6 +7,7 @@ add_subdirectory(dependencies/glad/)
 add_subdirectory(dependencies/cglm/)
 
 include_directories(include)
+include_directories(dependencies)
 
 set(SOURCE_DIR src)
 set(SOURCE

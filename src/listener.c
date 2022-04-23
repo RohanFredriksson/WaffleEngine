@@ -1,7 +1,6 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <stdio.h>
 
+#include "external.h"
 #include "window.h"
 #include "listener.h"
 
