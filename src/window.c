@@ -4,11 +4,9 @@
 #include <cglm/cglm.h>
 
 #include "window.h"
+#include "listener.h"
 
-int width = 800;
-int height = 800;
-vec2 viewportPos = { 0.0f, 0.0f };
-vec2 viewportSize = { 0.0f, 0.0f };
+ivec2 windowSize = { 800, 800 };
 float fps = -1.0f;
 
 int Window_Init() {
@@ -25,11 +23,18 @@ int Window_Init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create the window
-    window = glfwCreateWindow(width, height, "Waffle Engine", NULL, NULL);
+    window = glfwCreateWindow(windowSize[0], windowSize[1], "Waffle Engine", NULL, NULL);
     if (window == NULL) {
         printf("Failed to create GLFW window\n");
         return 1;
     }
+
+    // Manage callbacks
+	glfwSetKeyCallback(window, KeyListener_KeyCallback);
+	glfwSetWindowSizeCallback(window, WindowListener_ResizeCallback);
+	//glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
+	//glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
+	//glfwSetScrollCallback(window, MouseListener::mouseScrollCallback);
 
     // Make the OpenGl context current
 	glfwMakeContextCurrent(window);
@@ -56,6 +61,10 @@ void Window_Loop() {
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
 
+        if (KeyListener_IsBeginPress(GLFW_KEY_A)) {
+            printf("%f\n", fps);
+        }
+
         endTime = (float)glfwGetTime();
         dt = endTime - beginTime;
         beginTime = endTime;
@@ -81,4 +90,24 @@ void Window_Run() {
     Window_Loop();
     Window_Exit();
 
+}
+
+int Window_GetWidth() {
+    return windowSize[0];
+}
+
+int Window_GetHeight() {
+    return windowSize[1];
+}
+
+void Window_SetWidth(int width) {
+    windowSize[0] = width;
+}
+
+void Window_SetHeight(int height) {
+    windowSize[1] = height;
+}
+
+float Window_GetAspectRatio() {
+    return (float) windowSize[0] / (float) windowSize[1];
 }

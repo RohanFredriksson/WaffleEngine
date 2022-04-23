@@ -13,6 +13,7 @@ set(SOURCE
     ${SOURCE}
     src/main.c
     src/window.c
+    src/listener.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
