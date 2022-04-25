@@ -17,6 +17,9 @@ set(SOURCE
     src/listener.c
     src/texture.c
     src/shader.c
+    src/transform.c
+    src/sprite.c
+    src/spriterenderer.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
