@@ -3,17 +3,15 @@
 #include "gameobject.h"
 
 #define INITIAL_COMPONENTS_SIZE 16
-int next_id = 0;
+int GameObject_nextId = 0;
 
 void GameObject_Init(GameObject* g, Transform* t) {
-
-    g->id = next_id;
+    g->id = GameObject_nextId;
     g->num_components = 0;
     g->size_components = INITIAL_COMPONENTS_SIZE;
     g->components = malloc(INITIAL_COMPONENTS_SIZE * sizeof(Component));
     g->transform = t;
-    next_id++;
-
+    GameObject_nextId++;
 }
 
 void GameObject_Update(GameObject* g, float dt) {
@@ -50,6 +48,7 @@ void GameObject_AddComponent(GameObject* g, Component* c) {
 
     // Add the component.
     memcpy(g->components + g->num_components, c, sizeof(Component));
+    g->components[g->num_components].go = g;
     g->num_components++;
 
 }

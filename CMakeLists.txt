@@ -23,6 +23,7 @@ set(SOURCE
     src/component.c
     src/gameobject.c
     src/camera.c
+    src/scene.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
@@ -40,4 +41,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC glad)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 target_link_libraries(${PROJECT_NAME} PUBLIC cglm)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+#set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")

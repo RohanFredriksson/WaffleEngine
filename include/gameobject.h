@@ -3,8 +3,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-int next_id;
-
 struct GameObject {
     int id;
     int num_components;

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "sprite.h"
 
 void Sprite_Init(Sprite* s, Texture* texture, vec2 texcoords[4], vec2 size) {

@@ -3,10 +3,11 @@
 #include "external.h"
 #include "window.h"
 #include "listener.h"
-
+#include "scene.h"
 #include "shader.h"
 #include "texture.h"
 
+Scene scene;
 ivec2 windowSize = { 800, 800 };
 float fps = -1.0f;
 
@@ -45,6 +46,10 @@ int Window_Init() {
 
     //Load GLAD so it configures OpenGL
 	gladLoadGL();
+
+    // Set up the current scene.
+    Scene_Init(&scene);
+
     return 0;
 
 }
@@ -55,6 +60,7 @@ void Window_Loop() {
     float endTime = (float)glfwGetTime();
     float dt = -1.0f;
 
+    /*
     Shader s;
     Shader_Init(&s, "./assets/shaders/default.vert", "./assets/shaders/default.frag");
     Shader_Compile(&s);
@@ -122,6 +128,7 @@ void Window_Loop() {
 	// MAKE SURE TO UNBIND IT AFTER UNBINDING THE VAO, as the EBO is linked in the VAO
 	// This does not apply to the VBO because the VBO is already linked to the VAO during glVertexAttribPointer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    */
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -129,8 +136,13 @@ void Window_Loop() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+        //glBindVertexArray(VAO);
+        //glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+
+        if (dt > 0) {
+            Scene_Update(&scene, dt);
+            Scene_Render(&scene);
+        }
 
         glfwSwapBuffers(window);
         endTime = (float)glfwGetTime();
@@ -178,4 +190,8 @@ void Window_SetHeight(int height) {
 
 float Window_GetAspectRatio() {
     return (float) windowSize[0] / (float) windowSize[1];
+}
+
+Scene* Window_GetScene() {
+    return &scene;
 }
