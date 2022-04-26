@@ -5,8 +5,8 @@
 
 struct GameObject {
     int id;
-    int num_components;
-    int size_components;
+    int numComponents;
+    int sizeComponents;
     struct Component* components;
     Transform* transform;
 };

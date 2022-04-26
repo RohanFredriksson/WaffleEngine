@@ -5,9 +5,8 @@
 #define SCENE_H
 
 struct Scene {
-    int id;
-    int num_gameObjects;
-    int size_gameObjects;
+    int numGameObjects;
+    int sizeGameObjects;
     GameObject* gameObjects;
     Camera camera;
 };
