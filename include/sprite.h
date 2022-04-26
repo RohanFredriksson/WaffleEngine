@@ -6,11 +6,11 @@
 
 struct Sprite {
     Texture* texture;
-    vec2 texcoords[4];
+    vec2 texCoords[4];
     vec2 size;    
 };
 typedef struct Sprite Sprite;
 
-void Sprite_Init(Sprite* s, Texture* texture, vec2 texcoords[4], vec2 size);
+void Sprite_Init(Sprite* s, Texture* texture, vec2 texCoords[4], vec2 size);
 
 #endif

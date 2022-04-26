@@ -9,9 +9,9 @@
 #define SPRITERENDERER_H
 
 struct SpriteRenderer {
+    vec4 colour;
     Component* component;
     Sprite* sprite;
-    vec4 colour;
     Transform* transform;
     int zIndex;
     Transform lastTransform;

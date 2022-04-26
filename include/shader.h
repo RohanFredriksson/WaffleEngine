@@ -27,6 +27,6 @@ void Shader_UploadVec3(Shader* s, const char* name, vec3 vector);
 void Shader_UploadVec4(Shader* s, const char* name, vec4 vector);
 void Shader_UploadMat4(Shader* s, const char* name, mat4 matrix);
 void Shader_UploadTexture(Shader* s, const char* name, int slot);
-void Shader_UploadIntArray(Shader* s, const char* name, int* array);
+void Shader_UploadIntArray(Shader* s, const char* name, int num, int* array);
 
 #endif

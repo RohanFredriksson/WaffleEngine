@@ -24,6 +24,7 @@ set(SOURCE
     src/gameobject.c
     src/camera.c
     src/scene.c
+    src/renderer.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
