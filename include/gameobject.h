@@ -9,7 +9,7 @@ struct GameObject {
     int id;
     int num_components;
     int size_components;
-    struct Component** components;
+    struct Component* components;
     Transform* transform;
 };
 typedef struct GameObject GameObject;
