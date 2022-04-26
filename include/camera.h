@@ -14,11 +14,11 @@ struct Camera {
 };
 typedef struct Camera Camera;
 
-void Camera_Init(Camera* c, vec2 pos);
+void Camera_Init(Camera* c);
 void Camera_AdjustProjection(Camera* c);
-mat4 Camera_GetView(Camera* c);
-mat4 Camera_GetProjection(Camera* c);
-mat4 Camera_GetInverseView(Camera* c);
-mat4 Camera_GetInverseProjection(Camera* c);
+void Camera_GetView(Camera* c, mat4 matrix);
+void Camera_GetProjection(Camera* c, mat4 matrix);
+void Camera_GetInverseView(Camera* c, mat4 matrix);
+void Camera_GetInverseProjection(Camera* c, mat4 matrix);
 
 #endif

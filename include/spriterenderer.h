@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
 #include "external.h"
-#include "component.h"
+#include "gameobject.h"
 #include "sprite.h"
 #include "transform.h"
 

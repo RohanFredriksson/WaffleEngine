@@ -8,8 +8,10 @@ void Camera_Init(Camera* c) {
     glm_mat4_identity(c->view);
     glm_mat4_identity(c->inverseProjection);
     glm_mat4_identity(c->inverseView);
-    c->pos = { 0.0f, 0.0f };
-    c->projectionSize = { 3.0f, 4.0f };
+    c->pos[0] = 0.0f;
+    c->pos[1] = 0.0f;
+    c->projectionSize[0] = 3.0f;
+    c->projectionSize[1] = 4.0f;
     c->zoom = 1.0f;
 
 }
@@ -22,7 +24,7 @@ void Camera_AdjustProjection(Camera* c) {
 
 }
 
-mat4 Camera_GetView(Camera* c) {
+void Camera_GetView(Camera* c, mat4 matrix) {
 
     vec3 cameraPos = {c->pos[0] - c->projectionSize[0] / (2 * c->zoom), c->pos[1] - c->projectionSize[1] / (2 * c->zoom), 20.0f};
     vec3 cameraFront = {c->pos[0] - c->projectionSize[0] / (2 * c->zoom), c->pos[1] - c->projectionSize[1] / (2 * c->zoom), -1.0f};
@@ -30,18 +32,19 @@ mat4 Camera_GetView(Camera* c) {
     glm_lookat(cameraPos, cameraFront, cameraUp, c->view);
     glm_mat4_inv(c->view, c->inverseView);
     
-    return c->view;
+    glm_mat4_copy(c->view, matrix);
 }
 
-mat Camera_GetProjection(Camera* c) {
-    return c->projection;
+void Camera_GetProjection(Camera* c, mat4 matrix) {
+    glm_mat4_copy(c->projection, matrix);
 }
 
-mat4 Camera_GetInverseView(Camera* c) {
-    Camera_GetView(c);
-    return c->inverseView;
+void Camera_GetInverseView(Camera* c, mat4 matrix) {
+    mat4 tmp;
+    Camera_GetView(c, tmp);
+    glm_mat4_copy(c->inverseView, matrix);
 }
 
-mat4 Camera_GetInverseProjection(Camera* c) {
-    return c->inverseProjection;
+void Camera_GetInverseProjection(Camera* c, mat4 matrix) {
+    glm_mat4_copy(c->inverseProjection, matrix);
 }

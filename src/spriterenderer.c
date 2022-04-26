@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "external.h"
-#include "component.h"
+#include "gameobject.h"
 #include "spriterenderer.h"
 #include "transform.h"
 
@@ -27,7 +27,7 @@ void SpriteRenderer_Init(Component* c, Sprite* sprite, vec4 colour, Transform* t
 
 void SpriteRenderer_Update(Component* c, float dt) {
 
-    SpriteRenderer s = (SpriteRenderer*) c->data;
+    SpriteRenderer* s = (SpriteRenderer*) c->data;
     if (!Transform_Equals(*s->transform, s->lastTransform)) {
         s->lastTransform = *s->transform;
         s->isDirty = 1;

@@ -20,6 +20,9 @@ set(SOURCE
     src/transform.c
     src/sprite.c
     src/spriterenderer.c
+    src/component.c
+    src/gameobject.c
+    src/camera.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "component.h"
+#include "gameobject.h"
 
 void Component_Init(Component* c, 
                     char* type, 
