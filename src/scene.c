@@ -53,7 +53,7 @@ void Scene_Init(Scene* s) {
     Sprite_Init(&testSprite, &testTexture, testSpriteTexCoords, testSpriteSize);
 
     vec2 testPosition = { 0, 0 };
-    vec2 testSize = { 0.5f, 0.5f };
+    vec2 testSize = { 1, 1 };
     float testRotation = 0;
     Transform_Init(&testTransform, testPosition, testSize, testRotation);
 

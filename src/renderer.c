@@ -87,7 +87,7 @@ void Renderer_Render(Renderer* r) {
     //printf("RENDERER::RENDER\n");
     Shader_Use(Renderer_CurrentShader);
     for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_Render(r->batches + 1);
+        RenderBatch_Render(r->batches + i);
     }
 }
 
@@ -136,7 +136,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     int* indices = (int*) malloc(MAX_BATCH_SIZE * 6 * sizeof(int));
     RenderBatch_GenerateIndices(indices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_BATCH_SIZE * 6 * sizeof(int), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_BATCH_SIZE * 6 * sizeof(int), indices, GL_DYNAMIC_DRAW);
     free(indices);
 
     // Enable the buffer attribute pointers
@@ -155,51 +155,15 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, GL_FALSE, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
     glEnableVertexAttribArray(4);
 
-}
-
-void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
-
-    for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i].type, "SpriteRenderer")) {
-            RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i].data);
-        }
-    }
-
-}
-
-void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
-
-    printf("RENDERBATCH::ADDSPRITE\n");
-
-    // If full do not attempt to add.
-    if (r->numSprites == r->sizeSprites) {
-        return;
-    }
-
-    // Get index and add the render object
-    int index = r->numSprites;
-    r->sprites[index] = s;
-    r->numSprites++;
-
-    // Add the sprites texture, if the batch does not have it.
-    if (s->sprite->texture != NULL) {
-        if (!RenderBatch_HasTexture(r, s->sprite->texture)) {
-            RenderBatch_AddTexture(r, s->sprite->texture);
-        }
-    }
-
-    // Add properites to local vertices array.
-    RenderBatch_LoadVertexProperties(r, index);
-
-    if (r->numSprites >= MAX_BATCH_SIZE) {
-        r->hasRoom = 0;
-    }
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindVertexArray(0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
 
 void RenderBatch_Render(RenderBatch* r) {
     
-    printf("RENDERBATCH::RENDER\n");
+    //printf("RENDERBATCH::RENDER\n");
 
     bool rebufferData = 0;
     for (int i = 0; i < r->numSprites; i++) {
@@ -229,6 +193,7 @@ void RenderBatch_Render(RenderBatch* r) {
     }
 
     if (rebufferData) {
+        printf("RENDERBATCH::RENDER::REBUFFER\n");
         glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices);
     }
@@ -252,11 +217,17 @@ void RenderBatch_Render(RenderBatch* r) {
     glBindVertexArray(r->vao);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    glEnableVertexAttribArray(4);
 
     glDrawElements(GL_TRIANGLES, r->numSprites * 6, GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(3);
+    glDisableVertexAttribArray(4);
     glBindVertexArray(0);
 
     for (int i = 0; i < r->numTextures; i++) {
@@ -266,10 +237,52 @@ void RenderBatch_Render(RenderBatch* r) {
 
 }
 
-void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
-    
+void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
+
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer")) {
+            RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i].data);
+        }
+    }
+
+}
+
+void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
+
+    printf("RENDERBATCH::ADDSPRITE\n");
+
+    // If full do not attempt to add.
+    if (r->numSprites == r->sizeSprites) {
+        return;
+    }
+
+    // Get index and add the render object
+    int index = r->numSprites;
+    r->sprites[index] = s;
+    r->numSprites = r->numSprites + 1;
+
+    // Add the sprites texture, if the batch does not have it.
+    if (s->sprite->texture != NULL) {
+        if (!RenderBatch_HasTexture(r, s->sprite->texture)) {
+            RenderBatch_AddTexture(r, s->sprite->texture);
+        }
+    }
+
+    // Add properites to local vertices array.
+    RenderBatch_LoadVertexProperties(r, index);
+
+    if (r->numSprites >= MAX_BATCH_SIZE) {
+        r->hasRoom = 0;
+    }
+
+}
+
+void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
+    
+    printf("RENDERBATCH::REMOVEGAMEOBJECT\n");
+
+    for (int i = 0; i < go->numComponents; i++) {
+        if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
             RenderBatch_RemoveSprite(r, (SpriteRenderer*) go->components[i].data);
         }
     }
@@ -278,6 +291,8 @@ void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 
 void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
     
+    printf("RENDERBATCH::REMOVESPRITE\n");
+
     for (int i = 0; i < r->numSprites; i++) {
         if (r->sprites[i] == s) {
             memcpy(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
@@ -381,7 +396,7 @@ void RenderBatch_GenerateIndices(int* elements) {
 }
 
 void RenderBatch_LoadElementIndices(int* elements, int index) {
-    
+
     int offsetArrayIndex = 6 * index;
     int offset = 4 * index;
 
@@ -398,15 +413,18 @@ void RenderBatch_LoadElementIndices(int* elements, int index) {
 }
 
 bool RenderBatch_HasRoom(RenderBatch* r) {
+    printf("RENDERBATCH::HASROOM\n");
     return r->hasRoom;
 }
 
 bool RenderBatch_HasTextureRoom(RenderBatch* r) {
+    printf("RENDERBATCH::HASTEXTUREROOM\n");
     return r->numTextures < INITIAL_TEXTURES_SIZE;
 }
 
 bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     
+    printf("RENDERBATCH::HASTEXTURE\n");
     // Check if the given texture pointer exists in the array.
     for (int i = 0; i < r->numTextures; i++) {
         Texture* current = r->textures[i];
