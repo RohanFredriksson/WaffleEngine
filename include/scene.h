@@ -1,4 +1,5 @@
 #include "gameobject.h"
+#include "renderer.h"
 #include "camera.h"
 
 #ifndef SCENE_H
@@ -9,6 +10,7 @@ struct Scene {
     int sizeGameObjects;
     GameObject* gameObjects;
     Camera camera;
+    Renderer renderer;
 };
 typedef struct Scene Scene;
 

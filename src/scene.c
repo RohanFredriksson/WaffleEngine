@@ -3,17 +3,73 @@
 #include <stdio.h>
 #include "scene.h"
 #include "camera.h"
+#include "renderer.h"
+
+#include "texture.h"
+#include "sprite.h"
+#include "gameobject.h"
+#include "spriterenderer.h"
+#include "transform.h"
+#include "shader.h"
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
+Shader testShader;
+Texture testTexture;
+Sprite testSprite;
+Component testSpriteRenderer;
+Transform testTransform;
+GameObject testGameObject;
+
 void Scene_Init(Scene* s) {
+
+    //printf("SCENE::INIT\n");
+
     s->numGameObjects = 0;
     s->sizeGameObjects = INITIAL_GAMEOBJECTS_SIZE;
     s->gameObjects = malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject));
     Camera_Init(&s->camera);
+    Renderer_Init(&s->renderer);
+
+    // Temporary
+
+    Shader testShader;
+    Shader_Init(&testShader, "./assets/shaders/default.vert", "./assets/shaders/default.frag");
+    Shader_Compile(&testShader);
+    Renderer_BindShader(&testShader);
+
+    Texture_Init(&testTexture, "./assets/textures/armaan.png");
+    
+    vec2 testSpriteSize = { 323, 324 };
+    vec2 testSpriteTexCoords[4];
+    testSpriteTexCoords[0][0] = 1;
+    testSpriteTexCoords[0][1] = 1;
+    testSpriteTexCoords[1][0] = 1;
+    testSpriteTexCoords[1][1] = 0;
+    testSpriteTexCoords[2][0] = 0;
+    testSpriteTexCoords[2][1] = 0;
+    testSpriteTexCoords[3][0] = 0;
+    testSpriteTexCoords[3][1] = 1;
+    Sprite_Init(&testSprite, &testTexture, testSpriteTexCoords, testSpriteSize);
+
+    vec2 testPosition = { 0, 0 };
+    vec2 testSize = { 0.5f, 0.5f };
+    float testRotation = 0;
+    Transform_Init(&testTransform, testPosition, testSize, testRotation);
+
+    vec4 testColour = { 1, 1, 1, 1 };
+    int testZIndex = 1;
+    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, testColour, &testTransform, testZIndex);
+    
+    GameObject_Init(&testGameObject, NULL);
+    GameObject_AddComponent(&testGameObject, &testSpriteRenderer);
+    Scene_AddGameObject(s, &testGameObject);
+
 }
 
 void Scene_Update(Scene* s, float dt) {
+
+    //printf("SCENE::UPDATE\n");
     
     // Update all gameobjects.
     for (int i = 0; i < s->numGameObjects; i++) {
@@ -23,7 +79,8 @@ void Scene_Update(Scene* s, float dt) {
 }
 
 void Scene_Render(Scene* s) {
-    //Renderer_Render(s->renderer);
+    //printf("SCENE::RENDER\n");
+    Renderer_Render(&s->renderer);
 }
 
 void Scene_Free(Scene* s) {
@@ -34,7 +91,7 @@ void Scene_Free(Scene* s) {
     }
 
     // Free all renderer data.
-    //Renderer_Free(s->renderer);
+    Renderer_Free(&s->renderer);
 
     // Free the array itself
     free(s->gameObjects);
@@ -51,6 +108,10 @@ void Scene_AddGameObject(Scene* s, GameObject* go) {
 
     // Add the gameobject.
     memcpy(s->gameObjects + s->numGameObjects, go, sizeof(GameObject));
+    
+    // Add all renderable components to the renderer.
+    Renderer_AddGameObject(&s->renderer, s->gameObjects + s->numGameObjects);
+    
     s->numGameObjects++;
 
 }

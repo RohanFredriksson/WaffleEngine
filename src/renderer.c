@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "renderer.h"
 #include "external.h"
 #include "texture.h"
@@ -18,8 +19,10 @@ void Renderer_Init(Renderer* r) {
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
     
+    printf("RENDERER::ADDGAMEOBJECT\n");
+
     for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i].type, "SpriteRenderer")) {
+        if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
             Renderer_AddSprite(r, (SpriteRenderer*) go->components[i].data);
         }
     }
@@ -28,6 +31,8 @@ void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
 void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
     
+    printf("RENDERER::ADDSPRITE\n");
+
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch* currentBatch = r->batches + i;
@@ -74,11 +79,12 @@ void Renderer_BindShader(Shader* s) {
     Renderer_CurrentShader = s;
 }
 
-Shader* Renderer_GetBoundShader(Renderer* r) {
+Shader* Renderer_GetBoundShader() {
     return Renderer_CurrentShader;
 }
 
 void Renderer_Render(Renderer* r) {
+    //printf("RENDERER::RENDER\n");
     Shader_Use(Renderer_CurrentShader);
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch_Render(r->batches + 1);
@@ -94,6 +100,8 @@ void Renderer_Free(Renderer* r) {
 
 void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     
+    printf("RENDERBATCH::INIT\n");
+
     r->renderer = renderer;
     r->sprites = (SpriteRenderer**) malloc(MAX_BATCH_SIZE * sizeof(SpriteRenderer*));
     r->numSprites = 0;
@@ -161,6 +169,8 @@ void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
 void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
+    printf("RENDERBATCH::ADDSPRITE\n");
+
     // If full do not attempt to add.
     if (r->numSprites == r->sizeSprites) {
         return;
@@ -189,6 +199,8 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
 void RenderBatch_Render(RenderBatch* r) {
     
+    printf("RENDERBATCH::RENDER\n");
+
     bool rebufferData = 0;
     for (int i = 0; i < r->numSprites; i++) {
 
@@ -277,6 +289,8 @@ void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
 void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     
+    printf("RENDERBATCH::LOADVERTEXPROPERTIES\n");
+
     SpriteRenderer* sprite = r->sprites[index];
 
     // Find the offset with array (4 vertices per sprite).
@@ -308,7 +322,7 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         vec3 translateVector = {sprite->transform->pos[0], sprite->transform->pos[1], 0.0f};
         glm_translate(transformMatrix, translateVector);
         vec3 rotateVector = {0.0f, 0.0f, 1.0f};
-        glm_rotate(transformMatrix, sprite->transform->rotation, rotateVector);
+        glm_rotate(transformMatrix, sprite->transform->rotation * (float)(180.0 / M_PI), rotateVector);
         vec3 scaleVector = {sprite->transform->size[0], sprite->transform->size[1], 1.0f};
         glm_scale(transformMatrix, scaleVector);
     }
@@ -405,6 +419,8 @@ bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
 }
 
 void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
+
+    printf("RENDERBATCH::ADDTEXTURE\n");
 
     // If there is no more space, allocate some more.
     if (r->numTextures == r->sizeTextures) {

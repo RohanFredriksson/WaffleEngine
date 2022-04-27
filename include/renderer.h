@@ -45,7 +45,7 @@ void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s);
 
 void Renderer_BindShader(Shader* s);
 
-Shader* Renderer_GetBoundShader(Renderer* r);
+Shader* Renderer_GetBoundShader();
 
 void Renderer_Render(Renderer* r);
 
