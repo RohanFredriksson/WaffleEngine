@@ -18,8 +18,6 @@ void Renderer_Init(Renderer* r) {
 }
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
-    
-    printf("RENDERER::ADDGAMEOBJECT\n");
 
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
@@ -30,8 +28,6 @@ void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 }
 
 void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
-    
-    printf("RENDERER::ADDSPRITE\n");
 
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
@@ -84,7 +80,6 @@ Shader* Renderer_GetBoundShader() {
 }
 
 void Renderer_Render(Renderer* r) {
-    //printf("RENDERER::RENDER\n");
     Shader_Use(Renderer_CurrentShader);
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch_Render(r->batches + i);
@@ -99,26 +94,16 @@ void Renderer_Free(Renderer* r) {
 }
 
 void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
-    
-    printf("RENDERBATCH::INIT\n");
 
     r->renderer = renderer;
     r->sprites = (SpriteRenderer**) malloc(MAX_BATCH_SIZE * sizeof(SpriteRenderer*));
     r->numSprites = 0;
     r->sizeSprites = MAX_BATCH_SIZE;
-    r->textures = (Texture**) malloc(INITIAL_TEXTURES_SIZE * sizeof(Texture*));
+    r->textures = (Texture**) malloc(TEXTURES_SIZE * sizeof(Texture*));
     r->numTextures = 0;
-    r->sizeTextures = INITIAL_TEXTURES_SIZE;
     r->hasRoom = 1;
+    r->hasTextureRoom = 1;
     r->vertices = (float*) malloc(MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float));
-    r->texSlots[0] = 0;
-    r->texSlots[1] = 1;
-    r->texSlots[2] = 2;
-    r->texSlots[3] = 3;
-    r->texSlots[4] = 4;
-    r->texSlots[5] = 5;
-    r->texSlots[6] = 6;
-    r->texSlots[7] = 7;
     r->zIndex = zIndex;
 
     // Generate and bind a Vertex Array Object
@@ -128,7 +113,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     // Allocate space for vertices
     glGenBuffers(1, &r->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
-    glBufferData(GL_ARRAY_BUFFER, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 
     // Create and upload the indices buffer.
     int ebo;
@@ -136,7 +121,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     int* indices = (int*) malloc(MAX_BATCH_SIZE * 6 * sizeof(int));
     RenderBatch_GenerateIndices(indices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_BATCH_SIZE * 6 * sizeof(int), indices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_BATCH_SIZE * 6 * sizeof(int), indices, GL_STATIC_DRAW);
     free(indices);
 
     // Enable the buffer attribute pointers
@@ -152,9 +137,6 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, GL_FALSE, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
     glEnableVertexAttribArray(3);
 
-    glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, GL_FALSE, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
-    glEnableVertexAttribArray(4);
-
     //glBindBuffer(GL_ARRAY_BUFFER, 0);
     //glBindVertexArray(0);
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -162,8 +144,6 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
 }
 
 void RenderBatch_Render(RenderBatch* r) {
-    
-    //printf("RENDERBATCH::RENDER\n");
 
     bool rebufferData = 0;
     for (int i = 0; i < r->numSprites; i++) {
@@ -193,44 +173,35 @@ void RenderBatch_Render(RenderBatch* r) {
     }
 
     if (rebufferData) {
-        printf("RENDERBATCH::RENDER::REBUFFER\n");
+        
         glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices);
     }
 
     // Use shader
     Shader* shader = Renderer_GetBoundShader(r->renderer);
+    Shader_Use(shader);
 
-    mat4 view;
-    mat4 projection;
-    Camera_GetProjection(&(Window_GetScene()->camera), projection);
-    Camera_GetView(&(Window_GetScene()->camera), view);
+    //mat4 view;
+    //mat4 projection;
+    //Camera_GetProjection(&(Window_GetScene()->camera), projection);
+    //Camera_GetView(&(Window_GetScene()->camera), view);
+    //Shader_UploadMat4(shader, "uProjection", projection);
+    //Shader_UploadMat4(shader, "uView", view);
 
-    Shader_UploadMat4(shader, "uProjection", projection);
-    Shader_UploadMat4(shader, "uView", view);
     for (int i = 0; i < r->numTextures; i++) {
         glActiveTexture(GL_TEXTURE0 + i + 1);
         Texture_Bind(r->textures[i]);
     }
-    Shader_UploadIntArray(shader, "uTextures", 8, r->texSlots);
+    int slots[] = {0, 1, 2, 3, 4, 5, 6, 7};
+    Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE, slots);
 
     glBindVertexArray(r->vao);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-    glEnableVertexAttribArray(3);
-    glEnableVertexAttribArray(4);
-
     glDrawElements(GL_TRIANGLES, r->numSprites * 6, GL_UNSIGNED_INT, 0);
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(3);
-    glDisableVertexAttribArray(4);
     glBindVertexArray(0);
 
     for (int i = 0; i < r->numTextures; i++) {
+        glActiveTexture(GL_TEXTURE0 + i + 1);
         Texture_Unbind(r->textures[i]);
     }
     Shader_Detach(shader);
@@ -249,10 +220,8 @@ void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
 void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
-    printf("RENDERBATCH::ADDSPRITE\n");
-
     // If full do not attempt to add.
-    if (r->numSprites == r->sizeSprites) {
+    if (!r->hasRoom) {
         return;
     }
 
@@ -278,8 +247,6 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 }
 
 void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
-    
-    printf("RENDERBATCH::REMOVEGAMEOBJECT\n");
 
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
@@ -290,8 +257,6 @@ void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 }
 
 void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
-    
-    printf("RENDERBATCH::REMOVESPRITE\n");
 
     for (int i = 0; i < r->numSprites; i++) {
         if (r->sprites[i] == s) {
@@ -304,8 +269,6 @@ void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
 void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     
-    printf("RENDERBATCH::LOADVERTEXPROPERTIES\n");
-
     SpriteRenderer* sprite = r->sprites[index];
 
     // Find the offset with array (4 vertices per sprite).
@@ -380,9 +343,6 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         // Load Texture ID
         r->vertices[offset + 8] = texId;
 
-        // Load Entity ID
-        r->vertices[offset + 9] = (float) sprite->component->go->id + 1;
-
         offset += VERTEX_SIZE;
 
     }
@@ -413,18 +373,15 @@ void RenderBatch_LoadElementIndices(int* elements, int index) {
 }
 
 bool RenderBatch_HasRoom(RenderBatch* r) {
-    printf("RENDERBATCH::HASROOM\n");
     return r->hasRoom;
 }
 
-bool RenderBatch_HasTextureRoom(RenderBatch* r) {
-    printf("RENDERBATCH::HASTEXTUREROOM\n");
-    return r->numTextures < INITIAL_TEXTURES_SIZE;
+bool RenderBatch_HasTextureRoom(RenderBatch* r) { 
+    return r->hasTextureRoom;
 }
 
 bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     
-    printf("RENDERBATCH::HASTEXTURE\n");
     // Check if the given texture pointer exists in the array.
     for (int i = 0; i < r->numTextures; i++) {
         Texture* current = r->textures[i];
@@ -438,17 +395,17 @@ bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
 
 void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
 
-    printf("RENDERBATCH::ADDTEXTURE\n");
-
-    // If there is no more space, allocate some more.
-    if (r->numTextures == r->sizeTextures) {
-        r->textures = realloc(r->textures, r->sizeTextures * 2 * sizeof(Texture*));
-        r->sizeTextures = r->sizeTextures * 2;
+    if (!RenderBatch_HasTextureRoom(r)) {
+        return;
     }
 
     // Add the texture.
     r->textures[r->numTextures] = t;
     r->numTextures++;
+
+    if (r->numTextures == TEXTURES_SIZE) {
+        r->hasTextureRoom = 0;
+    }
 
 }
 

@@ -14,7 +14,7 @@
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
-Shader testShader;
+Shader shader;
 Texture testTexture;
 Sprite testSprite;
 Component testSpriteRenderer;
@@ -23,8 +23,6 @@ GameObject testGameObject;
 
 void Scene_Init(Scene* s) {
 
-    //printf("SCENE::INIT\n");
-
     s->numGameObjects = 0;
     s->sizeGameObjects = INITIAL_GAMEOBJECTS_SIZE;
     s->gameObjects = malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject));
@@ -32,11 +30,9 @@ void Scene_Init(Scene* s) {
     Renderer_Init(&s->renderer);
 
     // Temporary
-
-    Shader testShader;
-    Shader_Init(&testShader, "./assets/shaders/default.vert", "./assets/shaders/default.frag");
-    Shader_Compile(&testShader);
-    Renderer_BindShader(&testShader);
+    Shader_Init(&shader, "./assets/shaders/default.vert", "./assets/shaders/default.frag");
+    Shader_Compile(&shader);
+    Renderer_BindShader(&shader);
 
     Texture_Init(&testTexture, "./assets/textures/armaan.png");
     
@@ -51,14 +47,15 @@ void Scene_Init(Scene* s) {
     testSpriteTexCoords[3][0] = 0;
     testSpriteTexCoords[3][1] = 1;
     Sprite_Init(&testSprite, &testTexture, testSpriteTexCoords, testSpriteSize);
+    //Sprite_Init(&testSprite, NULL, testSpriteTexCoords, testSpriteSize);
 
     vec2 testPosition = { 0, 0 };
     vec2 testSize = { 1, 1 };
     float testRotation = 0;
     Transform_Init(&testTransform, testPosition, testSize, testRotation);
 
-    vec4 testColour = { 1, 1, 1, 1 };
-    int testZIndex = 1;
+    vec4 testColour = { 1, 0, 1, 1 };
+    int testZIndex = 0;
     SpriteRenderer_Init(&testSpriteRenderer, &testSprite, testColour, &testTransform, testZIndex);
     
     GameObject_Init(&testGameObject, NULL);
@@ -68,8 +65,6 @@ void Scene_Init(Scene* s) {
 }
 
 void Scene_Update(Scene* s, float dt) {
-
-    //printf("SCENE::UPDATE\n");
     
     // Update all gameobjects.
     for (int i = 0; i < s->numGameObjects; i++) {
@@ -79,7 +74,6 @@ void Scene_Update(Scene* s, float dt) {
 }
 
 void Scene_Render(Scene* s) {
-    //printf("SCENE::RENDER\n");
     Renderer_Render(&s->renderer);
 }
 

@@ -11,18 +11,16 @@
 #define COLOUR_SIZE 4
 #define TEX_COORDS_SIZE 2
 #define TEX_ID_SIZE 1
-#define ENTITY_ID_SIZE 1
 
 #define POS_OFFSET 0
 #define COLOUR_OFFSET (POS_OFFSET + POS_SIZE * sizeof(float))
 #define TEX_COORDS_OFFSET (COLOUR_OFFSET + COLOUR_SIZE * sizeof(float))
 #define TEX_ID_OFFSET (TEX_COORDS_OFFSET + TEX_COORDS_SIZE * sizeof(float))
-#define ENTITY_ID_OFFSET (TEX_ID_OFFSET + TEX_ID_SIZE * sizeof(float))
 
-#define VERTEX_SIZE 10
+#define VERTEX_SIZE 9
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
-#define INITIAL_TEXTURES_SIZE 16
+#define TEXTURES_SIZE 8
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
@@ -58,10 +56,9 @@ struct RenderBatch {
     int sizeSprites;
     Texture** textures;
     int numTextures;
-    int sizeTextures;
     bool hasRoom;
+    bool hasTextureRoom;
     float* vertices;
-    int texSlots[8];
     int vao;
     int vbo;
     int zIndex;

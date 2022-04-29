@@ -66,21 +66,23 @@ void Window_Loop() {
     Shader_Compile(&s);
     Shader_Use(&s);
 
-    Texture t;
-    Texture_Init(&t, "./assets/textures/armaan.png");
-    Texture_Bind(&t);
+    Texture t1;
+    Texture_Init(&t1, "./assets/textures/armaan.png");
+
+    Texture t2;
+    Texture_Init(&t2, "./assets/textures/ainsley.jpg");
 
     float vertices[] = {
         // Position    Colour                    Tex Coords    Tex ID
-        0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   (float)t.id, // top right
-        0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f,   (float)t.id, // bottom right
-       -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f,   (float)t.id, // bottom left
-       -0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,   (float)t.id  // top left 
+        0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   (float)t2.id, // top right
+        0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f,   (float)t2.id, // bottom right
+       -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f,   (float)t2.id, // bottom left
+       -0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,   (float)t1.id  // top left 
     };
 
     int indices[] = {2, 3, 0, 0, 2, 1};
-    int textures[] = {t.id};
-    Shader_UploadIntArray(&s, "uTextures", textures);
+    int textures[] = {0, 1, 2, 3, 4, 5, 6, 7};
+    Shader_UploadIntArray(&s, "uTextures", 8, textures);
     
     int VAO, VBO, EBO;
 
@@ -136,8 +138,15 @@ void Window_Loop() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //glBindVertexArray(VAO);
-        //glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+        /*
+        glActiveTexture(GL_TEXTURE0 + 1);
+        Texture_Bind(&t1);
+        glActiveTexture(GL_TEXTURE0 + 2);
+        Texture_Bind(&t2);
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+        */
 
         if (dt > 0) {
             Scene_Update(&scene, dt);

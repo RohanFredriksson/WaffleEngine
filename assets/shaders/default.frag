@@ -3,7 +3,6 @@
 in vec4 fColour;
 in vec2 fTexCoords;
 in float fTexId;
-in float fEntityId;
 
 uniform sampler2D uTextures[8];
 
