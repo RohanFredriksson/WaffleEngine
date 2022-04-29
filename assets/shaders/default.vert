@@ -4,8 +4,8 @@ layout (location=1) in vec4 aColour;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
 
-//uniform mat4 uProjection;
-//uniform mat4 uView;
+uniform mat4 uProjection;
+uniform mat4 uView;
 
 out vec4 fColour;
 out vec2 fTexCoords;

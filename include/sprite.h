@@ -11,6 +11,10 @@ struct Sprite {
 };
 typedef struct Sprite Sprite;
 
-void Sprite_Init(Sprite* s, Texture* texture, vec2 texCoords[4], vec2 size);
+void Sprite_Init(Sprite* s, Texture* texture);
+
+void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]);
+
+void Sprite_SetSize(Sprite* s, vec2 size);
 
 #endif

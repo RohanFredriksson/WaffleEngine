@@ -35,19 +35,8 @@ void Scene_Init(Scene* s) {
     Renderer_BindShader(&shader);
 
     Texture_Init(&testTexture, "./assets/textures/armaan.png");
-    
-    vec2 testSpriteSize = { 323, 324 };
-    vec2 testSpriteTexCoords[4];
-    testSpriteTexCoords[0][0] = 1;
-    testSpriteTexCoords[0][1] = 1;
-    testSpriteTexCoords[1][0] = 1;
-    testSpriteTexCoords[1][1] = 0;
-    testSpriteTexCoords[2][0] = 0;
-    testSpriteTexCoords[2][1] = 0;
-    testSpriteTexCoords[3][0] = 0;
-    testSpriteTexCoords[3][1] = 1;
-    Sprite_Init(&testSprite, &testTexture, testSpriteTexCoords, testSpriteSize);
-    //Sprite_Init(&testSprite, NULL, testSpriteTexCoords, testSpriteSize);
+    //Sprite_Init(&testSprite, &testTexture);
+    Sprite_Init(&testSprite, NULL);
 
     vec2 testPosition = { 0, 0 };
     vec2 testSize = { 1, 1 };

@@ -150,7 +150,7 @@ void RenderBatch_Render(RenderBatch* r) {
 
         if(r->sprites[i]->isDirty) {
             
-            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture)) {
+            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture != NULL) {
                 Renderer_RemoveSprite(r->renderer, r->sprites[i]);
                 Renderer_AddSprite(r->renderer, r->sprites[i]);
                 i--;
@@ -173,7 +173,6 @@ void RenderBatch_Render(RenderBatch* r) {
     }
 
     if (rebufferData) {
-        
         glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices);
     }
@@ -182,12 +181,12 @@ void RenderBatch_Render(RenderBatch* r) {
     Shader* shader = Renderer_GetBoundShader(r->renderer);
     Shader_Use(shader);
 
-    //mat4 view;
-    //mat4 projection;
-    //Camera_GetProjection(&(Window_GetScene()->camera), projection);
-    //Camera_GetView(&(Window_GetScene()->camera), view);
-    //Shader_UploadMat4(shader, "uProjection", projection);
-    //Shader_UploadMat4(shader, "uView", view);
+    mat4 view;
+    mat4 projection;
+    Camera_GetProjection(&(Window_GetScene()->camera), projection);
+    Camera_GetView(&(Window_GetScene()->camera), view);
+    Shader_UploadMat4(shader, "uProjection", projection);
+    Shader_UploadMat4(shader, "uView", view);
 
     for (int i = 0; i < r->numTextures; i++) {
         glActiveTexture(GL_TEXTURE0 + i + 1);
