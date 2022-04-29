@@ -41,6 +41,7 @@ void WindowListener_ResizeCallback(GLFWwindow* window, int screenWidth, int scre
 
     Window_SetWidth(screenWidth);
     Window_SetHeight(screenHeight);
+    Camera_AdjustProjection(&Window_GetScene()->camera);
     glViewport(0, 0, screenWidth, screenHeight);
 
 }

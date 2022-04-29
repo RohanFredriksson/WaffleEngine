@@ -14,9 +14,6 @@ void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFile
     s->fragmentCode = Shader_LoadSource(fragmentFilepath);
     s->beingUsed = 0;
 
-    printf("%s\n", s->vertexCode);
-    printf("%s\n", s->fragmentCode);
-
 }
 
 void Shader_Compile(Shader* s) {

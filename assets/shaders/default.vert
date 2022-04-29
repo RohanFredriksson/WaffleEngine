@@ -16,7 +16,5 @@ void main()
     fColour = aColour;
     fTexCoords = aTexCoords;
     fTexId = aTexId;
-
-    gl_Position = vec4(aPos, 1.0);
-    //gl_Position = uProjection * uView * vec4(aPos, 1.0);
+    gl_Position = uProjection * uView * vec4(aPos, 1.0);
 }
