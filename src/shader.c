@@ -14,6 +14,9 @@ void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFile
     s->fragmentCode = Shader_LoadSource(fragmentFilepath);
     s->beingUsed = 0;
 
+    printf("%s\n", s->vertexCode);
+    printf("%s\n", s->fragmentCode);
+
 }
 
 void Shader_Compile(Shader* s) {
@@ -85,14 +88,34 @@ void Shader_Free(Shader* s) {
 }
 
 char* Shader_LoadSource(const char* filepath) {
-    FILE* f = fopen(filepath, "r");
-    fseek(f, 0L, SEEK_END);
-    size_t size = ftell(f) + 1;
+    
+    size_t size = 1;
+    size_t length = 0;
     char* source = malloc(size);
-    rewind(f);
-    fread(source, size, sizeof(char), f);
+    FILE* f = fopen(filepath, "r");
+    
+    char next;
+    while (1) {
+        
+        next = fgetc(f);
+        if (next == EOF) {
+            break;
+        }
+
+        if (length >= size) {
+            source = realloc(source, size * 2);
+            size = size * 2;
+        }
+
+        source[length] = next;
+        length++;
+
+    }
+
     fclose(f);
-    source[size-1] = '\0';
+    source = realloc(source, length + 1);
+    source[length] = '\0';
+
     return source;   
 }
 

@@ -3,6 +3,7 @@
 #include "external.h"
 #include "window.h"
 #include "listener.h"
+#include "camera.h"
 
 bool KeyListener_KeyPressed[350] = {0};
 bool KeyListener_KeyBeginPress[350] = {0};
