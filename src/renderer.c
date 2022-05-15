@@ -259,7 +259,7 @@ void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
     for (int i = 0; i < r->numSprites; i++) {
         if (r->sprites[i] == s) {
-            memcpy(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
+            memmove(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
             r->numSprites--;
         }
     }

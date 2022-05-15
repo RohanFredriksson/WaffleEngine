@@ -35,8 +35,7 @@ void Scene_Init(Scene* s) {
     Renderer_BindShader(&shader);
 
     Texture_Init(&testTexture, "./assets/textures/armaan.png");
-    //Sprite_Init(&testSprite, &testTexture);
-    Sprite_Init(&testSprite, NULL);
+    Sprite_Init(&testSprite, &testTexture);
 
     vec2 testPosition = { 0, 0 };
     vec2 testSize = { 1, 1 };
@@ -68,16 +67,14 @@ void Scene_Render(Scene* s) {
 
 void Scene_Free(Scene* s) {
 
-    // Free all gameobject data in the array
+    // Free all gameobject data.
     for (int i = 0; i < s->numGameObjects; i++) {
         GameObject_Free(s->gameObjects + i);
     }
+    free(s->gameObjects);
 
     // Free all renderer data.
     Renderer_Free(&s->renderer);
-
-    // Free the array itself
-    free(s->gameObjects);
 
 }
 

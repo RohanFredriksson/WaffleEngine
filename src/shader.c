@@ -6,10 +6,10 @@
 
 void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFilepath) {
     
-    s->vertexFilepath = malloc(strlen(vertexFilepath));
-    s->fragmentFilepath = malloc(strlen(fragmentFilepath));
-    memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath));
-    memcpy(s->fragmentFilepath, fragmentFilepath, strlen(fragmentFilepath));
+    s->vertexFilepath = malloc(strlen(vertexFilepath)+1);
+    s->fragmentFilepath = malloc(strlen(fragmentFilepath)+1);
+    memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath)+1);
+    memcpy(s->fragmentFilepath, fragmentFilepath, strlen(fragmentFilepath)+1);
     s->vertexCode = Shader_LoadSource(vertexFilepath);
     s->fragmentCode = Shader_LoadSource(fragmentFilepath);
     s->beingUsed = 0;

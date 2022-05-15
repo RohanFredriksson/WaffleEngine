@@ -13,7 +13,6 @@ bool KeyListener_IsBeginPress(int key);
 
 void WindowListener_ResizeCallback(GLFWwindow* window, int screenWidth, int screenHeight);
 
-/*
 double MouseListener_ScrollX, MouseListener_ScrollY;
 double MouseListener_X, MouseListener_Y, MouseListener_LastX, MouseListener_LastY, MouseListener_WorldX, MouseListener_WorldY, MouseListener_LastWorldX, MouseListener_LastWorldY;
 bool MouseListener_MouseButtonPressed[9];
@@ -23,9 +22,8 @@ int MouseListener_MouseButtonsDown;
 void MouseListener_CalcOrthoX();
 void MouseListener_CalcOrthoY();
 void MouseListener_MousePosCallback(GLFWwindow* window, double xPos, double yPos);
-void MouseListener_MouseButtonCallback(GLFWwindow* window, double xPos, double yPos);
+void MouseListener_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void MouseListener_MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 void MouseListener_EndFrame();
-*/
 
 #endif
