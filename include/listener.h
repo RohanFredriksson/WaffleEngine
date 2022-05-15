@@ -16,6 +16,7 @@ void WindowListener_ResizeCallback(GLFWwindow* window, int screenWidth, int scre
 double MouseListener_ScrollX, MouseListener_ScrollY;
 double MouseListener_X, MouseListener_Y, MouseListener_LastX, MouseListener_LastY, MouseListener_WorldX, MouseListener_WorldY, MouseListener_LastWorldX, MouseListener_LastWorldY;
 bool MouseListener_MouseButtonPressed[9];
+bool MouseListener_MouseButtonBeginPress[9];
 bool MouseListener_IsDragging;
 int MouseListener_MouseButtonsDown;
 
@@ -24,6 +25,8 @@ void MouseListener_CalcOrthoY();
 void MouseListener_MousePosCallback(GLFWwindow* window, double xPos, double yPos);
 void MouseListener_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void MouseListener_MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+bool MouseListener_MouseButtonDown(int button);
+bool MouseListener_MouseButtonBeginDown(int button);
 void MouseListener_EndFrame();
 
 #endif

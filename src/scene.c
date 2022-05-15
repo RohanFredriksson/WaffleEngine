@@ -11,6 +11,7 @@
 #include "spriterenderer.h"
 #include "transform.h"
 #include "shader.h"
+#include "listener.h"
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
@@ -42,7 +43,7 @@ void Scene_Init(Scene* s) {
     float testRotation = 0;
     Transform_Init(&testTransform, testPosition, testSize, testRotation);
 
-    vec4 testColour = { 1, 0, 1, 1 };
+    vec4 testColour = { 0, 1, 1, 1 };
     int testZIndex = 0;
     SpriteRenderer_Init(&testSpriteRenderer, &testSprite, testColour, &testTransform, testZIndex);
     

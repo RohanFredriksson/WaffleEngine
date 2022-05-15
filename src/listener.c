@@ -57,6 +57,7 @@ double MouseListener_WorldY = 0.0;
 double MouseListener_LastWorldX = 0.0; 
 double MouseListener_LastWorldY = 0.0;
 bool MouseListener_MouseButtonPressed[9] = {0};
+bool MouseListener_MouseButtonBeginPress[9] = {0};
 bool MouseListener_IsDragging = 0;
 int MouseListener_MouseButtonsDown = 0;
 
@@ -126,6 +127,7 @@ void MouseListener_MouseButtonCallback(GLFWwindow* window, int button, int actio
 
         if (button < 9) {
             MouseListener_MouseButtonPressed[button] = 1;
+            MouseListener_MouseButtonBeginPress[button] = 1;
         }
 
     }
@@ -136,10 +138,33 @@ void MouseListener_MouseButtonCallback(GLFWwindow* window, int button, int actio
 
         if (button < 9) {
             MouseListener_MouseButtonPressed[button] = 0;
+            MouseListener_MouseButtonBeginPress[button] = 0;
             MouseListener_IsDragging = 0;
         }
 
     }
+
+}
+
+bool MouseListener_MouseButtonDown(int button) {
+
+    if (button < 9) {
+        return MouseListener_MouseButtonPressed[button];
+    }
+    return 0;
+
+}
+
+bool MouseListener_MouseButtonBeginDown(int button) {
+
+    if (button < 9) {
+        bool result = MouseListener_MouseButtonBeginPress[button];
+        if (result) {
+            MouseListener_MouseButtonBeginPress[button] = 0;
+        }
+        return result;
+    }
+    return 0;
 
 }
 

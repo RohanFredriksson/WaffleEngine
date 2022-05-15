@@ -34,9 +34,9 @@ int Window_Init() {
     // Manage callbacks
 	glfwSetKeyCallback(window, KeyListener_KeyCallback);
 	glfwSetWindowSizeCallback(window, WindowListener_ResizeCallback);
-	//glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
-	//glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
-	//glfwSetScrollCallback(window, MouseListener::mouseScrollCallback);
+	glfwSetCursorPosCallback(window, MouseListener_MousePosCallback);
+	glfwSetMouseButtonCallback(window, MouseListener_MouseButtonCallback);
+	glfwSetScrollCallback(window, MouseListener_MouseScrollCallback);
 
     // Make the OpenGl context current
 	glfwMakeContextCurrent(window);
