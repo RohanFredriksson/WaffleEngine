@@ -9,6 +9,23 @@
 #include "window.h"
 #include "camera.h"
 
+#define POS_SIZE 2
+#define COLOUR_SIZE 4
+#define TEX_COORDS_SIZE 2
+#define TEX_ID_SIZE 1
+
+#define POS_OFFSET 0
+#define COLOUR_OFFSET (POS_OFFSET + POS_SIZE * sizeof(float))
+#define TEX_COORDS_OFFSET (COLOUR_OFFSET + COLOUR_SIZE * sizeof(float))
+#define TEX_ID_OFFSET (TEX_COORDS_OFFSET + TEX_COORDS_SIZE * sizeof(float))
+
+#define VERTEX_SIZE 9
+#define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
+
+#define TEXTURES_SIZE 8
+#define INITIAL_BATCHES_SIZE 8
+#define MAX_BATCH_SIZE 1000
+
 Shader* Renderer_CurrentShader = NULL;
 
 void Renderer_Init(Renderer* r) {
@@ -299,7 +316,7 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         vec3 translateVector = {sprite->transform->pos[0], sprite->transform->pos[1], 0.0f};
         glm_translate(transformMatrix, translateVector);
         vec3 rotateVector = {0.0f, 0.0f, 1.0f};
-        glm_rotate(transformMatrix, sprite->transform->rotation * (float)(180.0 / M_PI), rotateVector);
+        glm_rotate(transformMatrix, sprite->transform->rotation / (float)(180.0 / M_PI), rotateVector);
         vec3 scaleVector = {sprite->transform->size[0], sprite->transform->size[1], 1.0f};
         glm_scale(transformMatrix, scaleVector);
     }

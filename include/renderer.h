@@ -7,23 +7,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#define POS_SIZE 2
-#define COLOUR_SIZE 4
-#define TEX_COORDS_SIZE 2
-#define TEX_ID_SIZE 1
-
-#define POS_OFFSET 0
-#define COLOUR_OFFSET (POS_OFFSET + POS_SIZE * sizeof(float))
-#define TEX_COORDS_OFFSET (COLOUR_OFFSET + COLOUR_SIZE * sizeof(float))
-#define TEX_ID_OFFSET (TEX_COORDS_OFFSET + TEX_COORDS_SIZE * sizeof(float))
-
-#define VERTEX_SIZE 9
-#define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
-
-#define TEXTURES_SIZE 8
-#define INITIAL_BATCHES_SIZE 8
-#define MAX_BATCH_SIZE 1000
-
 struct Renderer {
     struct RenderBatch* batches;
     int numBatches;

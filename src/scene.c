@@ -38,14 +38,8 @@ void Scene_Init(Scene* s) {
     Texture_Init(&testTexture, "./assets/textures/armaan.png");
     Sprite_Init(&testSprite, &testTexture);
 
-    vec2 testPosition = { 0, 0 };
-    vec2 testSize = { 1, 1 };
-    float testRotation = 0;
-    Transform_Init(&testTransform, testPosition, testSize, testRotation);
-
-    vec4 testColour = { 0, 1, 1, 1 };
-    int testZIndex = 0;
-    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, testColour, &testTransform, testZIndex);
+    Transform_Init(&testTransform, (vec2){ 0, 0 }, (vec2){ 1, 1 }, 45);
+    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, &testTransform, 0);
     
     GameObject_Init(&testGameObject, NULL);
     GameObject_AddComponent(&testGameObject, &testSpriteRenderer);
@@ -54,7 +48,7 @@ void Scene_Init(Scene* s) {
 }
 
 void Scene_Update(Scene* s, float dt) {
-    
+
     // Update all gameobjects.
     for (int i = 0; i < s->numGameObjects; i++) {
         GameObject_Update(s->gameObjects + i, dt);

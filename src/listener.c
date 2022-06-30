@@ -168,11 +168,53 @@ bool MouseListener_MouseButtonBeginDown(int button) {
 
 }
 
-void MouseListener_MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
+bool MouseListener_MouseDragging() {
+    return MouseListener_IsDragging;
+}
 
+void MouseListener_MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
     MouseListener_ScrollX = xOffset;
     MouseListener_ScrollY = yOffset;
+}
 
+double MouseListener_GetX() {
+    return MouseListener_X;
+}
+
+double MouseListener_GetY() {
+    return MouseListener_Y;
+}
+
+double MouseListener_GetDx() {
+    return MouseListener_X - MouseListener_LastX;
+}
+
+double MouseListener_GetDy() {
+    return MouseListener_Y - MouseListener_LastY;
+}
+
+double MouseListener_GetWorldX() {
+    return MouseListener_WorldX;
+}
+
+double MouseListener_GetWorldY() {
+    return MouseListener_WorldY;
+}
+
+double MouseListener_GetWorldDx() {
+    return MouseListener_WorldX - MouseListener_LastWorldX;
+}
+
+double MouseListener_GetWorldDy() {
+    return MouseListener_WorldY - MouseListener_LastWorldY;
+}
+
+double MouseListener_GetScrollX() {
+    return MouseListener_ScrollX;
+}
+
+double MouseListener_GetScrollY() {
+    return MouseListener_ScrollY;
 }
 
 void MouseListener_EndFrame() {
