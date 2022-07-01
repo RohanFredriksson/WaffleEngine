@@ -17,5 +17,6 @@ void Component_Init(Component* c,
 }
 
 void Component_Free(Component* c) {
+    c->free(c);
     free(c->type);
 }
