@@ -66,6 +66,8 @@ void Window_Loop() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        //printf("(%lf, %lf)\n", MouseListener_GetWorldX(), MouseListener_GetWorldY());
+
         if (dt > 0) {
             Scene_Update(&scene, dt);
             Scene_Render(&scene);

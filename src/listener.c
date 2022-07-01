@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "external.h"
 #include "window.h"
 #include "listener.h"
@@ -63,42 +61,17 @@ int MouseListener_MouseButtonsDown = 0;
 
 void MouseListener_CalcOrthoX() {
 
-    float currentX = (float)MouseListener_X - Window_GetWidth();
-    currentX = (currentX / Window_GetWidth()) * 2.0f - 1.0f;
-    vec4 tmp = { currentX, 0, 0, 1};
-
+    float currentX = ((float)MouseListener_X / Window_GetWidth()) * 2.0f - 1.0f;
     Camera* camera =  &(Window_GetScene()->camera);
-    mat4 inverseView;
-    mat4 inverseProjection;
-    mat4 viewProjection;
-    
-    Camera_GetInverseView(camera, inverseView);
-    Camera_GetInverseProjection(camera, inverseProjection);
-    glm_mat4_mul(inverseView, inverseProjection, viewProjection);
-    glm_mat4_mulv(viewProjection, tmp, tmp);
-
-    MouseListener_WorldX = tmp[0];
+    MouseListener_WorldX = camera->pos[0] + (currentX / 2.0f) * (camera->projectionSize[0] / camera->zoom);
 
 }
 
 void MouseListener_CalcOrthoY() {
 
-    float currentY = (float)MouseListener_Y - Window_GetHeight();
-    currentY = (currentY / Window_GetHeight()) * 2.0f - 1.0f;
-    vec4 tmp = { 0, currentY, 0, 1};
-
+    float currentY = ((float)MouseListener_Y / Window_GetHeight()) * 2.0f - 1.0f;
     Camera* camera =  &(Window_GetScene()->camera);
-    mat4 inverseView;
-    mat4 inverseProjection;
-    mat4 viewProjection;
-
-    Camera_GetInverseView(camera, inverseView);
-    Camera_GetInverseProjection(camera, inverseProjection);
-
-    glm_mat4_mul(inverseView, inverseProjection, viewProjection);
-    glm_mat4_mulv(viewProjection, tmp, tmp);
-
-    MouseListener_WorldY = tmp[1];
+    MouseListener_WorldY = -(camera->pos[1] + (currentY / 2.0f) * (camera->projectionSize[1] / camera->zoom));
 
 }
 

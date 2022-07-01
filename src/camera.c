@@ -12,7 +12,7 @@ void Camera_Init(Camera* c) {
     c->pos[1] = 0.0f;
     c->projectionSize[0] = 3.0f;
     c->projectionSize[1] = 4.0f;
-    c->zoom = 2.0f;
+    c->zoom = 1.0f;
     Camera_AdjustProjection(c);
 
 }
