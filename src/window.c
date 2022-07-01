@@ -4,8 +4,6 @@
 #include "window.h"
 #include "listener.h"
 #include "scene.h"
-#include "shader.h"
-#include "texture.h"
 
 Scene scene;
 ivec2 windowSize = { 800, 800 };
@@ -65,8 +63,6 @@ void Window_Loop() {
         glfwPollEvents();
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        //printf("(%lf, %lf)\n", MouseListener_GetWorldX(), MouseListener_GetWorldY());
 
         if (dt > 0) {
             Scene_Update(&scene, dt);

@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "renderer.h"
+#include "texturepool.h"
 
 #include "texture.h"
 #include "sprite.h"
@@ -16,7 +17,6 @@
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
 Shader shader;
-Texture testTexture;
 Sprite testSprite;
 Component testSpriteRenderer;
 Transform testTransform;
@@ -35,8 +35,7 @@ void Scene_Init(Scene* s) {
     Shader_Compile(&shader);
     Renderer_BindShader(&shader);
 
-    Texture_Init(&testTexture, "./assets/textures/armaan.png");
-    Sprite_Init(&testSprite, &testTexture);
+    Sprite_Init(&testSprite, TexturePool_Get("./assets/textures/armaan.png"));
 
     Transform_Init(&testTransform, (vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
     SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, &testTransform, 0);

@@ -52,4 +52,3 @@ void GameObject_AddComponent(GameObject* g, Component* c) {
     g->numComponents++;
 
 }
-
