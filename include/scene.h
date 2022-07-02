@@ -14,7 +14,7 @@ struct Scene {
 };
 typedef struct Scene Scene;
 
-void Scene_Init(Scene* s);
+void Scene_Init(Scene* s, void (*init)(Scene* scene));
 
 void Scene_Update(Scene* s, float dt);
 

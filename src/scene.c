@@ -5,14 +5,7 @@
 #include "camera.h"
 #include "renderer.h"
 #include "texturepool.h"
-
-#include "texture.h"
-#include "sprite.h"
-#include "gameobject.h"
-#include "spriterenderer.h"
-#include "transform.h"
-#include "shader.h"
-#include "listener.h"
+#include "shaderpool.h"
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
@@ -22,7 +15,7 @@ Component testSpriteRenderer;
 Transform testTransform;
 GameObject testGameObject;
 
-void Scene_Init(Scene* s) {
+void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
 
     s->numGameObjects = 0;
     s->sizeGameObjects = INITIAL_GAMEOBJECTS_SIZE;

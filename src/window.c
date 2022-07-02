@@ -4,6 +4,7 @@
 #include "window.h"
 #include "listener.h"
 #include "scene.h"
+#include "title.h"
 
 Scene scene;
 ivec2 windowSize = { 800, 800 };
@@ -46,7 +47,7 @@ int Window_Init() {
 	gladLoadGL();
 
     // Set up the current scene.
-    Scene_Init(&scene);
+    Scene_Init(&scene, Title_Init);
 
     return 0;
 

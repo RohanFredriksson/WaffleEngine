@@ -26,6 +26,8 @@ set(SOURCE
     src/scene.c
     src/renderer.c
     src/texturepool.c
+    src/shaderpool.c
+    src/title.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})

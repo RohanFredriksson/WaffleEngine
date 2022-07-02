@@ -16,6 +16,18 @@ void TexturePool_Init() {
     poolLength = 0;
 }
 
+void TexturePool_Clear() {
+
+    // Free all texture data.
+    for (int i = 0; i < poolLength; i++) {
+        Texture_Free(pool + i);
+    }
+
+    // Set the length of the pool list to 0.
+    poolLength = 0;
+
+}
+
 void TexturePool_Free() {
     
     // Free all texture data.
