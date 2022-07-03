@@ -5,13 +5,14 @@
 #define SPRITE_H
 
 struct Sprite {
-    Texture* texture; // TODO: POINTER TO TEXTURE --> INDEX OF TEXTURE IN TEXTURE ARRAY
+    int texture; // Index to a texture in the texture pool.
+    //Texture* texture; // TODO: POINTER TO TEXTURE --> INDEX OF TEXTURE IN TEXTURE ARRAY
     vec2 texCoords[4];
     vec2 size;    
 };
 typedef struct Sprite Sprite;
 
-void Sprite_Init(Sprite* s, Texture* texture);
+void Sprite_Init(Sprite* s, const char* filename);
 
 void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]);
 

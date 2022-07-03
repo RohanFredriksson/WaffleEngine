@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sprite.h"
+#include "texturepool.h"
 
-void Sprite_Init(Sprite* s, Texture* texture) {
+void Sprite_Init(Sprite* s, const char* filename) {
     
-    s->texture = texture;
-    if (texture != NULL) {
+    Texture* texture = TexturePool_Get(filename);
+    s->texture = TexturePool_GetIndexOf(texture->filename);
+
+    if (texture != NULL) {    
         s->size[0] = texture->width;
         s->size[1] = texture->height;
     }

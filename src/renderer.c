@@ -4,6 +4,7 @@
 #include "renderer.h"
 #include "external.h"
 #include "texture.h"
+#include "texturepool.h"
 #include "spriterenderer.h"
 #include "shader.h"
 #include "window.h"
@@ -26,7 +27,7 @@
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
-Shader* Renderer_CurrentShader = NULL;
+Shader* Renderer_CurrentShader = NULL; // TODO: POINTER TO SHADER --> INDEX OF SHADER IN SHADER ARRAY
 
 void Renderer_Init(Renderer* r) {
     r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
@@ -35,6 +36,8 @@ void Renderer_Init(Renderer* r) {
 }
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
+
+    printf("RENDERER::ADDGAMEOBJECT\n");
 
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
@@ -46,11 +49,13 @@ void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
 void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
 
+    printf("RENDERER::ADDSPRITE\n");
+
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch* currentBatch = r->batches + i;
         if (RenderBatch_HasRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
-            if (s->sprite->texture == NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
+            if (s->sprite->texture >= 0 || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
                 RenderBatch_AddSprite(currentBatch, s);
                 added = 1;
                 break;
@@ -116,7 +121,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     r->sprites = (SpriteRenderer**) malloc(MAX_BATCH_SIZE * sizeof(SpriteRenderer*));
     r->numSprites = 0;
     r->sizeSprites = MAX_BATCH_SIZE;
-    r->textures = (Texture**) malloc(TEXTURES_SIZE * sizeof(Texture*));
+    r->textures = (int*) malloc(TEXTURES_SIZE * sizeof(int));
     r->numTextures = 0;
     r->hasRoom = 1;
     r->hasTextureRoom = 1;
@@ -167,7 +172,7 @@ void RenderBatch_Render(RenderBatch* r) {
 
         if(r->sprites[i]->isDirty) {
             
-            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture != NULL) {
+            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture >= 0) {
                 Renderer_RemoveSprite(r->renderer, r->sprites[i]);
                 Renderer_AddSprite(r->renderer, r->sprites[i]);
                 i--;
@@ -207,7 +212,7 @@ void RenderBatch_Render(RenderBatch* r) {
 
     for (int i = 0; i < r->numTextures; i++) {
         glActiveTexture(GL_TEXTURE0 + i + 1);
-        Texture_Bind(r->textures[i]);
+        Texture_Bind(TexturePool_GetIndex(r->textures[i]));
     }
     int slots[] = {0, 1, 2, 3, 4, 5, 6, 7};
     Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE, slots);
@@ -218,13 +223,15 @@ void RenderBatch_Render(RenderBatch* r) {
 
     for (int i = 0; i < r->numTextures; i++) {
         glActiveTexture(GL_TEXTURE0 + i + 1);
-        Texture_Unbind(r->textures[i]);
+        Texture_Unbind(TexturePool_GetIndex(r->textures[i]));
     }
     Shader_Detach(shader);
 
 }
 
 void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
+
+    printf("RENDERBATCH::ADDGAMEOBJECT\n");
 
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer")) {
@@ -235,6 +242,8 @@ void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 }
 
 void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
+
+    printf("RENDERBATCH::ADDSPRITE\n");
 
     // If full do not attempt to add.
     if (!r->hasRoom) {
@@ -247,7 +256,7 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
     r->numSprites = r->numSprites + 1;
 
     // Add the sprites texture, if the batch does not have it.
-    if (s->sprite->texture != NULL) {
+    if (s->sprite->texture >= 0) {
         if (!RenderBatch_HasTexture(r, s->sprite->texture)) {
             RenderBatch_AddTexture(r, s->sprite->texture);
         }
@@ -299,7 +308,7 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     glm_vec4_copy(sprite->sprite->texCoords[3], texCoords[3]);
 
     int texId = 0;
-    if (sprite->sprite->texture != NULL) {
+    if (sprite->sprite->texture >= 0) {
         for (int i = 0; i < r->numTextures; i++) {
             if (r->textures[i] == sprite->sprite->texture) {
                 texId = i + 1;
@@ -396,11 +405,11 @@ bool RenderBatch_HasTextureRoom(RenderBatch* r) {
     return r->hasTextureRoom;
 }
 
-bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
+bool RenderBatch_HasTexture(RenderBatch* r, int t) {
     
     // Check if the given texture pointer exists in the array.
     for (int i = 0; i < r->numTextures; i++) {
-        Texture* current = r->textures[i];
+        int current = r->textures[i];
         if (current == t) {
             return 1;
         }
@@ -409,7 +418,7 @@ bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     return 0;
 }
 
-void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
+void RenderBatch_AddTexture(RenderBatch* r, int t) {
 
     if (!RenderBatch_HasTextureRoom(r)) {
         return;

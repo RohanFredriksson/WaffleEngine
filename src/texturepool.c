@@ -65,3 +65,28 @@ Texture* TexturePool_Get(const char* filename) {
     return pool + (poolLength - 1);
 
 }
+
+Texture* TexturePool_GetIndex(int index) {
+
+    // If index out of range, return NULL.
+    if (index < 0 || index >= poolLength) {
+        return NULL;
+    }
+
+    // Return the pointer to the texture.
+    return pool + index;
+
+}
+
+int TexturePool_GetIndexOf(const char* filename) {
+
+    // If the texture already exists, return the texture index.
+    for (int i = 0; i < poolLength; i++) {
+        Texture* currentTexture = pool + i;
+        if (strcmp(currentTexture->filename, filename) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}

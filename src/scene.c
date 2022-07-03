@@ -28,7 +28,7 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     Shader_Compile(&shader);
     Renderer_BindShader(&shader);
 
-    Sprite_Init(&testSprite, TexturePool_Get("./assets/textures/armaan.png"));
+    Sprite_Init(&testSprite, "./assets/textures/armaan.png");
 
     Transform_Init(&testTransform, (vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
     SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, &testTransform, 0);
