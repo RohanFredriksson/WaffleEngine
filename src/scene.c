@@ -24,10 +24,6 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     Renderer_Init(&s->renderer);
 
     // Temporary
-    Shader_Init(&shader, "./assets/shaders/default.vert", "./assets/shaders/default.frag");
-    Shader_Compile(&shader);
-    Renderer_BindShader(&shader);
-
     Sprite_Init(&testSprite, "./assets/textures/armaan.png");
 
     Transform_Init(&testTransform, (vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);

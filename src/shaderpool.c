@@ -6,45 +6,45 @@
 
 #define INITIAL_SHADERPOOL_SIZE 16
 
-Shader* pool;
-size_t poolSize;
-size_t poolLength;
+Shader* shaderPool;
+size_t shaderPoolSize;
+size_t shaderPoolLength;
 
 void ShaderPool_Init() {
-    pool = (Shader*) malloc(INITIAL_SHADERPOOL_SIZE * sizeof(Shader));
-    poolSize = INITIAL_SHADERPOOL_SIZE;
-    poolLength = 0;
+    shaderPool = (Shader*) malloc(INITIAL_SHADERPOOL_SIZE * sizeof(Shader));
+    shaderPoolSize = INITIAL_SHADERPOOL_SIZE;
+    shaderPoolLength = 0;
 }
 
 void ShaderPool_Clear() {
 
     // Free all shader data.
-    for (int i = 0; i < poolLength; i++) {
-        Shader_Free(pool + i);
+    for (int i = 0; i < shaderPoolLength; i++) {
+        Shader_Free(shaderPool + i);
     }
 
-    // Set the length of the pool list to 0.
-    poolLength = 0;
+    // Set the length of the shader pool list to 0.
+    shaderPoolLength = 0;
 
 }
 
 void ShaderPool_Free() {
     
     // Free all shader data.
-    for (int i = 0; i < poolLength; i++) {
-        Shader_Free(pool + i);
+    for (int i = 0; i < shaderPoolLength; i++) {
+        Shader_Free(shaderPool + i);
     }
 
-    // Free the pool.
-    free(pool);
+    // Free the shader pool.
+    free(shaderPool);
 
 }
 
 Shader* ShaderPool_Get(const char* vertexFilepath, const char* fragmentFilepath) {
 
     // If the shader already exists, return the shader.
-    for (int i = 0; i < poolLength; i++) {
-        Shader* currentShader = pool + i;
+    for (int i = 0; i < shaderPoolLength; i++) {
+        Shader* currentShader = shaderPool + i;
         if (strcmp(currentShader->vertexFilepath, vertexFilepath) == 0 && 
             strcmp(currentShader->fragmentFilepath, fragmentFilepath) == 0) {
             return currentShader;
@@ -52,18 +52,19 @@ Shader* ShaderPool_Get(const char* vertexFilepath, const char* fragmentFilepath)
     }
 
     // The shader does not exist. Add it.
-    // If the pool is not big enough, allocate more memory.
-    if (poolLength >= poolSize) {
-        pool = (Shader*) realloc(pool, poolSize * 2 * sizeof(Shader));
-        poolSize = poolSize * 2;
+    // If the shaderPool is not big enough, allocate more memory.
+    if (shaderPoolLength >= shaderPoolSize) {
+        shaderPool = (Shader*) realloc(shaderPool, shaderPoolSize * 2 * sizeof(Shader));
+        shaderPoolSize = shaderPoolSize * 2;
     }
 
     // Initialise and compile the shader.
-    Shader_Init(pool + poolLength, vertexFilepath, fragmentFilepath);
-    Shader_Compile(pool + poolLength);
-    poolLength++;
+    Shader* shader = shaderPool + shaderPoolLength;
+    Shader_Init(shader, vertexFilepath, fragmentFilepath);
+    Shader_Compile(shader);
+    shaderPoolLength++;
 
     // Return the new shader.
-    return pool + (poolLength - 1);
+    return shader;
 
 }

@@ -11,6 +11,5 @@
 #include "listener.h"
 
 void Title_Init(Scene* s) {
-    printf("RENDERER BOUND\n");
-    Renderer_BindShader(ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag"));
+
 }

@@ -37,8 +37,6 @@ void Renderer_Init(Renderer* r) {
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
-    printf("RENDERER::ADDGAMEOBJECT\n");
-
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
             Renderer_AddSprite(r, (SpriteRenderer*) go->components[i].data);
@@ -48,8 +46,6 @@ void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 }
 
 void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
-
-    printf("RENDERER::ADDSPRITE\n");
 
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
@@ -231,8 +227,6 @@ void RenderBatch_Render(RenderBatch* r) {
 
 void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
-    printf("RENDERBATCH::ADDGAMEOBJECT\n");
-
     for (int i = 0; i < go->numComponents; i++) {
         if (strcmp(go->components[i].type, "SpriteRenderer")) {
             RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i].data);
@@ -242,8 +236,6 @@ void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 }
 
 void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
-
-    printf("RENDERBATCH::ADDSPRITE\n");
 
     // If full do not attempt to add.
     if (!r->hasRoom) {

@@ -5,6 +5,7 @@
 #include "listener.h"
 #include "scene.h"
 #include "title.h"
+#include "shaderpool.h"
 
 Scene scene;
 ivec2 windowSize = { 800, 800 };
@@ -59,6 +60,8 @@ void Window_Loop() {
     float endTime = (float)glfwGetTime();
     float dt = -1.0f;
 
+    Shader* shader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag");
+
     while (!glfwWindowShouldClose(window)) {
 
         glfwPollEvents();
@@ -66,6 +69,7 @@ void Window_Loop() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (dt > 0) {
+            Renderer_BindShader(shader);
             Scene_Update(&scene, dt);
             Scene_Render(&scene);
         }

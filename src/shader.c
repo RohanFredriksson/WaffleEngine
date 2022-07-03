@@ -5,7 +5,7 @@
 #include "shader.h"
 
 void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFilepath) {
-    
+
     s->vertexFilepath = malloc(strlen(vertexFilepath)+1);
     s->fragmentFilepath = malloc(strlen(fragmentFilepath)+1);
     memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath)+1);
