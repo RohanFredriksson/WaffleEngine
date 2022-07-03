@@ -5,7 +5,7 @@
 #define SPRITE_H
 
 struct Sprite {
-    Texture* texture;
+    Texture* texture; // TODO: POINTER TO TEXTURE --> INDEX OF TEXTURE IN TEXTURE ARRAY
     vec2 texCoords[4];
     vec2 size;    
 };

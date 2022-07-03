@@ -34,10 +34,10 @@ void Renderer_Free(Renderer* r);
 
 struct RenderBatch {
     Renderer* renderer;
-    SpriteRenderer** sprites;
+    SpriteRenderer** sprites; // TODO: ARRAY OF POINTERS TO SPRITERENDERERS --> ARRAY OF INDICES OF SPRITERENDERERS IN SPRITERENDERERS ARRAY
     int numSprites;
     int sizeSprites;
-    Texture** textures;
+    Texture** textures; // TODO: ARRAY OF POINTERS TO TEXTURES --> ARRAY OF INDICES OF TEXTURES IN TEXTURES ARRAY
     int numTextures;
     bool hasRoom;
     bool hasTextureRoom;
