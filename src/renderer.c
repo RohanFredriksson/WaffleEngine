@@ -7,6 +7,7 @@
 #include "texturepool.h"
 #include "spriterenderer.h"
 #include "shader.h"
+#include "shaderpool.h"
 #include "window.h"
 #include "camera.h"
 
@@ -27,7 +28,7 @@
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
-Shader* Renderer_CurrentShader = NULL; // TODO: POINTER TO SHADER --> INDEX OF SHADER IN SHADER ARRAY
+int Renderer_CurrentShader = -1;
 
 void Renderer_Init(Renderer* r) {
     r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
@@ -90,15 +91,15 @@ void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s) {
 }
 
 void Renderer_BindShader(Shader* s) {
-    Renderer_CurrentShader = s;
+    Renderer_CurrentShader = ShaderPool_GetIndexOf(s->vertexFilepath, s->fragmentFilepath);
 }
 
 Shader* Renderer_GetBoundShader() {
-    return Renderer_CurrentShader;
+    return ShaderPool_GetIndex(Renderer_CurrentShader);
 }
 
 void Renderer_Render(Renderer* r) {
-    Shader_Use(Renderer_CurrentShader);
+    Shader_Use(ShaderPool_GetIndex(Renderer_CurrentShader));
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch_Render(r->batches + i);
     }
