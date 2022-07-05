@@ -8,7 +8,7 @@ struct GameObject {
     int numComponents;
     int sizeComponents;
     struct Component* components;
-    Transform* transform; // TODO: POINTER TO TRANSFORM --> INDEX OF TRANSFORM IN TRANSFORM ARRAY
+    Transform* transform; // TODO: POINTER TO TRANSFORM --> ID OF TRANSFORM IN TRANSFORM ARRAY
 };
 typedef struct GameObject GameObject;
 

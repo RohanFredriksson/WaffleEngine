@@ -12,7 +12,7 @@ struct SpriteRenderer {
     vec4 colour;
     Component* component; // TODO: POINTER TO COMPONENT --> INDEX OF COMPONENT IN COMPONENT ARRAY
     Sprite* sprite;       // TODO: POINTER TO SPRITE --> INDEX OF SPRITE IN SPRITE ARRAY
-    Transform* transform; // TODO: POINTER TO TRANSFORM --> INDEX OF TRANSFORM IN TRANSFORM ARRAY
+    Transform* transform; // TODO: POINTER TO TRANSFORM --> ID OF TRANSFORM IN TRANSFORM ARRAY
     int zIndex;
     Transform lastTransform;
     bool isDirty;
