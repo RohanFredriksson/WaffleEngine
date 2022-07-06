@@ -5,6 +5,7 @@
 #define TRANSFORM_H
 
 struct Transform {
+    int id;
     vec2 pos;
     vec2 size;
     float rotation;
