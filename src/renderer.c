@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "assetpool.h"
 #include "renderer.h"
 #include "external.h"
 #include "texture.h"
-#include "texturepool.h"
 #include "spriterenderer.h"
 #include "shader.h"
-#include "shaderpool.h"
 #include "window.h"
 #include "camera.h"
 

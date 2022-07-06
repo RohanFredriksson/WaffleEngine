@@ -4,9 +4,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "renderer.h"
-#include "texturepool.h"
-#include "shaderpool.h"
-#include "transformpool.h"
+#include "assetpool.h"
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 

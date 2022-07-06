@@ -1,19 +1,11 @@
 #include "window.h"
-#include "texturepool.h"
-#include "shaderpool.h"
-#include "transformpool.h"
+#include "assetpool.h"
 
 int main() {
 
-    TexturePool_Init();
-    ShaderPool_Init();
-    TransformPool_Init();
-
+    AssetPool_Init();
     Window_Run();
-
-    TexturePool_Free();
-    ShaderPool_Free();
-    TransformPool_Free();
+    AssetPool_Free();
     
     return 0;
 }

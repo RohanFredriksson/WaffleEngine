@@ -5,7 +5,7 @@
 #include "listener.h"
 #include "scene.h"
 #include "title.h"
-#include "shaderpool.h"
+#include "assetpool.h"
 
 Scene scene;
 ivec2 windowSize = { 800, 800 };

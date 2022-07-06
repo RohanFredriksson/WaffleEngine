@@ -25,6 +25,7 @@ set(SOURCE
     src/camera.c
     src/scene.c
     src/renderer.c
+    src/assetpool.c
     src/texturepool.c
     src/shaderpool.c
     src/transformpool.c
