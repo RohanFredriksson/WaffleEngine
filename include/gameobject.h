@@ -21,7 +21,7 @@ void GameObject_Free(GameObject* g);
 void GameObject_AddComponent(GameObject* g, struct Component* c);
 
 struct Component {
-    struct GameObject* go; // TODO: POINTER TO GAMEOBJECT --> GAMEOBJECT ID
+    int go; // Gameobject id.
     void (*update)(struct Component* c, float dt);
     void (*free)(struct Component* c);
     char* type;

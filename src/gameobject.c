@@ -47,7 +47,7 @@ void GameObject_AddComponent(GameObject* g, Component* c) {
     }
 
     // Add the component.
-    c->go = g;
+    c->go = g->id;
     memcpy(g->components + g->numComponents, c, sizeof(Component));
     g->numComponents++;
 
