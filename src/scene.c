@@ -6,13 +6,12 @@
 #include "renderer.h"
 #include "texturepool.h"
 #include "shaderpool.h"
+#include "transformpool.h"
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
-Shader shader;
 Sprite testSprite;
 Component testSpriteRenderer;
-Transform testTransform;
 GameObject testGameObject;
 
 void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
@@ -26,8 +25,8 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     // Temporary
     Sprite_Init(&testSprite, "./assets/textures/armaan.png");
 
-    Transform_Init(&testTransform, (vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
-    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, &testTransform, 0);
+    Transform* testTransform = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
+    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, testTransform, 0);
     
     GameObject_Init(&testGameObject, NULL);
     GameObject_AddComponent(&testGameObject, &testSpriteRenderer);

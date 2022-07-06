@@ -27,6 +27,7 @@ set(SOURCE
     src/renderer.c
     src/texturepool.c
     src/shaderpool.c
+    src/transformpool.c
     src/title.c
 )
 
