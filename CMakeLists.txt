@@ -28,6 +28,7 @@ set(SOURCE
     src/assetpool.c
     src/texturepool.c
     src/shaderpool.c
+    src/spritepool.c
     src/transformpool.c
     src/title.c
 )

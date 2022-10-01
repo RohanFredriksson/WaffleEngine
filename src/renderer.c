@@ -68,7 +68,6 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
         }
 
         // Initialise the new batch.
-        printf("ADDED NEW BATCH: %d\n", s->zIndex);
 
         // If there are no renderbatches, add a new one to the front of the array.
         if (r->numBatches == 0) {
