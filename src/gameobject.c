@@ -6,11 +6,17 @@
 int nextGameObjectId = 0;
 
 void GameObject_Init(GameObject* g, Transform* t) {
+    
     g->id = nextGameObjectId;
     g->numComponents = 0;
     g->sizeComponents = INITIAL_COMPONENTS_SIZE;
     g->components = malloc(INITIAL_COMPONENTS_SIZE * sizeof(Component));
-    g->transform = t;
+    
+    g->transform = -1;
+    if (t != NULL) {
+        g->transform = t->id;
+    }
+    
     nextGameObjectId++;
 }
 

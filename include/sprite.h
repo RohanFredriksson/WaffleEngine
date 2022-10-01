@@ -5,13 +5,13 @@
 #define SPRITE_H
 
 struct Sprite {
-    int texture; // Index to a texture in the texture pool.
+    Texture* texture;
     vec2 texCoords[4];
     vec2 size;    
 };
 typedef struct Sprite Sprite;
 
-void Sprite_Init(Sprite* s, const char* filename);
+void Sprite_Init(Sprite* s, Texture* t);
 
 void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]);
 

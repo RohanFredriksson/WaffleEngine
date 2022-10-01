@@ -8,7 +8,5 @@ void TexturePool_Clear();
 void TexturePool_Free();
 
 Texture* TexturePool_Get(const char* filename);
-Texture* TexturePool_GetIndex(int index);
-int TexturePool_GetIndexOf(const char* filename);
 
 #endif

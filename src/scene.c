@@ -21,7 +21,7 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     Renderer_Init(&s->renderer);
 
     // Temporary
-    Sprite_Init(&testSprite, "./assets/textures/armaan.png");
+    Sprite_Init(&testSprite, TexturePool_Get("./assets/textures/armaan.png"));
 
     Transform* testTransform = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
     SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, testTransform, 0);
