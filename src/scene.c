@@ -8,12 +8,13 @@
 
 #define INITIAL_GAMEOBJECTS_SIZE 16
 
-Sprite testSprite;
-Component testSpriteRenderer;
-GameObject testGameObject;
+Sprite spriteArmaan;
+Sprite spriteAinsley;
+Sprite spriteSike;
 
 void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
 
+    s->isRunning = 0;
     s->numGameObjects = 0;
     s->sizeGameObjects = INITIAL_GAMEOBJECTS_SIZE;
     s->gameObjects = malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject));
@@ -21,14 +22,52 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     Renderer_Init(&s->renderer);
 
     // Temporary
-    Sprite_Init(&testSprite, TexturePool_Get("./assets/textures/armaan.png"));
 
-    Transform* testTransform = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
-    SpriteRenderer_Init(&testSpriteRenderer, &testSprite, (vec4){ 1, 1, 1, 1 }, testTransform, 0);
+    // Armaan
+    Sprite_Init(&spriteArmaan, TexturePool_Get("./assets/textures/armaan.png"));
+    Transform* transformArmaan = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
     
-    GameObject_Init(&testGameObject, NULL);
-    GameObject_AddComponent(&testGameObject, &testSpriteRenderer);
-    Scene_AddGameObject(s, &testGameObject);
+    Component spriteRendererArmaan;
+    SpriteRenderer_Init(&spriteRendererArmaan, &spriteArmaan, (vec4){ 1, 1, 1, 1 }, transformArmaan, -1);
+    
+    GameObject gameObjectArmaan;
+    GameObject_Init(&gameObjectArmaan, NULL);
+    GameObject_AddComponent(&gameObjectArmaan, &spriteRendererArmaan);
+    Scene_AddGameObject(s, &gameObjectArmaan);
+
+    // Ainsley
+    Sprite_Init(&spriteAinsley, TexturePool_Get("./assets/textures/ainsley.jpg"));
+    Transform* transformAinsley = TransformPool_Add((vec2){ 0.5f, 0.5f }, (vec2){ 1, 1 }, 45);
+
+    Component spriteRendererAinsley;
+    SpriteRenderer_Init(&spriteRendererAinsley, &spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 1);
+    
+    GameObject gameObjectAinsley;
+    GameObject_Init(&gameObjectAinsley, NULL);
+    GameObject_AddComponent(&gameObjectAinsley, &spriteRendererAinsley);
+    Scene_AddGameObject(s, &gameObjectAinsley);
+
+    // Sike
+    Sprite_Init(&spriteSike, TexturePool_Get("./assets/textures/sike.png"));
+    Transform* transformSike = TransformPool_Add((vec2){ 0.5f, -0.5f }, (vec2){ 1, 1 }, -45);
+
+    Component spriteRendererSike;
+    SpriteRenderer_Init(&spriteRendererSike, &spriteSike, (vec4){ 1, 1, 1, 1 }, transformSike, 0);
+    
+    GameObject gameObjectSike;
+    GameObject_Init(&gameObjectSike, NULL);
+    GameObject_AddComponent(&gameObjectSike, &spriteRendererSike);
+    Scene_AddGameObject(s, &gameObjectSike);
+
+}
+
+void Scene_Start(Scene* s) {
+
+    // Add all gameobjects to the renderer.
+    for (int i = 0; i < s->numGameObjects; i++) {
+        Renderer_AddGameObject(&s->renderer, s->gameObjects + i);
+    }
+    s->isRunning = 1;
 
 }
 
@@ -69,8 +108,10 @@ void Scene_AddGameObject(Scene* s, GameObject* go) {
     // Add the gameobject.
     memcpy(s->gameObjects + s->numGameObjects, go, sizeof(GameObject));
     
-    // Add all renderable components to the renderer.
-    Renderer_AddGameObject(&s->renderer, s->gameObjects + s->numGameObjects);
+    // If the scene is running, add all renderable components to the renderer.
+    if (s->isRunning) {
+        Renderer_AddGameObject(&s->renderer, s->gameObjects + s->numGameObjects);
+    }
     
     s->numGameObjects++;
 

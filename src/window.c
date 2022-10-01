@@ -49,6 +49,7 @@ int Window_Init() {
 
     // Set up the current scene.
     Scene_Init(&scene, Title_Init);
+    Scene_Start(&scene);
 
     return 0;
 

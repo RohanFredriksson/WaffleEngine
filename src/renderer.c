@@ -68,11 +68,45 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
         }
 
         // Initialise the new batch.
-        RenderBatch_Init(r->batches + r->numBatches, r, s->zIndex);
-        RenderBatch_AddSprite(r->batches + r->numBatches, s);
-        r->numBatches++;
-        qsort(r->batches, r->numBatches, sizeof(RenderBatch), RenderBatch_Compare);
+        printf("ADDED NEW BATCH: %d\n", s->zIndex);
 
+        // If there are no renderbatches, add a new one to the front of the array.
+        if (r->numBatches == 0) {
+            RenderBatch_Init(r->batches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches, s);
+            r->numBatches++;
+        }
+
+        // If the new renderbatch has a z index less than the first one, then add it to the
+        // front of the array.
+        else if (r->batches[0].zIndex > s->zIndex) {
+            memmove(r->batches + 1, r->batches, r->numBatches * sizeof(RenderBatch));
+            RenderBatch_Init(r->batches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches, s);
+            r->numBatches++;
+        }
+
+        // If the new renderbatch has a z index greater than the last one, append to the end.
+        else if (r->batches[r->numBatches-1].zIndex < s->zIndex) {
+            RenderBatch_Init(r->batches + r->numBatches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches + r->numBatches, s);
+            r->numBatches++;
+        }  
+
+        // Maintain the sortedness.
+        else {
+            for (int i = 1; i < r->numBatches; i++) {
+                RenderBatch* previousBatch = r->batches + i - 1;
+                RenderBatch* currentBatch = r->batches + i;
+                if (previousBatch->zIndex < s->zIndex && currentBatch->zIndex > s->zIndex) {
+                    memmove(r->batches + i + 1, r->batches + i, (r->numBatches - i) * sizeof(RenderBatch));
+                    RenderBatch_Init(r->batches + i, r, s->zIndex);
+                    RenderBatch_AddSprite(r->batches + i, s);
+                    r->numBatches++;
+                    break;
+                }
+            }
+        }
     }
 
 }

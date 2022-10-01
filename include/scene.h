@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "gameobject.h"
 #include "renderer.h"
 #include "camera.h"
@@ -6,6 +7,7 @@
 #define SCENE_H
 
 struct Scene {
+    bool isRunning;
     int numGameObjects;
     int sizeGameObjects;
     GameObject* gameObjects;
@@ -15,6 +17,8 @@ struct Scene {
 typedef struct Scene Scene;
 
 void Scene_Init(Scene* s, void (*init)(Scene* scene));
+
+void Scene_Start(Scene* s);
 
 void Scene_Update(Scene* s, float dt);
 
