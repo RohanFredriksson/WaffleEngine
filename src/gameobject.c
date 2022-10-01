@@ -11,12 +11,8 @@ void GameObject_Init(GameObject* g, Transform* t) {
     g->numComponents = 0;
     g->sizeComponents = INITIAL_COMPONENTS_SIZE;
     g->components = malloc(INITIAL_COMPONENTS_SIZE * sizeof(Component));
-    
-    g->transform = -1;
-    if (t != NULL) {
-        g->transform = t->id;
-    }
-    
+    g->transform = t;
+
     nextGameObjectId++;
 }
 

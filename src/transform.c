@@ -1,14 +1,10 @@
 #include "external.h"
 #include "transform.h"
 
-int nextTransformId = 0;
-
 void Transform_Init(Transform* t, vec2 pos, vec2 size, float rotation) {
-    t->id = nextTransformId;
     glm_vec2_copy(pos, t->pos);
     glm_vec2_copy(size, t->size);
     t->rotation = rotation;
-    nextTransformId++;
 }
 
 bool Transform_Equals(Transform t1, Transform t2) {

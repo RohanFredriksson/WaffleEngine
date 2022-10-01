@@ -8,7 +8,7 @@ struct GameObject {
     int numComponents;
     int sizeComponents;
     struct Component* components;
-    int transform; // ID of transform in the transform pool.
+    Transform* transform;
 };
 typedef struct GameObject GameObject;
 
