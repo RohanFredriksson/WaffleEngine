@@ -27,7 +27,7 @@
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
-int Renderer_CurrentShader = -1;
+Shader* Renderer_CurrentShader = NULL;
 
 void Renderer_Init(Renderer* r) {
     r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
@@ -90,15 +90,15 @@ void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s) {
 }
 
 void Renderer_BindShader(Shader* s) {
-    Renderer_CurrentShader = ShaderPool_GetIndexOf(s->vertexFilepath, s->fragmentFilepath);
+    Renderer_CurrentShader = s;
 }
 
 Shader* Renderer_GetBoundShader() {
-    return ShaderPool_GetIndex(Renderer_CurrentShader);
+    return Renderer_CurrentShader;
 }
 
 void Renderer_Render(Renderer* r) {
-    Shader_Use(ShaderPool_GetIndex(Renderer_CurrentShader));
+    Shader_Use(Renderer_CurrentShader);
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch_Render(r->batches + i);
     }
