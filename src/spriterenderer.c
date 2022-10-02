@@ -4,9 +4,9 @@
 #include "spriterenderer.h"
 #include "transform.h"
 
-void SpriteRenderer_Init(Component* c, Sprite* sprite, vec4 colour, Transform* transform, int zIndex) {
+Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform, int zIndex) {
     
-    Component_Init(c, "SpriteRenderer", &SpriteRenderer_Update, &SpriteRenderer_Free);
+    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, &SpriteRenderer_Free);
 
     // Allocate some memory for the sprite renderer.
     SpriteRenderer* s = malloc(sizeof(SpriteRenderer));
@@ -22,6 +22,7 @@ void SpriteRenderer_Init(Component* c, Sprite* sprite, vec4 colour, Transform* t
 
     // Attach the sprite renderer to the component
     c->data = s;
+    return c;
 
 }
 

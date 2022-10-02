@@ -10,7 +10,7 @@
 
 struct SpriteRenderer {
     vec4 colour;
-    Component* component; // TODO: POINTER TO COMPONENT --> INDEX OF COMPONENT IN COMPONENT ARRAY
+    Component* component;
     Sprite* sprite;
     Transform* transform;
     int zIndex;
@@ -19,7 +19,7 @@ struct SpriteRenderer {
 };
 typedef struct SpriteRenderer SpriteRenderer;
 
-void SpriteRenderer_Init(Component* c, Sprite* sprite, vec4 colour, Transform* transform, int zIndex);
+Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform, int zIndex);
 
 void SpriteRenderer_Update(Component* c, float dt);
 

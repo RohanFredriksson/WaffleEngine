@@ -38,8 +38,8 @@ void Renderer_Init(Renderer* r) {
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
     for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
-            Renderer_AddSprite(r, (SpriteRenderer*) go->components[i].data);
+        if (strcmp(go->components[i]->type, "SpriteRenderer") == 0) {
+            Renderer_AddSprite(r, (SpriteRenderer*) go->components[i]->data);
         }
     }
 
@@ -261,8 +261,8 @@ void RenderBatch_Render(RenderBatch* r) {
 void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
     for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i].type, "SpriteRenderer")) {
-            RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i].data);
+        if (strcmp(go->components[i]->type, "SpriteRenderer")) {
+            RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i]->data);
         }
     }
 
@@ -299,8 +299,8 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 
     for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i].type, "SpriteRenderer") == 0) {
-            RenderBatch_RemoveSprite(r, (SpriteRenderer*) go->components[i].data);
+        if (strcmp(go->components[i]->type, "SpriteRenderer") == 0) {
+            RenderBatch_RemoveSprite(r, (SpriteRenderer*) go->components[i]->data);
         }
     }
 

@@ -7,12 +7,12 @@ struct GameObject {
     int id;
     int numComponents;
     int sizeComponents;
-    struct Component* components;
+    struct Component** components;
     Transform* transform;
 };
 typedef struct GameObject GameObject;
 
-void GameObject_Init(GameObject* g, Transform* t);
+struct GameObject* GameObject_Init(Transform* t);
 
 void GameObject_Update(GameObject* g, float dt);
 
@@ -21,7 +21,7 @@ void GameObject_Free(GameObject* g);
 void GameObject_AddComponent(GameObject* g, struct Component* c);
 
 struct Component {
-    int go; // Gameobject id.
+    struct GameObject* go;
     void (*update)(struct Component* c, float dt);
     void (*free)(struct Component* c);
     char* type;
@@ -29,10 +29,9 @@ struct Component {
 };
 typedef struct Component Component;
 
-void Component_Init(Component* c, 
-                    char* type, 
-                    void (*update)(Component* c, float dt), 
-                    void (*free)(Component* c));
+struct Component* Component_Init(char* type, 
+                                 void (*update)(Component* c, float dt), 
+                                 void (*free)(Component* c));
 
 void Component_Free(Component* c);
 

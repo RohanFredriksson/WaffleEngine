@@ -10,7 +10,7 @@ struct Scene {
     bool isRunning;
     int numGameObjects;
     int sizeGameObjects;
-    GameObject* gameObjects;
+    GameObject** gameObjects;
     Camera camera;
     Renderer renderer;
 };

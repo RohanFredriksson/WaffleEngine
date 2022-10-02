@@ -2,10 +2,11 @@
 #include <string.h>
 #include "gameobject.h"
 
-void Component_Init(Component* c, 
-                    char* type, 
-                    void (*update)(Component* c, float dt), 
-                    void (*free)(Component* c)) {
+Component* Component_Init(char* type, 
+                          void (*update)(Component* c, float dt), 
+                          void (*free)(Component* c)) {
+
+    Component* c = (Component*) malloc(sizeof(Component));
 
     // Store the type
     c->type = malloc(strlen(type)+1);
@@ -14,6 +15,7 @@ void Component_Init(Component* c,
     c->update = update;
     c->free = free;
 
+    return c;
 }
 
 void Component_Free(Component* c) {
