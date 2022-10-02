@@ -10,11 +10,18 @@
 Sprite** SpritePool_Pool;
 size_t SpritePool_Size;
 size_t SpritePool_Length;
+Sprite empty;
 
 void SpritePool_Init() {
+    
+    // Initialise the sprite pool.
     SpritePool_Pool = (Sprite**) malloc(INITIAL_SPRITEPOOL_SIZE * sizeof(Sprite*));
     SpritePool_Size = INITIAL_SPRITEPOOL_SIZE;
     SpritePool_Length = 0;
+
+    // Initialise the empty sprite.
+    Sprite_Init(&empty, NULL);
+
 }
 
 void SpritePool_Clear() {
@@ -42,6 +49,11 @@ void SpritePool_Free() {
 }
 
 Sprite* SpritePool_Get(const char* filename) {
+
+    // If the filename is NULL, return the empty sprite.
+    if (filename == NULL) {
+        return &empty;
+    }
 
     // If the sprite already exists, return the sprite.
     for (int i = 0; i < SpritePool_Length; i++) {
