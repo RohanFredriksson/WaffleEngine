@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(run)
+project(waffle)
 
 add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)

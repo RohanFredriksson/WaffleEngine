@@ -6,7 +6,9 @@
 #include "texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
+#include "stb_image_write.h"
 
 void Texture_Init(Texture* t, const char* filename) {
     
@@ -56,6 +58,14 @@ void Texture_Init(Texture* t, const char* filename) {
     // Free the image
     stbi_image_free(image);
 
+}
+
+void Texture_Save(Texture* t, const char* filename) {
+    stbi_flip_vertically_on_write(1);
+    unsigned char* image = malloc(t->width * t->height * 4 * sizeof(unsigned char));
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    stbi_write_png(filename, t->width, t->height, 4, image, t->width * 4 * sizeof(unsigned char));
+    free(image);
 }
 
 void Texture_Bind(Texture* t) {

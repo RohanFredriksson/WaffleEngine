@@ -3,6 +3,9 @@
 
 void Title_Init(Scene* s) {
     
+    //Texture* armaan = TexturePool_Get("./assets/textures/armaan.png");
+    //Texture_Save(armaan, "test.png");
+
     // Armaan
     Sprite* spriteArmaan = SpritePool_Get("./assets/textures/armaan.png");
     Transform* transformArmaan = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
