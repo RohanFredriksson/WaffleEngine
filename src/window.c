@@ -7,6 +7,9 @@
 #include "title.h"
 #include "assetpool.h"
 
+#include "texture.h"
+#include "framebuffer.h"
+
 Scene scene;
 ivec2 windowSize = { 800, 800 };
 float fps = -1.0f;
@@ -63,6 +66,9 @@ void Window_Loop() {
 
     Shader* shader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag");
 
+    FrameBuffer fb;
+    FrameBuffer_Init(&fb, windowSize[0], windowSize[1]);
+
     while (!glfwWindowShouldClose(window)) {
 
         glfwPollEvents();
@@ -70,8 +76,11 @@ void Window_Loop() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (dt > 0) {
+            FrameBuffer_Bind(&fb);
             Renderer_BindShader(shader);
             Scene_Update(&scene, dt);
+            Scene_Render(&scene);
+            FrameBuffer_Unbind(&fb);
             Scene_Render(&scene);
         }
 
@@ -82,6 +91,8 @@ void Window_Loop() {
         fps = 1/dt;
 
     }
+
+    FrameBuffer_Free(&fb);
 
 }
 

@@ -62,6 +62,10 @@ void Texture_Init(Texture* t, const char* filename) {
 
 void Texture_New(Texture* t, int width, int height) {
 
+    // Store the width/height values.
+    t->width = width;
+    t->height = height;
+
     // Allocate space to store the string.
     char filename[] = "Generated";
     t->filename = (char*) malloc(strlen(filename)+1);

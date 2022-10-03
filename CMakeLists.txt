@@ -30,6 +30,7 @@ set(SOURCE
     src/shaderpool.c
     src/spritepool.c
     src/transformpool.c
+    src/framebuffer.c
     src/title.c
 )
 
