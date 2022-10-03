@@ -60,6 +60,25 @@ void Texture_Init(Texture* t, const char* filename) {
 
 }
 
+void Texture_New(Texture* t, int width, int height) {
+
+    // Allocate space to store the string.
+    char filename[] = "Generated";
+    t->filename = (char*) malloc(strlen(filename)+1);
+    memcpy(t->filename, filename, strlen(filename)+1);
+
+    // Generate texture on GPU
+    glGenTextures(1, &t->id);
+    glBindTexture(GL_TEXTURE_2D, t->id);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t->width, t->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+}
+
 void Texture_Save(Texture* t, const char* filename) {
     stbi_flip_vertically_on_write(1);
     unsigned char* image = malloc(t->width * t->height * 4 * sizeof(unsigned char));
