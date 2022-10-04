@@ -308,11 +308,36 @@ void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 
 void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
+    Texture* texture = s->sprite->texture;
+    bool removed = 0;
+    
+    // Remove the sprite from the batch if in the batch.
     for (int i = 0; i < r->numSprites; i++) {
         if (r->sprites[i] == s) {
             memmove(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
             r->numSprites--;
+            removed = 1;
         }
+    }
+
+    // If removed a sprite, check if we can remove its texture.
+    if (!removed || texture == NULL) {
+        return;
+    }
+
+    // If another sprite is using the texture, we cannot remove it.
+    // Check all other sprites to see if the texture is in use.
+    int exists = 0;
+    for (int i = 0; i < r->numSprites; i++) {
+        if (r->sprites[i]->sprite->texture == texture) {
+            exists = 1;
+            break;
+        }
+    }
+
+    // If it is not in use, we can safely remove it.
+    if (!exists) {
+        RenderBatch_RemoveTexture(r, texture);
     }
 
 }
@@ -455,6 +480,18 @@ void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
 
     if (r->numTextures == TEXTURES_SIZE) {
         r->hasTextureRoom = 0;
+    }
+
+}
+
+void RenderBatch_RemoveTexture(RenderBatch* r, Texture* t) {
+
+    for (int i = 0; i < r->numTextures; i++) {
+        if (r->textures[i] == t) {
+            memmove(r->textures + i, r->textures + i + 1, (r->numTextures - i - 1) * sizeof(Texture*));
+            r->numTextures--;
+            r->hasTextureRoom = 1;
+        }
     }
 
 }
