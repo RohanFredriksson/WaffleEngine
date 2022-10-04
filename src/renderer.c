@@ -50,8 +50,8 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch* currentBatch = r->batches + i;
-        if (RenderBatch_HasRoom(currentBatch) && RenderBatch_HasTextureRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
-            if (s->sprite->texture != NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
+        if (RenderBatch_HasRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
+            if (s->sprite->texture == NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
                 RenderBatch_AddSprite(currentBatch, s);
                 added = 1;
                 break;
