@@ -23,7 +23,7 @@
 #define VERTEX_SIZE 9
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
-#define TEXTURES_SIZE 8
+#define TEXTURES_SIZE 7
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
@@ -50,7 +50,7 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
         RenderBatch* currentBatch = r->batches + i;
-        if (RenderBatch_HasRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
+        if (RenderBatch_HasRoom(currentBatch) && RenderBatch_HasTextureRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
             if (s->sprite->texture != NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
                 RenderBatch_AddSprite(currentBatch, s);
                 added = 1;
@@ -78,7 +78,7 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
 
         // If the new renderbatch has a z index less than the first one, then add it to the
         // front of the array.
-        else if (r->batches[0].zIndex > s->zIndex) {
+        else if (r->batches[0].zIndex >= s->zIndex) {
             memmove(r->batches + 1, r->batches, r->numBatches * sizeof(RenderBatch));
             RenderBatch_Init(r->batches, r, s->zIndex);
             RenderBatch_AddSprite(r->batches, s);
@@ -86,7 +86,7 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
         }
 
         // If the new renderbatch has a z index greater than the last one, append to the end.
-        else if (r->batches[r->numBatches-1].zIndex < s->zIndex) {
+        else if (r->batches[r->numBatches-1].zIndex <= s->zIndex) {
             RenderBatch_Init(r->batches + r->numBatches, r, s->zIndex);
             RenderBatch_AddSprite(r->batches + r->numBatches, s);
             r->numBatches++;
@@ -97,7 +97,7 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
             for (int i = 1; i < r->numBatches; i++) {
                 RenderBatch* previousBatch = r->batches + i - 1;
                 RenderBatch* currentBatch = r->batches + i;
-                if (previousBatch->zIndex < s->zIndex && currentBatch->zIndex > s->zIndex) {
+                if (previousBatch->zIndex < s->zIndex && currentBatch->zIndex >= s->zIndex) {
                     memmove(r->batches + i + 1, r->batches + i, (r->numBatches - i) * sizeof(RenderBatch));
                     RenderBatch_Init(r->batches + i, r, s->zIndex);
                     RenderBatch_AddSprite(r->batches + i, s);
@@ -244,7 +244,7 @@ void RenderBatch_Render(RenderBatch* r) {
         Texture_Bind(r->textures[i]);
     }
     int slots[] = {0, 1, 2, 3, 4, 5, 6, 7};
-    Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE, slots);
+    Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE+1, slots);
 
     glBindVertexArray(r->vao);
     glDrawElements(GL_TRIANGLES, r->numSprites * 6, GL_UNSIGNED_INT, 0);
