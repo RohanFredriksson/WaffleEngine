@@ -79,3 +79,15 @@ void Scene_AddGameObject(Scene* s, GameObject* go) {
     s->numGameObjects++;
 
 }
+
+GameObject* Scene_GetGameObjectByID(Scene* s, int id) {
+
+    for (int i = 0; i < s->numGameObjects; i++) {
+        GameObject* currentGameObject = s->gameObjects[i];
+        if (currentGameObject->id == id) {
+            return currentGameObject;
+        }
+    }
+
+    return NULL;
+}

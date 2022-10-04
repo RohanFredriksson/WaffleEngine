@@ -28,4 +28,6 @@ void Scene_Free(Scene* s);
 
 void Scene_AddGameObject(Scene* s, GameObject* go);
 
+GameObject* Scene_GetGameObjectByID(Scene* s, int id);
+
 #endif
