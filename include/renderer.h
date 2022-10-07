@@ -74,7 +74,7 @@ bool RenderBatch_HasTexture(RenderBatch* r, Texture* t);
 
 void RenderBatch_AddTexture(RenderBatch* r, Texture* t);
 
-void RenderBatch_RemoveTexture(RenderBatch* r, Texture* t);
+void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t);
 
 int RenderBatch_Compare(const void* a, const void* b);
 
