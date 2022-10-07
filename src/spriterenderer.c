@@ -21,6 +21,7 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform
     s->zIndex = zIndex;
 
     s->lastSprite = *sprite;
+    s->lastTexture = NULL;
     glm_vec4_copy(colour, s->lastColour);
     s->lastTransform = *transform;
     s->lastZIndex = zIndex;
@@ -38,6 +39,12 @@ void SpriteRenderer_Update(Component* c, float dt) {
     SpriteRenderer* s = (SpriteRenderer*) c->data;
 
     if (!Sprite_Equals(*s->sprite, s->lastSprite)) {
+
+        // If the texture changed, keep a record of it.
+        if (s->sprite->texture != s->lastSprite.texture) {
+            s->lastTexture = s->lastSprite.texture;
+        }
+
         s->lastSprite = *s->sprite;
         s->isDirty = 1;
     }

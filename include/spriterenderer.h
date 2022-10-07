@@ -18,6 +18,7 @@ struct SpriteRenderer {
     int zIndex;
 
     Sprite lastSprite;
+    Texture* lastTexture;
     vec4 lastColour;
     Transform lastTransform;
     int lastZIndex;
