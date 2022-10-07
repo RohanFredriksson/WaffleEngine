@@ -194,6 +194,7 @@ void Window_SetFullscreenWindowed() {
     // Set the window attributes.
     glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_FALSE);
     glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+    glfwSetWindowAttrib(window, GLFW_MAXIMIZED, GLFW_FALSE);
     glfwRestoreWindow(window);
 
     // Set the window position.
