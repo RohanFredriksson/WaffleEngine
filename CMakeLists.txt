@@ -12,6 +12,7 @@ include_directories(dependencies)
 set(SOURCE_DIR src)
 set(SOURCE
     ${SOURCE}
+    src/util.c
     src/main.c
     src/window.c
     src/listener.c

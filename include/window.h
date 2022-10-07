@@ -21,4 +21,9 @@ void Window_SetHeight(int height);
 float Window_GetAspectRatio();
 Scene* Window_GetScene();
 
+void Window_SetWindowed();
+void Window_SetFullscreen();
+void Window_SetFullscreenWindowed();
+GLFWmonitor* Window_GetCurrentMonitor();
+
 #endif

@@ -2,6 +2,7 @@
 
 #include "external.h"
 #include "window.h"
+#include "util.h"
 #include "listener.h"
 #include "scene.h"
 #include "title.h"
@@ -23,9 +24,12 @@ int Window_Init() {
 	}
 
     // Configure GLFW
+    glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
 
     // Create the window
     window = glfwCreateWindow(windowSize[0], windowSize[1], "Waffle Engine", NULL, NULL);
@@ -44,11 +48,16 @@ int Window_Init() {
     // Make the OpenGl context current
 	glfwMakeContextCurrent(window);
 
-    //Enable v-sync
+    // Enable v-sync
     glfwSwapInterval(1);
+
+    // Make the window visible
+    glfwShowWindow(window);
 
     //Load GLAD so it configures OpenGL
 	gladLoadGL();
+
+    Window_SetFullscreenWindowed();
 
     // Set up the current scene.
     Scene_Init(&scene, Title_Init);
@@ -139,4 +148,98 @@ float Window_GetAspectRatio() {
 
 Scene* Window_GetScene() {
     return &scene;
+}
+
+void Window_SetWindowed() {
+
+    const GLFWvidmode* mode = glfwGetVideoMode(Window_GetCurrentMonitor());
+    int windowWidth = (int)((float)mode->width / 2.25f);
+    int windowHeight = (int)((float)mode->height / 2.25f);
+    
+    // Set window attributes
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_TRUE);
+    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+    glfwRestoreWindow(window);
+    
+    // Set the window size
+    glfwSetWindowSize(window, windowWidth, windowHeight);
+
+    // Set the window position.
+    int x, y;
+    glfwGetMonitorPos(Window_GetCurrentMonitor(), &x, &y);
+    glfwSetWindowPos(window, x + (mode->width - windowWidth) / 2, y + (mode->height - windowHeight) / 2);
+
+}
+
+void Window_SetFullscreen() {
+
+    // Set the window attributes.
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_FALSE);
+    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+    glfwMaximizeWindow(window);
+
+    // Set the window position.
+    int x, y;
+    glfwGetMonitorPos(Window_GetCurrentMonitor(window), &x, &y);
+    glfwSetWindowPos(window, x, y);
+
+    // Set the window size.
+    const GLFWvidmode* mode = glfwGetVideoMode(Window_GetCurrentMonitor());
+    glfwSetWindowSize(window, mode->width, mode->height);
+
+}
+
+void Window_SetFullscreenWindowed() {
+
+    // Set the window attributes.
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_FALSE);
+    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+    glfwRestoreWindow(window);
+
+    // Set the window position.
+    int x, y;
+    glfwGetMonitorPos(Window_GetCurrentMonitor(window), &x, &y);
+    glfwSetWindowPos(window, x, y);
+
+    // Set the window size.
+    const GLFWvidmode* mode = glfwGetVideoMode(Window_GetCurrentMonitor());
+    glfwSetWindowSize(window, mode->width, mode->height);
+
+}
+
+GLFWmonitor* Window_GetCurrentMonitor() {
+
+    int wx, wy, ww, wh;
+    int mx, my, mw, mh;
+
+    int overlap, bestOverlap;
+    GLFWmonitor* bestMonitor;
+    GLFWmonitor** monitors;
+    int numMonitors;
+
+    bestOverlap = 0;
+    bestMonitor = glfwGetPrimaryMonitor();
+
+    glfwGetWindowPos(window, &wx, &wy);
+    glfwGetWindowSize(window, &ww, &wh);
+    monitors = glfwGetMonitors(&numMonitors);
+
+    for (int i = 0; i < numMonitors; i++) {
+        
+        GLFWmonitor* monitor = monitors[i];
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        glfwGetMonitorPos(monitor, &mx, &my);
+        mw = mode->width;
+        mh = mode->height;
+
+        overlap = max(0, min(wx + ww, mx + mw) - max(wx, mx)) * 
+                  max(0, min(wy + wh, my + mh) - max(wy, my));
+
+        if (bestOverlap < overlap) {
+            bestOverlap = overlap;
+            bestMonitor = monitor;
+        }
+    }
+
+    return bestMonitor;
 }
