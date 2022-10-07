@@ -14,13 +14,15 @@
 #define COLOUR_SIZE 4
 #define TEX_COORDS_SIZE 2
 #define TEX_ID_SIZE 1
+#define ENTITY_ID_SIZE 1
 
 #define POS_OFFSET 0
 #define COLOUR_OFFSET (POS_OFFSET + POS_SIZE * sizeof(float))
 #define TEX_COORDS_OFFSET (COLOUR_OFFSET + COLOUR_SIZE * sizeof(float))
 #define TEX_ID_OFFSET (TEX_COORDS_OFFSET + TEX_COORDS_SIZE * sizeof(float))
+#define ENTITY_ID_OFFSET (TEX_ID_OFFSET + TEX_ID_SIZE * sizeof(float))
 
-#define VERTEX_SIZE 9
+#define VERTEX_SIZE 10
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
 #define TEXTURES_SIZE 7
@@ -188,9 +190,12 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, GL_FALSE, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
     glEnableVertexAttribArray(3);
 
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glBindVertexArray(0);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, GL_FALSE, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
+    glEnableVertexAttribArray(4);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
 
@@ -407,6 +412,9 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
 
         // Load Texture ID
         r->vertices[offset + 8] = texId;
+
+        // Load Entity ID
+        r->vertices[offset + 9] = (float) sprite->component->go->id;
 
         offset += VERTEX_SIZE;
 

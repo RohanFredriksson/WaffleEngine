@@ -35,8 +35,8 @@ set(SOURCE
     src/title.c
 )
 
-#add_executable(${PROJECT_NAME} ${SOURCE})
-add_executable(${PROJECT_NAME} WIN32 ${SOURCE})
+add_executable(${PROJECT_NAME} ${SOURCE})
+#add_executable(${PROJECT_NAME} WIN32 ${SOURCE})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_SEARCH_START_STATIC 1)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_SEARCH_END_STATIC 1)
