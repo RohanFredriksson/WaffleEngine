@@ -30,3 +30,26 @@ void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]) {
 void Sprite_SetSize(Sprite* s, vec2 size) {
     glm_vec2_copy(size, s->size);
 }
+
+bool Sprite_Equals(Sprite s1, Sprite s2) {
+
+    // If the textures are not the same, return 0.
+    if (s1.texture != s2.texture) {
+        return 0;
+    }
+    
+    // If the size is not the same, return 0.
+    for (int i = 0; i < 2; i++) {
+        if (s1.size[i] != s2.size[i]) {return 0;}
+    }
+
+    // If the texture coords are not the same, return 0.
+    for (int i = 0; i < 4; i++) {
+        if (s1.texCoords[i][0] != s2.texCoords[i][0]) {return 0;}
+        if (s1.texCoords[i][1] != s2.texCoords[i][1]) {return 0;}
+    }
+
+    // If reached here, then the sprites are the same, return 1.
+    return 1;
+
+}

@@ -9,12 +9,19 @@
 #define SPRITERENDERER_H
 
 struct SpriteRenderer {
-    vec4 colour;
+
     Component* component;
+    
     Sprite* sprite;
+    vec4 colour;
     Transform* transform;
     int zIndex;
+
+    Sprite lastSprite;
+    vec4 lastColour;
     Transform lastTransform;
+    int lastZIndex;
+
     bool isDirty;
 };
 typedef struct SpriteRenderer SpriteRenderer;

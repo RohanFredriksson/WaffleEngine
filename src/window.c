@@ -76,11 +76,14 @@ void Window_Loop() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (dt > 0) {
+
+            Scene_Update(&scene, dt);
+
             FrameBuffer_Bind(&fb);
             Renderer_BindShader(shader);
-            Scene_Update(&scene, dt);
             Scene_Render(&scene);
             FrameBuffer_Unbind(&fb);
+            
             Scene_Render(&scene);
         }
 
