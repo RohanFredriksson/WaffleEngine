@@ -64,7 +64,7 @@ int Window_Init() {
     //Window_SetFullscreenWindowed();
 
     // Set up the framebuffers.
-    FrameBuffer_Init(&entityTexture, windowSize[0], windowSize[1]);
+    PickingTexture_Init(&entityTexture, windowSize[0], windowSize[1]);
 
     // Set up the shaders.
     defaultShader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag");
@@ -262,7 +262,7 @@ GLFWmonitor* Window_GetCurrentMonitor() {
 
 void Window_ResetFramebuffers() {
     FrameBuffer_Free(&entityTexture);
-    FrameBuffer_Init(&entityTexture, windowSize[0], windowSize[1]);
+    PickingTexture_Init(&entityTexture, windowSize[0], windowSize[1]);
 }
 
 int Window_ReadPixel(int x, int y) {

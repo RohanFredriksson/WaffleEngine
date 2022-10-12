@@ -10,6 +10,7 @@ struct FrameBuffer {
 typedef struct FrameBuffer FrameBuffer;
 
 void FrameBuffer_Init(FrameBuffer* f, int width, int height);
+void PickingTexture_Init(FrameBuffer* f, int width, int height);
 void FrameBuffer_Bind(FrameBuffer* f);
 void FrameBuffer_Unbind(FrameBuffer* f);
 void FrameBuffer_Free(FrameBuffer* f);

@@ -80,6 +80,30 @@ void Texture_New(Texture* t, int width, int height) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t->width, t->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+}
+
+void Texture_New_RGB32F(Texture* t, int width, int height) {
+
+    // Store the width/height values.
+    t->width = width;
+    t->height = height;
+
+    // Allocate space to store the string.
+    char filename[] = "Generated";
+    t->filename = (char*) malloc(strlen(filename)+1);
+    memcpy(t->filename, filename, strlen(filename)+1);
+
+    // Generate texture on GPU
+    glGenTextures(1, &t->id);
+    glBindTexture(GL_TEXTURE_2D, t->id);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, t->width, t->height, 0, GL_RGB, GL_FLOAT, 0);
 
 }
