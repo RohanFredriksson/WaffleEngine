@@ -12,6 +12,9 @@
 #include "framebuffer.h"
 
 Scene scene;
+FrameBuffer entityTexture;
+Shader* defaultShader;
+Shader* entityShader;
 ivec2 windowSize = { 800, 800 };
 float fps = -1.0f;
 
@@ -57,7 +60,15 @@ int Window_Init() {
     //Load GLAD so it configures OpenGL
 	gladLoadGL();
 
-    Window_SetFullscreenWindowed();
+    // Set the window configuration.
+    //Window_SetFullscreenWindowed();
+
+    // Set up the framebuffers.
+    FrameBuffer_Init(&entityTexture, windowSize[0], windowSize[1]);
+
+    // Set up the shaders.
+    defaultShader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag");
+    entityShader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/entity.frag");
 
     // Set up the current scene.
     Scene_Init(&scene, Title_Init);
@@ -73,11 +84,6 @@ void Window_Loop() {
     float endTime = (float)glfwGetTime();
     float dt = -1.0f;
 
-    Shader* shader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/default.frag");
-
-    FrameBuffer fb;
-    FrameBuffer_Init(&fb, windowSize[0], windowSize[1]);
-
     while (!glfwWindowShouldClose(window)) {
 
         glfwPollEvents();
@@ -87,12 +93,19 @@ void Window_Loop() {
         if (dt > 0) {
 
             Scene_Update(&scene, dt);
-
-            FrameBuffer_Bind(&fb);
-            Renderer_BindShader(shader);
-            Scene_Render(&scene);
-            FrameBuffer_Unbind(&fb);
             
+            FrameBuffer_Bind(&entityTexture);
+            Renderer_BindShader(entityShader);
+            Scene_Render(&scene);
+            FrameBuffer_Unbind(&entityTexture);
+
+            if (MouseListener_MouseButtonBeginDown(GLFW_MOUSE_BUTTON_LEFT)) {
+                int x = MouseListener_GetX();
+                int y = MouseListener_GetY();
+                int id = Window_ReadPixel(x, y);
+            }
+            
+            Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
         }
 
@@ -104,11 +117,12 @@ void Window_Loop() {
 
     }
 
-    FrameBuffer_Free(&fb);
-
 }
 
 void Window_Exit() {
+
+    // Free the framebuffers
+    FrameBuffer_Free(&entityTexture);
 
     // Delete window before ending the program
 	glfwDestroyWindow(window);
@@ -243,4 +257,26 @@ GLFWmonitor* Window_GetCurrentMonitor() {
     }
 
     return bestMonitor;
+}
+
+void Window_ResetFramebuffers() {
+    FrameBuffer_Free(&entityTexture);
+    FrameBuffer_Init(&entityTexture, windowSize[0], windowSize[1]);
+}
+
+int Window_ReadPixel(int x, int y) {
+
+    // Create a buffer to store pixel data.
+    float pixel[3];
+
+    // Bind the framebuffer and read the corresponding pixel.
+    FrameBuffer_Bind(&entityTexture);
+    glReadPixels(x, windowSize[1]-y-1, 1, 1, GL_RGB, GL_FLOAT, pixel);
+    FrameBuffer_Unbind(&entityTexture);
+
+    printf("%f, %f, %f\n", pixel[0], pixel[1], pixel[2]);
+
+    // Return the value of this pixel.
+    return (int)pixel[0] - 1;
+
 }

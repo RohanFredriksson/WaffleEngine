@@ -87,7 +87,6 @@ void Title_Init(Scene* s) {
     GameObject_AddComponent(gameObjectSnake, spriteRendererSnake);
     Scene_AddGameObject(s, gameObjectSnake);
     
-    /*
     // Tommy
     Sprite* spriteTommy = SpritePool_Get("./assets/textures/tommy.png");
     Transform* transformTommy = TransformPool_Add((vec2){ -1, 1 }, (vec2){ 1, 1 }, 0);
@@ -97,6 +96,5 @@ void Title_Init(Scene* s) {
 
     GameObject_AddComponent(gameObjectTommy, spriteRendererTommy);
     Scene_AddGameObject(s, gameObjectTommy);
-    */
 
 }

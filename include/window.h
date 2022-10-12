@@ -26,4 +26,7 @@ void Window_SetFullscreen();
 void Window_SetFullscreenWindowed();
 GLFWmonitor* Window_GetCurrentMonitor();
 
+void Window_ResetFramebuffers();
+int Window_ReadPixel(int x, int y);
+
 #endif
