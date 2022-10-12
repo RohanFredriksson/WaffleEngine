@@ -103,6 +103,7 @@ void Window_Loop() {
                 int x = MouseListener_GetX();
                 int y = MouseListener_GetY();
                 int id = Window_ReadPixel(x, y);
+                printf("%d\n", id);
             }
             
             Renderer_BindShader(defaultShader);
@@ -273,8 +274,6 @@ int Window_ReadPixel(int x, int y) {
     FrameBuffer_Bind(&entityTexture);
     glReadPixels(x, windowSize[1]-y-1, 1, 1, GL_RGB, GL_FLOAT, pixel);
     FrameBuffer_Unbind(&entityTexture);
-
-    printf("%f, %f, %f\n", pixel[0], pixel[1], pixel[2]);
 
     // Return the value of this pixel.
     return (int)pixel[0] - 1;

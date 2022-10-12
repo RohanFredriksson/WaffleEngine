@@ -40,5 +40,5 @@ void main()
         discard;
     }
 
-    colour = vec3(fEntityId/4, 0, 0);
+    colour = vec3(fEntityId + 1, 0, 0);
 }
