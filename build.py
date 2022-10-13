@@ -70,45 +70,58 @@ def write_file(filename: str, contents: str):
 
 def update_cmakelists():
 
+    # Generate the latest CMakeLists file.
     tag = "#" + operating_system + "\n"
     include = create_include()
     source = create_source()
 
+    # Combine all components to build the latest CMakeLists file.
     new_script = tag + head + include + source + tail
+    
+    # Get the contents of the previous CMakeLists file.
     old_script = ""
     if os.path.exists("CMakeLists.txt"):
         with open("CMakeLists.txt", 'r') as f:
             old_script = f.read()
             f.close()
     
+    # If the file has changed, overwrite the old one with the latest.
     if old_script != new_script:
 
         # If the operating system has changed, remove cache.
         old_tag = old_script.split('\n')[0] + "\n"
         if old_tag != tag:
-            pass
+            os.remove("CMakeCache.txt")
         
         # Overwrite the old file with the new one.
         write_file("CMakeLists.txt", new_script)
 
 def build():
 
+    # Build the program depending on operating system
     if operating_system == "windows":
-        run("git submodule update --init --recursive\n")
-        run("cmake . -G \"MinGW Makefiles\"\n")
-        run("mingw32-make\n")
+        run("git submodule update --init --recursive")
+        run("cmake . -G \"MinGW Makefiles\"")
+        run("mingw32-make")
     else:
-        pass
+        run("git submodule update --init --recursive\n")
+        run("cmake .\n")
+        run("make\n")
 
+    # Create the build directory if it doesn't exist
     if not os.path.isdir("build"):
         os.mkdir("build")
 
+    # Update the assets in the build directory
+    if os.path.isdir("build/assets"):
+        shutil.rmtree("build/assets")
     shutil.copytree("assets", "build/assets")
     
+    # Copy the application into the build file
     if operating_system == "windows":
         shutil.copy("waffle.exe", "build")
     else:
-        pass
+        shutil.copy("waffle", "build")
 
 def main():
 
