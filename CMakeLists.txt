@@ -1,3 +1,4 @@
+#windows
 cmake_minimum_required(VERSION 3.14)
 
 project(waffle)
@@ -6,33 +7,31 @@ add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)
 add_subdirectory(dependencies/cglm/)
 
-include_directories(include)
 include_directories(dependencies)
+include_directories(include)
 
-set(SOURCE_DIR src)
 set(SOURCE
-    ${SOURCE}
-    src/util.c
-    src/main.c
-    src/window.c
-    src/listener.c
-    src/texture.c
-    src/shader.c
-    src/transform.c
-    src/sprite.c
-    src/spriterenderer.c
-    src/component.c
-    src/gameobject.c
-    src/camera.c
-    src/scene.c
-    src/renderer.c
     src/assetpool.c
-    src/texturepool.c
-    src/shaderpool.c
-    src/spritepool.c
-    src/transformpool.c
+    src/camera.c
+    src/component.c
     src/framebuffer.c
+    src/gameobject.c
+    src/listener.c
+    src/main.c
+    src/renderer.c
+    src/scene.c
+    src/shader.c
+    src/shaderpool.c
+    src/sprite.c
+    src/spritepool.c
+    src/spriterenderer.c
+    src/texture.c
+    src/texturepool.c
     src/title.c
+    src/transform.c
+    src/transformpool.c
+    src/util.c
+    src/window.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
