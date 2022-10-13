@@ -9,29 +9,34 @@ add_subdirectory(dependencies/cglm/)
 
 include_directories(dependencies)
 include_directories(include)
+include_directories(include/components)
+include_directories(include/core)
+include_directories(include/renderer)
+include_directories(include/scenes)
+include_directories(include/util)
 
 set(SOURCE
-    src/assetpool.c
-    src/camera.c
-    src/component.c
-    src/framebuffer.c
-    src/gameobject.c
-    src/listener.c
     src/main.c
-    src/renderer.c
-    src/scene.c
-    src/shader.c
-    src/shaderpool.c
-    src/sprite.c
-    src/spritepool.c
-    src/spriterenderer.c
-    src/texture.c
-    src/texturepool.c
-    src/title.c
-    src/transform.c
-    src/transformpool.c
-    src/util.c
-    src/window.c
+    src/components/spriterenderer.c
+    src/core/component.c
+    src/core/gameobject.c
+    src/core/listener.c
+    src/core/scene.c
+    src/core/transform.c
+    src/core/window.c
+    src/renderer/camera.c
+    src/renderer/framebuffer.c
+    src/renderer/renderer.c
+    src/renderer/shader.c
+    src/renderer/sprite.c
+    src/renderer/texture.c
+    src/scenes/title.c
+    src/util/assetpool.c
+    src/util/shaderpool.c
+    src/util/spritepool.c
+    src/util/texturepool.c
+    src/util/transformpool.c
+    src/util/util.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE})
