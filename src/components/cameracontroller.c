@@ -96,7 +96,7 @@ void CameraController_MoveTo(CameraController* cc, float x, float y, float t) {
     }
 
     // Define max velocity, and raise the moving flag.
-    cc->maxVelocity = (2 * cc->distance) / (PI * cc->timeHalf);
+    cc->maxVelocity = (2 * cc->distance) / (M_PI * cc->timeHalf);
     cc->isMoving = 1;
 
 }
