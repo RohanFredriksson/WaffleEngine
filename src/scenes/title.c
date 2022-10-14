@@ -1,5 +1,6 @@
 #include "title.h"
 #include "assetpool.h"
+#include "cameracontroller.h"
 
 void Title_Init(Scene* s) {
     
@@ -11,9 +12,11 @@ void Title_Init(Scene* s) {
     Transform* transformArmaan = TransformPool_Add((vec2){ 0, 0 }, (vec2){ 1, 1 }, 0);
     
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, transformArmaan, 0);
+    Component* cameraControllerArmaan = CameraController_Init(NULL);
     GameObject* gameObjectArmaan = GameObject_Init(NULL);
 
     GameObject_AddComponent(gameObjectArmaan, spriteRendererArmaan);
+    GameObject_AddComponent(gameObjectArmaan, cameraControllerArmaan);
     Scene_AddGameObject(s, gameObjectArmaan);
 
     // Ainsley

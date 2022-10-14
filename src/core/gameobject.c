@@ -58,3 +58,14 @@ void GameObject_AddComponent(GameObject* g, Component* c) {
     g->numComponents++;
 
 }
+
+Component* GameObject_GetComponent(GameObject* g, const char* type) {
+
+    for (int i = 0; i < g->numComponents; i++) {
+        if (strcmp(g->components[i]->type, type) == 0) {
+            return g->components[i];
+        }
+    }
+
+    return NULL;
+}

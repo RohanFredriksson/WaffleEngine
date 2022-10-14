@@ -11,6 +11,8 @@
 #include "texture.h"
 #include "framebuffer.h"
 
+#include "cameracontroller.h"
+
 Scene scene;
 FrameBuffer entityTexture;
 Shader* defaultShader;
@@ -100,10 +102,21 @@ void Window_Loop() {
             FrameBuffer_Unbind(&entityTexture);
 
             if (MouseListener_MouseButtonBeginDown(GLFW_MOUSE_BUTTON_LEFT)) {
+                
                 int x = MouseListener_GetX();
                 int y = MouseListener_GetY();
                 int id = Window_ReadPixel(x, y);
-                printf("%d\n", id);
+                
+                GameObject* go = Scene_GetGameObjectByID(&scene, id);
+                Component* c = GameObject_GetComponent(go, "CameraController");
+
+                if (c != NULL) {
+
+                    CameraController* cc = (CameraController*) c->data;
+                    CameraController_MoveTo(cc, 1.0f, -1.5f, 1.0f);
+
+                }
+
             }
             
             Renderer_BindShader(defaultShader);

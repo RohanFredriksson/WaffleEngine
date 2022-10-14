@@ -20,6 +20,8 @@ void GameObject_Free(GameObject* g);
 
 void GameObject_AddComponent(GameObject* g, struct Component* c);
 
+struct Component* GameObject_GetComponent(GameObject* g, const char* type);
+
 struct Component {
     struct GameObject* go;
     void (*update)(struct Component* c, float dt);

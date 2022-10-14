@@ -17,6 +17,7 @@ include_directories(include/util)
 
 set(SOURCE
     src/main.c
+    src/components/cameracontroller.c
     src/components/spriterenderer.c
     src/core/component.c
     src/core/gameobject.c
