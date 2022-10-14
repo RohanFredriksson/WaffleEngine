@@ -21,4 +21,7 @@ void Camera_GetProjection(Camera* c, mat4 matrix);
 void Camera_GetInverseView(Camera* c, mat4 matrix);
 void Camera_GetInverseProjection(Camera* c, mat4 matrix);
 
+float Camera_Left(Camera* c, float x, float pos);
+float Camera_Bottom(Camera* c, float y, float pos);
+
 #endif

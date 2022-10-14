@@ -49,3 +49,11 @@ void Camera_GetInverseView(Camera* c, mat4 matrix) {
 void Camera_GetInverseProjection(Camera* c, mat4 matrix) {
     glm_mat4_copy(c->inverseProjection, matrix);
 }
+
+float Camera_Left(Camera* c, float x, float pos) {
+    return x - pos * c->projectionSize[0] * c->zoom;
+}
+
+float Camera_Bottom(Camera* c, float y, float pos) {
+    return y - pos * c->projectionSize[1] * c->zoom;
+}
