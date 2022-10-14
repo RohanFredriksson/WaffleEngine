@@ -108,12 +108,13 @@ void Window_Loop() {
                 int id = Window_ReadPixel(x, y);
                 
                 GameObject* go = Scene_GetGameObjectByID(&scene, id);
-                Component* c = GameObject_GetComponent(go, "CameraController");
-
-                if (c != NULL) {
-
-                    CameraController* cc = (CameraController*) c->data;
-                    CameraController_MoveTo(cc, 1.0f, -1.5f, 1.0f);
+                if (go != NULL) {
+                    
+                    Component* c = GameObject_GetComponent(go, "CameraController");
+                    if (c != NULL) {
+                        CameraController* cc = (CameraController*) c->data;
+                        CameraController_MoveTo(cc, 1.0f, -1.5f, 1.0f);
+                    }
 
                 }
 

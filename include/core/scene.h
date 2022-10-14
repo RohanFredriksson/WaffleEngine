@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "gameobject.h"
+#include "physics.h"
 #include "renderer.h"
 #include "camera.h"
 
@@ -13,6 +14,7 @@ struct Scene {
     GameObject** gameObjects;
     Camera camera;
     Renderer renderer;
+    Physics physics;
 };
 typedef struct Scene Scene;
 

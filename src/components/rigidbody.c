@@ -17,6 +17,7 @@ Component* RigidBody_Init(Transform* transform, BodyType bodyType) {
 
     rb->transform = transform;
     rb->bodyType = bodyType;
+    glm_vec2_zero(rb->velocity);
 
     // Attach the rigid body to the component
     c->data = rb;

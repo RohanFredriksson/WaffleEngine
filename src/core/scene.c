@@ -16,6 +16,7 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     s->gameObjects = (GameObject**) malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject*));
     Camera_Init(&s->camera);
     Renderer_Init(&s->renderer);
+    Physics_Init(&s->physics, (vec2){ 0, -10 });
 
     if (init != NULL) {
         init(s);
@@ -28,12 +29,16 @@ void Scene_Start(Scene* s) {
     // Add all gameobjects to the renderer.
     for (int i = 0; i < s->numGameObjects; i++) {
         Renderer_AddGameObject(&s->renderer, s->gameObjects[i]);
+        Physics_AddGameObject(&s->physics, s->gameObjects[i]);
     }
     s->isRunning = 1;
 
 }
 
 void Scene_Update(Scene* s, float dt) {
+
+    Camera_AdjustProjection(&s->camera);
+    Physics_Update(&s->physics, dt);
 
     // Update all gameobjects.
     for (int i = 0; i < s->numGameObjects; i++) {
@@ -74,6 +79,7 @@ void Scene_AddGameObject(Scene* s, GameObject* go) {
     // If the scene is running, add all renderable components to the renderer.
     if (s->isRunning) {
         Renderer_AddGameObject(&s->renderer, go);
+        Physics_AddGameObject(&s->physics, go);
     }
     
     s->numGameObjects++;

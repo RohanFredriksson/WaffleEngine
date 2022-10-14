@@ -1,11 +1,10 @@
 #include "title.h"
 #include "assetpool.h"
 #include "cameracontroller.h"
+#include "rigidbody.h"
+#include "physics.h"
 
 void Title_Init(Scene* s) {
-    
-    //Texture* armaan = TexturePool_Get("./assets/textures/armaan.png");
-    //Texture_Save(armaan, "test.png");
 
     // Armaan
     Sprite* spriteArmaan = SpritePool_Get("./assets/textures/armaan.png");
@@ -24,9 +23,11 @@ void Title_Init(Scene* s) {
     Transform* transformAinsley = TransformPool_Add((vec2){ 1, 0 }, (vec2){ 1, 1 }, 0);
 
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
+    Component* rigidBodyAinsley = RigidBody_Init(transformAinsley, BODYTYPE_DYNAMIC);
     GameObject* gameObjectAinsley = GameObject_Init(NULL);
     
     GameObject_AddComponent(gameObjectAinsley, spriteRendererAinsley);
+    GameObject_AddComponent(gameObjectAinsley, rigidBodyAinsley);
     Scene_AddGameObject(s, gameObjectAinsley);
 
     // Sike
