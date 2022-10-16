@@ -2,21 +2,16 @@
 
 #include "external.h"
 #include "window.h"
-#include "util.h"
-#include "listener.h"
-#include "scene.h"
-#include "title.h"
-#include "assetpool.h"
-
-#include "texture.h"
-#include "framebuffer.h"
 
 #include "cameracontroller.h"
 
+GLFWwindow* window;
 Scene scene;
+
 FrameBuffer entityTexture;
 Shader* defaultShader;
 Shader* entityShader;
+
 ivec2 windowSize = { 800, 800 };
 float fps = -1.0f;
 
@@ -149,9 +144,11 @@ void Window_Exit() {
 
 void Window_Run() {
 
+    AssetPool_Init();
     if (Window_Init()) {return;}
     Window_Loop();
     Window_Exit();
+    AssetPool_Free();
 
 }
 

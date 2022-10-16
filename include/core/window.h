@@ -1,13 +1,14 @@
 #include "external.h"
 #include "scene.h"
+#include "util.h"
+#include "listener.h"
+#include "title.h"
+#include "assetpool.h"
+#include "texture.h"
+#include "framebuffer.h"
 
 #ifndef WINDOW_H
 #define WINDOW_H
-
-Scene scene;
-GLFWwindow* window;
-ivec2 windowSize;
-float fps;
 
 void Window_Run();
 int Window_Init();
