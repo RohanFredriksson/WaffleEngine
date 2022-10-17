@@ -10,6 +10,7 @@ project(waffle)
 add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)
 add_subdirectory(dependencies/cglm/)
+add_subdirectory(dependencies/cimgui/)
 
 include_directories(dependencies)
 """
@@ -25,10 +26,12 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 target_include_directories(${PROJECT_NAME} PUBLIC glad)
 target_include_directories(${PROJECT_NAME} PUBLIC glfw)
 target_include_directories(${PROJECT_NAME} PUBLIC cglm)
+target_include_directories(${PROJECT_NAME} PUBLIC cimgui)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC glad)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 target_link_libraries(${PROJECT_NAME} PUBLIC cglm)
+target_link_libraries(${PROJECT_NAME} PUBLIC cimgui)
 
 #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")"""
 
@@ -91,7 +94,8 @@ def update_cmakelists():
         # If the operating system has changed, remove cache.
         old_tag = old_script.split('\n')[0] + "\n"
         if old_tag != tag:
-            os.remove("CMakeCache.txt")
+            if os.path.exists("CMakeCache.txt"):
+                os.remove("CMakeCache.txt")
         
         # Overwrite the old file with the new one.
         write_file("CMakeLists.txt", new_script)
