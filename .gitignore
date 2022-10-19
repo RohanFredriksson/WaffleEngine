@@ -8,3 +8,4 @@ CMakeCache.txt
 Makefile
 CMakefiles
 build
+dependencies/glad/libglad.a
