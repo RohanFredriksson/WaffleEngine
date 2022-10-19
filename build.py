@@ -42,10 +42,8 @@ target_compile_definitions(cimgui PRIVATE
 """
 
 tail = """
-file(GLOB gl3w_files "${gl3w}/GL/*.c")
-
-add_executable(${project_name} ${source_files} ${gl3w_files})
-#add_executable(${project_name} WIN32 ${source_files} ${gl3w_files})
+add_executable(${project_name} ${source_files})
+#add_executable(${project_name} WIN32 ${source_files})
 
 set_target_properties(${project_name} PROPERTIES LINK_SEARCH_START_STATIC 1)
 set_target_properties(${project_name} PROPERTIES LINK_SEARCH_END_STATIC 1)

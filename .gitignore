@@ -4,6 +4,7 @@ CMakeLists.txt
 CMakeCache.txt
 *.pc
 *.ini
+*.a
 Makefile
 CMakefiles
 build
