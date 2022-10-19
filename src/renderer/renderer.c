@@ -370,7 +370,7 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         vec3 translateVector = {sprite->transform->pos[0], sprite->transform->pos[1], 0.0f};
         glm_translate(transformMatrix, translateVector);
         vec3 rotateVector = {0.0f, 0.0f, 1.0f};
-        glm_rotate(transformMatrix, sprite->transform->rotation / (float)(180.0 / M_PI), rotateVector);
+        glm_rotate(transformMatrix, sprite->transform->rotation / (float)(180.0 / GLM_PI), rotateVector);
         vec3 scaleVector = {sprite->transform->size[0], sprite->transform->size[1], 1.0f};
         glm_scale(transformMatrix, scaleVector);
     }

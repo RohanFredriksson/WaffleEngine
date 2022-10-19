@@ -5,4 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
+#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include <cimgui.h>
+#include <cimgui_impl.h>
+
 #endif

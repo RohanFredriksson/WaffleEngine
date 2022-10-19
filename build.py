@@ -5,33 +5,58 @@ import shutil
 
 head = """cmake_minimum_required(VERSION 3.14)
 
-project(waffle)
+set(project_name waffle)
+project(${project_name})
 
 add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)
-add_subdirectory(dependencies/cglm/)
-add_subdirectory(dependencies/cimgui/)
+add_subdirectory(dependencies/cglm)
+
+set(cimgui dependencies/cimgui)
+set(imgui_impl ${cimgui}/imgui/backends)
+set(gl3w dependencies/gl3w)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall -g")
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 include_directories(dependencies)
+include_directories(dependencies/glfw/include)
+include_directories(dependencies/cglm/include)
+
+include_directories(${cimgui})
+include_directories(${cimgui}/imgui)
+include_directories(${imgui_impl})
+include_directories(${gl3w})
+
+file(GLOB 
+	cimgui_source
+	"${cimgui}/*.cpp" 
+	"${cimgui}/imgui/*.cpp"
+	"${imgui_impl}/imgui_impl_glfw.cpp"
+	"${imgui_impl}/imgui_impl_opengl3.cpp")
+add_library(cimgui ${cimgui_source})
+target_compile_definitions(cimgui PRIVATE 
+	IMGUI_IMPL_API=extern\ \"C\"
+	IMGUI_IMPL_OPENGL_LOADER_GLAD)
+
 """
 
 tail = """
-add_executable(${PROJECT_NAME} ${SOURCE})
-#add_executable(${PROJECT_NAME} WIN32 ${SOURCE})
+add_executable(${project_name} ${source_files})
+#add_executable(${project_name} WIN32 ${source_files})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_SEARCH_START_STATIC 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_SEARCH_END_STATIC 1)
+set_target_properties(${project_name} PROPERTIES LINK_SEARCH_START_STATIC 1)
+set_target_properties(${project_name} PROPERTIES LINK_SEARCH_END_STATIC 1)
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
-target_include_directories(${PROJECT_NAME} PUBLIC glad)
-target_include_directories(${PROJECT_NAME} PUBLIC glfw)
-target_include_directories(${PROJECT_NAME} PUBLIC cglm)
-target_include_directories(${PROJECT_NAME} PUBLIC cimgui)
+target_include_directories(${project_name} PUBLIC glfw)
+target_include_directories(${project_name} PUBLIC glad)
+target_include_directories(${project_name} PUBLIC cglm)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
-target_link_libraries(${PROJECT_NAME} PUBLIC cglm)
-target_link_libraries(${PROJECT_NAME} PUBLIC cimgui)
+target_link_libraries(${project_name} glfw)
+target_link_libraries(${project_name} glad)
+target_link_libraries(${project_name} cglm)
+target_link_libraries(${project_name} cimgui)
 
 #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")"""
 
@@ -56,7 +81,7 @@ def create_include():
 
 def create_source():
 
-    source = "set(SOURCE\n"
+    source = "set(source_files\n"
     for (dirpath, dirnames, filenames) in os.walk("src"):
         for filename in filenames:
             if filename.endswith(".c"):
@@ -80,7 +105,7 @@ def update_cmakelists():
 
     # Combine all components to build the latest CMakeLists file.
     new_script = tag + head + include + source + tail
-    
+
     # Get the contents of the previous CMakeLists file.
     old_script = ""
     if os.path.exists("CMakeLists.txt"):
@@ -111,6 +136,14 @@ def build():
         run("git submodule update --init --recursive\n")
         run("cmake .\n")
         run("make\n")
+
+    # If the build failed stop
+    if operating_system == "windows":
+        if not os.path.exists("waffle.exe"):
+            return
+    else:
+        if not os.path.exists("waffle"):
+            return
 
     # Create the build directory if it doesn't exist
     if not os.path.isdir("build"):

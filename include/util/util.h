@@ -1,7 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-int max(int a, int b);
-int min(int a, int b);
+int maxi(int a, int b);
+int mini(int a, int b);
 
 #endif
