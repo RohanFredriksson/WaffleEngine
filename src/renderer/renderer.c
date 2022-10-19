@@ -208,7 +208,7 @@ void RenderBatch_Render(RenderBatch* r) {
             
             if (r->sprites[i]->lastTexture != NULL) {
                 RenderBatch_RemoveTextureIfNotUsed(r, r->sprites[i]->lastTexture);
-                r->sprites[i]->lastTexture == NULL;
+                r->sprites[i]->lastTexture = NULL;
             }
 
             if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture != NULL) {
