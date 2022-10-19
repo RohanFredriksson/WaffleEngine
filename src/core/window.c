@@ -11,6 +11,9 @@
 GLFWwindow* window;
 Scene scene;
 
+struct ImGuiContext* ctx;
+struct ImGuiIO* io;
+
 FrameBuffer entityTexture;
 Shader* defaultShader;
 Shader* entityShader;
@@ -57,8 +60,19 @@ int Window_Init() {
     // Make the window visible
     glfwShowWindow(window);
 
-    //Load GLAD so it configures OpenGL
+    // Load GLAD so it configures OpenGL
 	gladLoadGL();
+
+    // Initialise cimgui
+    ctx = igCreateContext(NULL);
+    io  = igGetIO();
+
+    const char* glsl_version = "#version 330 core";
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    // Setup style
+    igStyleColorsDark(NULL);
 
     // Set the window configuration.
     //Window_SetFullscreenWindowed();
@@ -93,6 +107,13 @@ void Window_Loop() {
         if (dt > 0) {
 
             Scene_Update(&scene, dt);
+
+            //----
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            igNewFrame();
+            igShowDemoWindow(NULL);
+            //----
             
             FrameBuffer_Bind(&entityTexture);
             Renderer_BindShader(entityShader);
@@ -121,6 +142,10 @@ void Window_Loop() {
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
 
+            // Render the imgui
+            igRender();
+            ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
+
         }
 
         glfwSwapBuffers(window);
@@ -138,10 +163,13 @@ void Window_Exit() {
     // Free the framebuffers
     FrameBuffer_Free(&entityTexture);
 
+    // Terminate imgui
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    igDestroyContext(ctx);
+
     // Delete window before ending the program
 	glfwDestroyWindow(window);
-
-    //nk_glfw3_shutdown(&glfw);
 
 	// Terminate GLFW before ending the program
 	glfwTerminate();
