@@ -3,6 +3,7 @@
 CMakeLists.txt
 CMakeCache.txt
 *.pc
+*.ini
 Makefile
 CMakefiles
 build
