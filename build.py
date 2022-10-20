@@ -45,12 +45,11 @@ tail = """
 add_executable(${project_name} ${source_files})
 #add_executable(${project_name} WIN32 ${source_files})
 
-add_compile_options(-fsanitize=address)
-add_link_options(-fsanitize=address)
-
-set_target_properties(${project_name} PROPERTIES LINK_SEARCH_START_STATIC 1)
-set_target_properties(${project_name} PROPERTIES LINK_SEARCH_END_STATIC 1)
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+#add_compile_options(-fsanitize=address)
+#add_link_options(-fsanitize=address)
+#set_target_properties(${project_name} PROPERTIES LINK_SEARCH_START_STATIC 1)
+#set_target_properties(${project_name} PROPERTIES LINK_SEARCH_END_STATIC 1)
+#set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 target_include_directories(${project_name} PUBLIC glfw)
 target_include_directories(${project_name} PUBLIC glad)
