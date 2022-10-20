@@ -347,10 +347,10 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     vec4 colour;
     glm_vec4_copy(sprite->colour, colour);
     vec2 texCoords[4];
-    glm_vec4_copy(sprite->sprite->texCoords[0], texCoords[0]);
-    glm_vec4_copy(sprite->sprite->texCoords[1], texCoords[1]);
-    glm_vec4_copy(sprite->sprite->texCoords[2], texCoords[2]);
-    glm_vec4_copy(sprite->sprite->texCoords[3], texCoords[3]);
+    glm_vec2_copy(sprite->sprite->texCoords[0], texCoords[0]);
+    glm_vec2_copy(sprite->sprite->texCoords[1], texCoords[1]);
+    glm_vec2_copy(sprite->sprite->texCoords[2], texCoords[2]);
+    glm_vec2_copy(sprite->sprite->texCoords[3], texCoords[3]);
 
     int texId = 0;
     if (sprite->sprite->texture != NULL) {
