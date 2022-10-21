@@ -54,6 +54,10 @@ add_executable(${project_name} ${source_files})
 target_include_directories(${project_name} PUBLIC glfw)
 target_include_directories(${project_name} PUBLIC glad)
 target_include_directories(${project_name} PUBLIC cglm)
+target_include_directories(${project_name} PUBLIC chipmunk)
+
+find_library(pthread NAME pthread)
+target_link_libraries(${project_name} pthread)
 
 target_link_libraries(${project_name} glfw)
 target_link_libraries(${project_name} glad)
