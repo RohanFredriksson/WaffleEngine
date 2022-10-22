@@ -58,13 +58,14 @@ target_include_directories(${project_name} PUBLIC chipmunk)
 
 find_library(pthread NAME pthread)
 target_link_libraries(${project_name} pthread)
+target_link_libraries(${project_name} -static)
 
 target_link_libraries(${project_name} glfw)
 target_link_libraries(${project_name} glad)
 target_link_libraries(${project_name} cglm)
 target_link_libraries(${project_name} cimgui)
 
-#set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")"""
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")"""
 
 operating_system = platform.system().lower()
 
