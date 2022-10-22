@@ -7,5 +7,7 @@ CMakeCache.txt
 *.a
 Makefile
 CMakefiles
+CMakeFiles
 build
-dependencies/glad/libglad.a
+dependencies/glad/CMakeFiles
+waffle
