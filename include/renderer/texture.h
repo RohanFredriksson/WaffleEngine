@@ -3,7 +3,7 @@
 
 struct Texture {
     char* filename;
-    int id;
+    unsigned int id;
     int width, height, channels;
 };
 typedef struct Texture Texture;

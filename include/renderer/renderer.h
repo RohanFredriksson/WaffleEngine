@@ -42,8 +42,8 @@ struct RenderBatch {
     bool hasRoom;
     bool hasTextureRoom;
     float* vertices;
-    int vao;
-    int vbo;
+    unsigned int vao;
+    unsigned int vbo;
     int zIndex;
 };
 typedef struct RenderBatch RenderBatch;

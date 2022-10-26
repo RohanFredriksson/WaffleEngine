@@ -4,7 +4,7 @@
 #define FRAMEBUFFER_H
 
 struct FrameBuffer {
-    int fbo;
+    unsigned int fbo;
     Texture texture;
 };
 typedef struct FrameBuffer FrameBuffer;

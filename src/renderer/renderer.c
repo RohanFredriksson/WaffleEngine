@@ -169,7 +169,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
     glBufferData(GL_ARRAY_BUFFER, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 
     // Create and upload the indices buffer.
-    int ebo;
+    unsigned int ebo;
     glGenBuffers(1, &ebo);
     int* indices = (int*) malloc(MAX_BATCH_SIZE * 6 * sizeof(int));
     RenderBatch_GenerateIndices(indices);
