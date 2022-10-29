@@ -14,7 +14,6 @@ add_subdirectory(dependencies/cglm)
 
 set(cimgui dependencies/cimgui)
 set(imgui_impl ${cimgui}/imgui/backends)
-set(gl3w dependencies/gl3w)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall -g")
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -26,7 +25,6 @@ include_directories(dependencies/cglm/include)
 include_directories(${cimgui})
 include_directories(${cimgui}/imgui)
 include_directories(${imgui_impl})
-include_directories(${gl3w})
 
 file(GLOB 
 	cimgui_source
