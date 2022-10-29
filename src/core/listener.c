@@ -72,7 +72,7 @@ void MouseListener_CalcOrthoY() {
 
     float currentY = ((float)MouseListener_Y / Window_GetHeight()) * 2.0f - 1.0f;
     Camera* camera =  &(Window_GetScene()->camera);
-    MouseListener_WorldY = -(camera->pos[1] + (currentY / 2.0f) * (camera->projectionSize[1] / camera->zoom));
+    MouseListener_WorldY = camera->pos[1] - (currentY / 2.0f) * (camera->projectionSize[1] / camera->zoom);
 
 }
 

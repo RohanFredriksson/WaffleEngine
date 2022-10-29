@@ -108,6 +108,29 @@ void Window_Loop() {
 
             Scene_Update(&scene, dt);
 
+            if (MouseListener_MouseDragging()) {
+                if (MouseListener_GetDx() != 0) {scene.camera.pos[0] = scene.camera.pos[0] - MouseListener_GetWorldDx();}
+                if (MouseListener_GetDy() != 0) {scene.camera.pos[1] = scene.camera.pos[1] - MouseListener_GetWorldDy();}
+            }
+
+            if (MouseListener_GetScrollY() != 0) {
+
+                if (MouseListener_GetScrollY() > 0) {
+                    scene.camera.zoom = scene.camera.zoom * 1.1f;
+                    scene.camera.pos[0] = scene.camera.pos[0] + (MouseListener_GetWorldX() - scene.camera.pos[0]) * 0.0909090909f;
+                    scene.camera.pos[1] = scene.camera.pos[1] + (MouseListener_GetWorldY() - scene.camera.pos[1]) * 0.0909090909f;
+                }
+
+                else {
+                    scene.camera.zoom = scene.camera.zoom / 1.1f;
+                    scene.camera.pos[0] = scene.camera.pos[0] - (MouseListener_GetWorldX() - scene.camera.pos[0]) * 0.1f;
+                    scene.camera.pos[1] = scene.camera.pos[1] - (MouseListener_GetWorldY() - scene.camera.pos[1]) * 0.1f;
+                }
+
+                Camera_AdjustProjection(&scene.camera);
+
+            }
+
             //----
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -149,6 +172,7 @@ void Window_Loop() {
         }
 
         glfwSwapBuffers(window);
+        MouseListener_EndFrame();
         endTime = (float)glfwGetTime();
         dt = endTime - beginTime;
         beginTime = endTime;
