@@ -76,7 +76,7 @@ bool Intersection_LineAndCircle(Line2D line, Circle circle) {
 
 }
 
-bool Intersection_LineAndAABB(Line2D line, AABB2D box) {
+bool Intersection_LineAndAABB2D(Line2D line, AABB2D box) {
 
     if (Intersection_PointInAABB2D(line.from, box) || Intersection_PointInAABB2D(line.to, box)) {
         return 1;
@@ -131,7 +131,7 @@ bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
     Box2D_GetMax(&box, max);
     AABB2D_InitRange(&aabb, min, max);
 
-    return Intersection_LineAndAABB(localLine, aabb);
+    return Intersection_LineAndAABB2D(localLine, aabb);
 
 }
 
@@ -166,5 +166,119 @@ bool Intersection_RaycastCircle(Circle circle, Ray2D ray, RaycastResult* result)
         RaycastResult_Init(result, point, normal, t, 1);
     }
     
+    return 1;
+}
+
+bool Intersection_RaycastAABB2D(AABB2D box, Ray2D ray, RaycastResult* result) {
+
+    RaycastResult_Reset(result);
+
+    vec2 unitVector;
+    glm_vec2_copy(ray.direction, unitVector);
+    glm_vec2_normalize(unitVector);
+    unitVector[0] = (unitVector != 0) ? 1.0f / unitVector[0] : 0.0f;
+    unitVector[1] = (unitVector != 0) ? 1.0f / unitVector[1] : 0.0f;
+
+    vec2 min;
+    AABB2D_GetMin(&box, min);
+    glm_vec2_sub(min, ray.origin, min);
+    glm_vec2_mul(min, unitVector, min);
+
+    vec2 max;
+    AABB2D_GetMax(&box, max);
+    glm_vec2_sub(max, ray.origin, max);
+    glm_vec2_mul(max, unitVector, max);
+
+    float tmin = WMath_MaxFloat(WMath_MinFloat(min[0], max[0]), WMath_MinFloat(min[1], max[1]));
+    float tmax = WMath_MinFloat(WMath_MaxFloat(min[0], max[0]), WMath_MaxFloat(min[1], max[1]));
+    if (tmax < 0 || tmin > tmax) {
+        return 0;
+    }
+
+    float t = (tmin < 0.0f) ? tmax : tmin;
+    bool hit = t > 0.0f;// && t * t < ray.maximum;
+    if (!hit) {
+        return 0;
+    }
+
+    if (result != NULL) {
+        vec2 point;
+        glm_vec2_scale(ray.direction, t, point);
+        glm_vec2_add(ray.origin, point, point);
+        vec2 normal;
+        glm_vec2_sub(ray.origin, point, normal);
+        glm_vec2_normalize(normal);
+        RaycastResult_Init(result, point, normal, t, 1);
+    }
+
+    return 1;
+}
+
+bool Intersection_RaycastBox2D(Box2D box, Ray2D ray, RaycastResult* result) {
+
+    RaycastResult_Reset(result);
+
+    vec2 size;
+    glm_vec2_copy(box.halfSize, size);
+    vec2 xAxis;
+    xAxis[0] = 1;
+    xAxis[1] = 0;
+    vec2 yAxis;
+    yAxis[0] = 0;
+    yAxis[1] = 1;
+    vec2 origin;
+    glm_vec2_zero(origin);
+
+    WMath_Rotate(xAxis, -box.rigidbody->rotation, origin);
+    WMath_Rotate(yAxis, -box.rigidbody->rotation, origin);
+
+    vec2 p;
+    glm_vec2_sub(box.rigidbody->pos, ray.origin, p);
+
+    // Project the direction of the ray onto each axis of the box
+    vec2 f;
+    f[0] = glm_vec2_dot(xAxis, ray.direction);
+    f[1] = glm_vec2_dot(yAxis, ray.direction);
+
+    // Project p onto every axis of the box
+    vec2 e;
+    e[0] = glm_vec2_dot(xAxis, p);
+    e[1] = glm_vec2_dot(yAxis, p);
+
+    float tArr[] = {0,0,0,0};
+    for (int i = 0; i < 2; i++) {
+
+        if (WMath_CompareFloat(f[i], 0)) {
+            if (-e[i] - size[i] > 0 || -e[i] + size[i] < 0) {return false;} // If the ray is parallel to the current axis, and the origin of the ray is not inside, we have no hit.
+            f[i] = 0.000001f; // Set to small value to avoid divide by zero.
+        }
+
+        tArr[i * 2 + 0] = (e[i] + size[i]) / f[i]; // tmin for this axis
+        tArr[i * 2 + 1] = (e[i] - size[i]) / f[i]; // tmax for this axis
+
+    }
+
+    float tmin = WMath_MaxFloat(WMath_MinFloat(tArr[0], tArr[1]), WMath_MinFloat(tArr[2], tArr[3]));
+    float tmax = WMath_MinFloat(WMath_MaxFloat(tArr[0], tArr[1]), WMath_MaxFloat(tArr[2], tArr[3]));
+    if (tmax < 0 || tmin > tmax) {
+        return 0;
+    }
+
+    float t = (tmin < 0.0f) ? tmax : tmin;
+    bool hit = t > 0.0f;// && t * t < ray.maximum;
+    if (!hit) {
+        return 0;
+    }
+
+    if (result != NULL) {
+        vec2 point;
+        glm_vec2_scale(ray.direction, t, point);
+        glm_vec2_add(ray.origin, point, point);
+        vec2 normal;
+        glm_vec2_sub(ray.origin, point, normal);
+        glm_vec2_normalize(normal);
+        RaycastResult_Init(result, point, normal, t, 1);
+    }
+
     return 1;
 }
