@@ -317,8 +317,8 @@ GLFWmonitor* Window_GetCurrentMonitor() {
         mw = mode->width;
         mh = mode->height;
 
-        overlap = maxi(0, mini(wx + ww, mx + mw) - maxi(wx, mx)) * 
-                  maxi(0, mini(wy + wh, my + mh) - maxi(wy, my));
+        overlap = WMath_MaxInt(0, WMath_MinInt(wx + ww, mx + mw) - WMath_MaxInt(wx, mx)) * 
+                  WMath_MaxInt(0, WMath_MinInt(wy + wh, my + mh) - WMath_MaxInt(wy, my));
 
         if (bestOverlap < overlap) {
             bestOverlap = overlap;

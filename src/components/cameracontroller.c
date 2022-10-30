@@ -1,6 +1,6 @@
 #include <math.h>
 #include "external.h"
-#include "util.h"
+#include "wmath.h"
 #include "window.h"
 #include "scene.h"
 #include "cameracontroller.h"
