@@ -10,5 +10,6 @@ struct Line2D {
 typedef struct Line2D Line2D;
 
 void Line2D_Init(Line2D* l, vec2 from, vec2 to);
+float Line2D_LengthSquared(Line2D* l);
 
 #endif

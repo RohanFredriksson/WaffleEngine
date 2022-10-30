@@ -10,7 +10,7 @@ bool Intersection_PointOnLine(vec2 point, Line2D line) {
 
     float m = dy/dx;
     float b = line.to[1] - (m * line.to[0]) ;
-    
+
     return point[1] == m * point[0] + b;
 }
 
@@ -72,5 +72,64 @@ bool Intersection_LineAndCircle(Line2D line, Circle circle) {
     glm_vec2_add(line.from, abt, closestPoint);
 
     return Intersection_PointInCircle(closestPoint, circle);
+
+}
+
+bool Intersection_LineAndAABB(Line2D line, AABB2D box) {
+
+    if (Intersection_PointInAABB2D(line.from, box) || Intersection_PointInAABB2D(line.to, box)) {
+        return 1;
+    }
+
+    vec2 unitVector;
+    glm_vec2_sub(line.to, line.from, unitVector);
+    glm_vec2_normalize(unitVector);
+    unitVector[0] = (unitVector != 0) ? 1.0f / unitVector[0] : 0.0f;
+    unitVector[1] = (unitVector != 0) ? 1.0f / unitVector[1] : 0.0f;
+
+    vec2 min;
+    AABB2D_GetMin(&box, min);
+    glm_vec2_sub(min, line.from, min);
+    glm_vec2_mul(min, unitVector, min);
+
+    vec2 max;
+    AABB2D_GetMax(&box, max);
+    glm_vec2_sub(max, line.from, max);
+    glm_vec2_mul(max, unitVector, max);
+
+    float tmin = WMath_MaxFloat(WMath_MinFloat(min[0], max[0]), WMath_MinFloat(min[1], max[1]));
+    float tmax = WMath_MinFloat(WMath_MaxFloat(min[0], max[0]), WMath_MaxFloat(min[1], max[1]));
+    if (tmax < 0 || tmin > tmax) {
+        return 0;
+    }
+
+    float t = (tmin < 0.0f) ? tmax : tmin;
+    return t > 0.0f && t * t < Line2D_LengthSquared(&line);
+
+}
+
+bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
+
+    float theta = -box.rigidbody->rotation;
+    vec2 centre; 
+    glm_vec2_copy(box.rigidbody->pos, centre);
+    vec2 localStart;
+    glm_vec2_copy(line.from, localStart);
+    vec2 localEnd;
+    glm_vec2_copy(line.to, localEnd);
+
+    WMath_Rotate(localStart, theta, centre);
+    WMath_Rotate(localEnd, theta, centre);
+
+    Line2D localLine;
+    Line2D_Init(&localLine, localStart, localEnd);
+    AABB2D aabb;
+    vec2 min;
+    vec2 max;
+    Box2D_GetMin(&box, min);
+    Box2D_GetMax(&box, max);
+    AABB2D_InitRange(&aabb, min, max);
+
+    return Intersection_LineAndAABB(localLine, aabb);
 
 }
