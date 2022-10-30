@@ -1,4 +1,5 @@
 #include <float.h>
+#include <math.h>
 #include "intersection.h"
 #include "wmath.h"
 
@@ -132,4 +133,38 @@ bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
 
     return Intersection_LineAndAABB(localLine, aabb);
 
+}
+
+bool Intersection_RaycastCircle(Circle circle, Ray2D ray, RaycastResult* result) {
+    
+    RaycastResult_Reset(result);
+    
+    vec2 originToCircle;
+    glm_vec2_sub(circle.rigidbody->pos, ray.origin, originToCircle);
+    float radiusSquared = circle.radius * circle.radius;
+    float originToCircleLengthSquared = glm_vec2_norm2(originToCircle);
+
+    // Project the vector from the ray origin onto the direction of the ray
+    float a = glm_vec2_dot(originToCircle, ray.direction);
+    float b2 = originToCircleLengthSquared - (a * a);
+    if (radiusSquared - b2 < 0.0f) {
+        return false;
+    }
+
+    float f = sqrtf(radiusSquared - b2);
+    float t = 0;
+    if (originToCircleLengthSquared < radiusSquared) {t = a + f;} // Ray starts inside the circle
+    else {t = a - f;}
+
+    if (result != NULL) {
+        vec2 point;
+        glm_vec2_scale(ray.direction, t, point);
+        glm_vec2_add(ray.origin, point, point);
+        vec2 normal;
+        glm_vec2_sub(point, circle.rigidbody->pos, normal);
+        glm_vec2_normalize(normal);
+        RaycastResult_Init(result, point, normal, t, 1);
+    }
+    
+    return 1;
 }
