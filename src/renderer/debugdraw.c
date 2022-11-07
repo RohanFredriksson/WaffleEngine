@@ -11,6 +11,7 @@
 
 #define MAX_LINES 5000
 #define VERTEX_ARRAY_LENGTH (MAX_LINES * 6 * 2)
+#define CIRCLE_POINTS 20
 
 struct DebugLine {
     vec2 from;
@@ -188,5 +189,21 @@ void DebugDraw_AddBox2D(vec2 centre, vec2 dimensions, float rotation, vec3 colou
 }
 
 void DebugDraw_AddCircle(vec2 centre, float radius, vec3 colour, int lifetime) {
+
+    vec2 points[CIRCLE_POINTS];
+    int increment = 360 / CIRCLE_POINTS;
+    int currentAngle = 0;
+
+    for (int i = 0; i < CIRCLE_POINTS; i++) {
+        
+        vec2 tmp = { 0, radius };
+        WMath_Rotate(tmp, currentAngle, (vec2) { 0, 0 });
+        glm_vec2_add(tmp, centre, points[i]);
+
+        if (i > 0) {DebugDraw_AddLine2D(points[i - 1], points[i], colour, lifetime);}
+        currentAngle = currentAngle + increment;
+
+    }
+    DebugDraw_AddLine2D(points[CIRCLE_POINTS - 1], points[0], colour, lifetime);
 
 }
