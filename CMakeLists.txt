@@ -16,7 +16,7 @@ ENDMACRO()
 
 add_subdirectory(dependencies/glfw/)
 add_subdirectory(dependencies/glad/)
-add_subdirectory(dependencies/cglm)
+add_subdirectory(dependencies/cglm/)
 
 set(cimgui dependencies/cimgui)
 set(imgui_impl ${cimgui}/imgui/backends)
