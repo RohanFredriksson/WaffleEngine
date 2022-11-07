@@ -76,6 +76,10 @@ bool Intersection_LineAndCircle(Line2D line, Circle circle) {
 
 }
 
+bool Intersection_CircleAndLine(Circle circle, Line2D line) {
+    return Intersection_LineAndCircle(line, circle);
+}
+
 bool Intersection_LineAndAABB2D(Line2D line, AABB2D box) {
 
     if (Intersection_PointInAABB2D(line.from, box) || Intersection_PointInAABB2D(line.to, box)) {
@@ -132,6 +136,68 @@ bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
     AABB2D_InitRange(&aabb, min, max);
 
     return Intersection_LineAndAABB2D(localLine, aabb);
+
+}
+
+bool Intersection_CircleAndCircle(Circle c1, Circle c2) {
+    vec2 vecBetweenCentres;
+    glm_vec2_sub(c1.rigidbody->pos, c2.rigidbody->pos, vecBetweenCentres);
+    float radiiSum = c1.radius + c2.radius;
+    return glm_vec2_norm2(vecBetweenCentres) < radiiSum;
+}
+
+bool Intersection_CircleAndAABB2D(Circle circle, AABB2D box) {
+
+    vec2 min;
+    vec2 max;
+    AABB2D_GetMin(&box, min);
+    AABB2D_GetMax(&box, max);
+
+    vec2 closestPointToCircle;
+    glm_vec2_copy(circle.rigidbody->pos, closestPointToCircle);
+
+    if (closestPointToCircle[0] < min[0]) {closestPointToCircle[0] = min[0];} 
+    else if (closestPointToCircle[0] > max[0]) {closestPointToCircle[0] = max[0];}
+
+    if (closestPointToCircle[1] < min[1]) {closestPointToCircle[1] = min[1];} 
+    else if (closestPointToCircle[1] > max[1]) {closestPointToCircle[1] = max[1];}
+
+    vec2 circleToBox;
+    glm_vec2_sub(circle.rigidbody->pos, closestPointToCircle, circleToBox);
+    return glm_vec2_norm2(circleToBox) < circle.radius * circle.radius;
+
+}
+
+bool Intersection_CircleAndBox2D(Circle circle, Box2D box) {
+
+    // Treat the box just like an AABB2D, after we rotate the stuff.
+    vec2 min;
+    min[0] = 0.0f;
+    min[1] = 0.0f;
+
+    vec2 max;
+    glm_vec2_copy(box.halfSize, max);
+    glm_vec2_scale(max, 2.0f, max);
+
+    // Create a circle in box's local space
+    vec2 r;
+    glm_vec2_sub(circle.rigidbody->pos, box.rigidbody->pos, r);
+    WMath_Rotate(r, -box.rigidbody->rotation, min);
+    vec2 localCirclePos;
+    glm_vec2_add(r, box.halfSize, localCirclePos);
+
+    vec2 closestPointToCircle;
+    glm_vec2_copy(localCirclePos, closestPointToCircle);
+
+    if (closestPointToCircle[0] < min[0]) {closestPointToCircle[0] = min[0];} 
+    else if (closestPointToCircle[0] > max[0]) {closestPointToCircle[0] = max[0];}
+
+    if (closestPointToCircle[1] < min[1]) {closestPointToCircle[1] = min[1];} 
+    else if (closestPointToCircle[1] > max[1]) {closestPointToCircle[1] = max[1];}
+
+    vec2 circleToBox;
+    glm_vec2_sub(localCirclePos, closestPointToCircle, circleToBox);
+    return glm_vec2_norm2(circleToBox) < circle.radius * circle.radius;
 
 }
 
