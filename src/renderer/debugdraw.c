@@ -17,12 +17,12 @@ struct DebugLine {
     vec2 from;
     vec2 to;
     vec3 colour;
-    unsigned int lifetime;
+    int lifetime;
 };
 typedef struct DebugLine DebugLine;
 
 DebugLine* DebugDraw_Lines;
-unsigned int DebugDraw_NumLines;
+int DebugDraw_NumLines;
 float* DebugDraw_Vertices;
 Shader* DebugDraw_Shader;
 unsigned int DebugDraw_VAO;
@@ -72,12 +72,11 @@ void DebugDraw_BeginFrame() {
         DebugLine* current = DebugDraw_Lines + i;
         current->lifetime--;
         if (current->lifetime < 0) {
-            memmove(current, current+1, (DebugDraw_NumLines - i) * sizeof(DebugLine));
+            memmove(current, current + 1, (DebugDraw_NumLines - i - 1) * sizeof(DebugLine));
             DebugDraw_NumLines--;
             i--;
         }
     }
-
 }
 
 void DebugDraw_Draw() {
@@ -123,7 +122,7 @@ void DebugDraw_Draw() {
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
-    glDrawArrays(GL_LINES, 0, DebugDraw_NumLines);
+    glDrawArrays(GL_LINES, 0, 2 * DebugDraw_NumLines);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
@@ -140,15 +139,35 @@ void DebugDraw_Free() {
 
 void DebugDraw_AddLine2D(vec2 from, vec2 to, vec3 colour, int lifetime) {
 
+    if (DebugDraw_NumLines >= MAX_LINES) {
+        return;
+    }
+
+    Camera* camera = &Window_GetScene()->camera;
+
+    vec2 min;
+    glm_vec2_copy(camera->projectionSize, min);
+    glm_vec2_scale(min, 0.5f, min);
+    glm_vec2_sub(camera->pos, min, min);
+
+    vec2 max;
+    glm_vec2_copy(camera->projectionSize, max);
+    glm_vec2_scale(max, 0.5f, max);
+    glm_vec2_add(camera->pos, max, max);
+
+    bool fromInView = ((from[0] >= min[0] && from[0] <= max[0]) && (from[1] >= min[1] && from[1] <= max[1]));
+    bool toInView = ((to[0] >= min[0] && to[0] <= max[0]) && (to[1] >= min[1] && to[1] <= max[1]));
+    bool inView = fromInView || toInView;
+
+    if (!inView) {
+        return;
+    }
+
     DebugLine l;
     glm_vec2_copy(from, l.from);
     glm_vec2_copy(to, l.to);
     glm_vec3_copy(colour, l.colour);
     l.lifetime = lifetime;
-
-    if (DebugDraw_NumLines >= MAX_LINES) {
-        return;
-    }
 
     DebugDraw_Lines[DebugDraw_NumLines] = l;
     DebugDraw_NumLines++;
