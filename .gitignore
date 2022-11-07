@@ -1,13 +1,13 @@
 *.exe 
 *.cmake
-CMakeLists.txt
-CMakeCache.txt
 *.pc
 *.ini
 *.a
+CMakeCache.txt
 Makefile
 CMakefiles
 CMakeFiles
 build
 dependencies/glad/CMakeFiles
 waffle
+os.txt

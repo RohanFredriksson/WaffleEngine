@@ -3,82 +3,6 @@ import platform
 import subprocess
 import shutil
 
-head = """cmake_minimum_required(VERSION 3.14)
-
-set(project_name waffle)
-project(${project_name})
-
-MACRO(HEADER_DIRECTORIES return_list)
-    FILE(GLOB_RECURSE new_list include/*.h)
-    SET(dir_list "")
-    FOREACH(file_path ${new_list})
-        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
-        SET(dir_list ${dir_list} ${dir_path})
-    ENDFOREACH()
-    LIST(REMOVE_DUPLICATES dir_list)
-    SET(${return_list} ${dir_list})
-ENDMACRO()
-
-add_subdirectory(dependencies/glfw/)
-add_subdirectory(dependencies/glad/)
-add_subdirectory(dependencies/cglm)
-
-set(cimgui dependencies/cimgui)
-set(imgui_impl ${cimgui}/imgui/backends)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall -g")
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
-include_directories(dependencies)
-include_directories(dependencies/glfw/include)
-include_directories(dependencies/cglm/include)
-
-include_directories(${cimgui})
-include_directories(${cimgui}/imgui)
-include_directories(${imgui_impl})
-
-HEADER_DIRECTORIES(header_directories)
-include_directories(${header_directories})
-
-file(GLOB 
-	cimgui_source
-	"${cimgui}/*.cpp" 
-	"${cimgui}/imgui/*.cpp"
-	"${imgui_impl}/imgui_impl_glfw.cpp"
-	"${imgui_impl}/imgui_impl_opengl3.cpp")
-add_library(cimgui ${cimgui_source})
-target_compile_definitions(cimgui PRIVATE 
-	IMGUI_IMPL_API=extern\ \"C\"
-	IMGUI_IMPL_OPENGL_LOADER_GLAD)
-
-file(GLOB_RECURSE source_files src/*.c)
-
-"""
-
-tail = """
-add_executable(${project_name} ${source_files})
-#add_executable(${project_name} WIN32 ${source_files})
-
-#add_compile_options(-fsanitize=address)
-#add_link_options(-fsanitize=address)
-
-target_include_directories(${project_name} PUBLIC glfw)
-target_include_directories(${project_name} PUBLIC glad)
-target_include_directories(${project_name} PUBLIC cglm)
-
-if (WIN32)
-find_library(pthread NAME pthread)
-target_link_libraries(${project_name} pthread)
-target_link_libraries(${project_name} -static)
-endif()
-
-target_link_libraries(${project_name} glfw)
-target_link_libraries(${project_name} glad)
-target_link_libraries(${project_name} cglm)
-target_link_libraries(${project_name} cimgui)
-
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")"""
-
 operating_system = platform.system().lower()
 
 def run(command: str):
@@ -89,63 +13,32 @@ def run(command: str):
             break
         print(line.decode('utf-8').replace('\n', ''))
 
-def create_include():
-
-    include = ""
-    for (dirpath, dirnames, filenames) in os.walk("include"):
-        include += "include_directories(" + dirpath.replace('\\','/') + ")\n"
-    include += "\n"
-
-    return include
-
-def create_source():
-
-    source = "set(source_files\n"
-    for (dirpath, dirnames, filenames) in os.walk("src"):
-        for filename in filenames:
-            if filename.endswith(".c"):
-                source += "    " + dirpath.replace('\\','/') + "/" + filename + "\n"
-    
-    source += ")\n"
-    return source
-
 def write_file(filename: str, contents: str):
-
     f = open(filename, 'w')
     f.write(contents)
     f.close()
 
-def update_cmakelists():
-
-    # Generate the latest CMakeLists file.
-    tag = "#" + operating_system + "\n"
-    include = create_include()
-    source = create_source()
-
-    # Combine all components to build the latest CMakeLists file.
-    # new_script = tag + head + include + source + tail
-    new_script= tag + head + tail
-
-    # Get the contents of the previous CMakeLists file.
-    old_script = ""
-    if os.path.exists("CMakeLists.txt"):
-        with open("CMakeLists.txt", 'r') as f:
-            old_script = f.read()
-            f.close()
-    
-    # If the file has changed, overwrite the old one with the latest.
-    if old_script != new_script:
-
-        # If the operating system has changed, remove cache.
-        old_tag = old_script.split('\n')[0] + "\n"
-        if old_tag != tag:
-            if os.path.exists("CMakeCache.txt"):
-                os.remove("CMakeCache.txt")
-        
-        # Overwrite the old file with the new one.
-        write_file("CMakeLists.txt", new_script)
+def read_file(filename: str) -> str:
+    f = open(filename, 'r')
+    contents = f.read()
+    f.close()
+    return contents
 
 def build():
+
+    # If the operating system changes, remove the cache
+    if os.path.exists("os.txt"):
+        tag = read_file("os.txt")
+        if tag != operating_system and os.path.exists("CMakeCache.txt"):
+            os.remove("CMakeCache.txt")
+
+    # If there is no os tag and the cache exists, 
+    # we cannot guarantee the os, remove the old cache.
+    elif os.path.exists("CMakeCache.txt"):
+        os.remove("CMakeCache.txt")
+
+    # Update the os cache
+    write_file("os.txt", operating_system)
 
     # Build the program depending on operating system
     if operating_system == "windows":
@@ -179,12 +72,6 @@ def build():
         shutil.copy("waffle.exe", "build")
     else:
         shutil.copy("waffle", "build")
-
-def main():
-
-    update_cmakelists()
-    build()
-
     
 if __name__ == '__main__':
-    main()
+    build()
