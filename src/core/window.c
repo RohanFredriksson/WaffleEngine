@@ -2,7 +2,7 @@
 
 #include "external.h"
 #include "window.h"
-
+#include "debugdraw.h"
 #include "cameracontroller.h"
 
 #define MAX_VERTEX_BUFFER 512 * 1024
@@ -88,6 +88,9 @@ int Window_Init() {
     Scene_Init(&scene, Title_Init);
     Scene_Start(&scene);
 
+    DebugDraw_Init();
+    DebugDraw_Start();
+
     return 0;
 
 }
@@ -165,6 +168,10 @@ void Window_Loop() {
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
 
+            DebugDraw_AddLine2D((vec2) {0,0}, (vec2) {2,1}, (vec3) {0,1,0}, 1);
+            DebugDraw_BeginFrame();
+            DebugDraw_Draw();
+
             // Render the imgui
             igRender();
             ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
@@ -183,6 +190,8 @@ void Window_Loop() {
 }
 
 void Window_Exit() {
+
+    DebugDraw_Free();
 
     // Free the framebuffers
     FrameBuffer_Free(&entityTexture);
