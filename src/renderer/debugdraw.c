@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "external.h"
+#include "debugdraw.h"
+#include "wmath.h"
 #include "window.h"
 #include "camera.h"
-#include "debugdraw.h"
 #include "shader.h"
 #include "shaderpool.h"
+
 #define MAX_LINES 5000
 #define VERTEX_ARRAY_LENGTH (MAX_LINES * 6 * 2)
 
@@ -153,6 +155,35 @@ void DebugDraw_AddLine2D(vec2 from, vec2 to, vec3 colour, int lifetime) {
 }
 
 void DebugDraw_AddBox2D(vec2 centre, vec2 dimensions, float rotation, vec3 colour, int lifetime) {
+
+    vec2 min;
+    glm_vec2_scale(dimensions, 0.5f, min);
+    glm_vec2_sub(centre, min, min);
+
+    vec2 max;
+    glm_vec2_scale(dimensions, 0.5f, max);
+    glm_vec2_add(centre, max, max);
+
+    vec2 vertices[4];
+    vertices[0][0] = min[0];
+    vertices[0][1] = min[1];
+    vertices[1][0] = min[0];
+    vertices[1][1] = max[1];
+    vertices[2][0] = max[0];
+    vertices[2][1] = max[1];
+    vertices[3][0] = max[0];
+    vertices[3][1] = min[1];
+
+    if (rotation != 0.0f) {
+        for (int i = 0; i < 4; i++) {
+            WMath_Rotate(vertices[i], rotation, centre);
+        }
+    }
+
+    DebugDraw_AddLine2D(vertices[0], vertices[1], colour, lifetime);
+    DebugDraw_AddLine2D(vertices[0], vertices[3], colour, lifetime);
+    DebugDraw_AddLine2D(vertices[1], vertices[2], colour, lifetime);
+    DebugDraw_AddLine2D(vertices[2], vertices[3], colour, lifetime);
 
 }
 

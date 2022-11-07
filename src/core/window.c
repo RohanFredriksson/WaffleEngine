@@ -168,7 +168,7 @@ void Window_Loop() {
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
 
-            DebugDraw_AddLine2D((vec2) {0,0}, (vec2) {2,1}, (vec3) {0,1,0}, 1);
+            DebugDraw_AddBox2D((vec2) {0,0}, (vec2) {2,1}, 45.0f, (vec3) {0,1,0}, 1);
             DebugDraw_BeginFrame();
             DebugDraw_Draw();
 
