@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "wmath.h"
 #include "box2d.h"
 
 void Box2D_Init(Box2D* box, vec2 size) {
@@ -41,8 +42,7 @@ void Box2D_GetVertices(Box2D* box, vec2* buffer) {
 
     if (box->rigidbody->rotation != 0.0f) {
         for (int i = 0; i < 4; i++) {
-            //vec2 v = vertices[i];
-            // TODO
+            WMath_Rotate(vertices[i], box->rigidbody->rotation, box->rigidbody->pos);
         }
     }
 

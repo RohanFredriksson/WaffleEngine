@@ -3,6 +3,85 @@
 #include "intersection.h"
 #include "wmath.h"
 
+void Intersection_GetIntervalAABB2D(AABB2D rect, vec2 axis, vec2 dest) {
+    
+    glm_vec2_zero(dest);
+    
+    vec2 min;
+    vec2 max;
+    AABB2D_GetMin(&rect, min);
+    AABB2D_GetMax(&rect, max);
+
+    vec2 vertices[4];
+    vertices[0][0] = min[0];
+    vertices[0][1] = min[1];
+    vertices[1][0] = min[0];
+    vertices[1][1] = max[1];
+    vertices[2][0] = max[0];
+    vertices[2][1] = min[1];
+    vertices[3][0] = max[0];
+    vertices[3][1] = max[1];
+
+    dest[0] = glm_vec2_dot(axis, vertices[0]);
+    dest[1] = dest[0];
+    for (int i = 0; i < 4; i++) {
+        float projection = glm_vec2_dot(axis, vertices[i]);
+        if (projection < dest[0]) {dest[0] = projection;}
+        if (projection > dest[1]) {dest[1] = projection;}
+    }
+
+}
+
+void Intersection_GetIntervalBox2D(Box2D rect, vec2 axis, vec2 dest) {
+    
+    glm_vec2_zero(dest);
+
+    vec2 vertices[4];
+    Box2D_GetVertices(&rect, vertices);
+
+    dest[0] = glm_vec2_dot(axis, vertices[0]);
+    dest[1] = dest[0];
+    for (int i = 0; i < 4; i++) {
+        float projection = glm_vec2_dot(axis, vertices[i]);
+        if (projection < dest[0]) {dest[0] = projection;}
+        if (projection > dest[1]) {dest[1] = projection;}
+    }
+
+}
+
+bool Intersection_OverlapOnAxisAABB2DAndAABB2D(AABB2D b1, AABB2D b2, vec2 axis) {
+    
+    vec2 i1;
+    vec2 i2;
+    Intersection_GetIntervalAABB2D(b1, axis, i1);
+    Intersection_GetIntervalAABB2D(b2, axis, i2);
+
+    return (i2[0] <= i1[1]) && (i1[0] <= i2[1]);
+
+}
+
+bool Intersection_OverlapOnAxisAABB2DAndBox2D(AABB2D b1, Box2D b2, vec2 axis) {
+    
+    vec2 i1;
+    vec2 i2;
+    Intersection_GetIntervalAABB2D(b1, axis, i1);
+    Intersection_GetIntervalBox2D(b2, axis, i2);
+
+    return (i2[0] <= i1[1]) && (i1[0] <= i2[1]);
+
+}
+
+bool Intersection_OverlapOnAxisBox2DAndBox2D(Box2D b1, Box2D b2, vec2 axis) {
+    
+    vec2 i1;
+    vec2 i2;
+    Intersection_GetIntervalBox2D(b1, axis, i1);
+    Intersection_GetIntervalBox2D(b2, axis, i2);
+
+    return (i2[0] <= i1[1]) && (i1[0] <= i2[1]);
+
+}
+
 bool Intersection_PointOnLine(vec2 point, Line2D line) {
     
     float dy = line.to[1] - line.from[1];
@@ -168,6 +247,10 @@ bool Intersection_CircleAndAABB2D(Circle circle, AABB2D box) {
 
 }
 
+bool Intersection_AABB2DAndCircle(AABB2D box, Circle circle) {
+    return Intersection_CircleAndAABB2D(circle, box);
+}
+
 bool Intersection_CircleAndBox2D(Circle circle, Box2D box) {
 
     // Treat the box just like an AABB2D, after we rotate the stuff.
@@ -198,6 +281,48 @@ bool Intersection_CircleAndBox2D(Circle circle, Box2D box) {
     vec2 circleToBox;
     glm_vec2_sub(localCirclePos, closestPointToCircle, circleToBox);
     return glm_vec2_norm2(circleToBox) < circle.radius * circle.radius;
+
+}
+
+bool Intersection_AABB2DAndAABB2D(AABB2D b1, AABB2D b2) {
+
+    vec2 axes[2];
+    axes[0][0] = 0;
+    axes[0][1] = 1;
+    axes[1][0] = 1;
+    axes[1][1] = 0;
+
+    for (int i = 0; i < 2; i++) {
+        if (!Intersection_OverlapOnAxisAABB2DAndAABB2D(b1, b2, axes[i])) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+bool Intersection_AABB2DAndBox2D(AABB2D b1, Box2D b2) {
+
+    vec2 axes[4];
+    axes[0][0] = 0;
+    axes[0][1] = 1;
+    axes[1][0] = 1;
+    axes[1][1] = 0;
+    axes[2][0] = 0;
+    axes[2][1] = 1;
+    axes[3][0] = 1;
+    axes[3][1] = 0;
+
+    WMath_Rotate(axes[2], b2.rigidbody->rotation, (vec2) { 0.0f, 0.0f });
+    WMath_Rotate(axes[3], b2.rigidbody->rotation, (vec2) { 0.0f, 0.0f });
+
+    for (int i = 0; i < 4; i++) {
+        if (!Intersection_OverlapOnAxisAABB2DAndBox2D(b1, b2, axes[i])) {
+            return 0;
+        }
+    }
+
+    return 1;
 
 }
 
