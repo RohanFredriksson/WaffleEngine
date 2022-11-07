@@ -147,12 +147,12 @@ void DebugDraw_AddLine2D(vec2 from, vec2 to, vec3 colour, int lifetime) {
 
     vec2 min;
     glm_vec2_copy(camera->projectionSize, min);
-    glm_vec2_scale(min, 0.5f, min);
+    glm_vec2_scale(min, 0.5f / camera->zoom, min);
     glm_vec2_sub(camera->pos, min, min);
 
     vec2 max;
     glm_vec2_copy(camera->projectionSize, max);
-    glm_vec2_scale(max, 0.5f, max);
+    glm_vec2_scale(max, 0.5f / camera->zoom, max);
     glm_vec2_add(camera->pos, max, max);
 
     bool fromInView = ((from[0] >= min[0] && from[0] <= max[0]) && (from[1] >= min[1] && from[1] <= max[1]));
