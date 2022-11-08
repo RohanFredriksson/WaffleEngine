@@ -49,6 +49,7 @@ target_compile_definitions(cimgui PRIVATE
 	IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 file(GLOB_RECURSE source_files src/*.c)
+list(REMOVE_ITEM source_files "src/main.c" "src/test.c")
 
 add_library(${project_library} ${source_files})
 target_include_directories(${project_library} PUBLIC glfw)
@@ -66,12 +67,12 @@ target_link_libraries(${project_library} glad)
 target_link_libraries(${project_library} cglm)
 target_link_libraries(${project_library} cimgui)
 
-add_executable(${project_name} main.c)
-#add_executable(${project_name} WIN32 main.c)
+add_executable(${project_name} src/main.c)
+#add_executable(${project_name} WIN32 src/main.c)
 
 target_link_libraries(${project_name} ${project_library})
 
-add_executable(waffle_test test.c)
+add_executable(waffle_test src/test.c)
 target_link_libraries(waffle_test ${project_library})
 enable_testing()
 
