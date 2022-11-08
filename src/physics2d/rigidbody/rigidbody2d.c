@@ -11,6 +11,11 @@ Component* Rigidbody2D_Init(vec2 pos, float rotation) {
     rb->component = c;
     glm_vec2_copy(pos, rb->pos);
     rb->rotation = rotation;
+    glm_vec2_zero(rb->linearVelocity);
+    rb->angularVelocity = 0.0f;
+    rb->linearDamping = 0.0f;
+    rb->angularDamping = 0.0f;
+    rb->fixedRotation = 0;
 
     // Attach the rigidbody to the component
     c->data = rb;

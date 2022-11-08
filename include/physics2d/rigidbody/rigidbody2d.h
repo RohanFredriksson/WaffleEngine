@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "external.h"
 #include "gameobject.h"
 
@@ -5,9 +6,17 @@
 #define RIGIDBODY2D_H
 
 struct Rigidbody2D {
+    
     Component* component;
     vec2 pos;
     float rotation;
+
+    vec2 linearVelocity;
+    float angularVelocity;
+    float linearDamping;
+    float angularDamping;
+    bool fixedRotation;
+    
 };
 typedef struct Rigidbody2D Rigidbody2D;
 

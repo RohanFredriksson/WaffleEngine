@@ -117,8 +117,8 @@ bool Intersection_PointInBox2D(vec2 point, Box2D box) {
 
     vec2 min;
     vec2 max;
-    Box2D_GetMin(&box, min);
-    Box2D_GetMax(&box, max);
+    Box2D_GetLocalMin(&box, min);
+    Box2D_GetLocalMax(&box, max);
     return pointLocalBoxSpace[0] >= min[0] && pointLocalBoxSpace[0] <= max[0] && pointLocalBoxSpace[1] >= min[1] && pointLocalBoxSpace[1] <= max[1];
 
 }
@@ -210,8 +210,8 @@ bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
     AABB2D aabb;
     vec2 min;
     vec2 max;
-    Box2D_GetMin(&box, min);
-    Box2D_GetMax(&box, max);
+    Box2D_GetLocalMin(&box, min);
+    Box2D_GetLocalMax(&box, max);
     AABB2D_InitRange(&aabb, min, max);
 
     return Intersection_LineAndAABB2D(localLine, aabb);

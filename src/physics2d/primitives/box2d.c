@@ -15,11 +15,11 @@ void Box2D_InitRange(Box2D* box, vec2 min, vec2 max) {
     Box2D_Init(box, size);
 }
 
-void Box2D_GetMin(Box2D* box, vec2 dest) {
+void Box2D_GetLocalMin(Box2D* box, vec2 dest) {
     glm_vec2_sub(box->rigidbody->pos, box->halfSize, dest);
 }
 
-void Box2D_GetMax(Box2D* box, vec2 dest) {
+void Box2D_GetLocalMax(Box2D* box, vec2 dest) {
     glm_vec2_add(box->rigidbody->pos, box->halfSize, dest);
 }
 
@@ -27,8 +27,8 @@ void Box2D_GetVertices(Box2D* box, vec2* buffer) {
 
     vec2 min;
     vec2 max;
-    Box2D_GetMin(box, min);
-    Box2D_GetMax(box, max);
+    Box2D_GetLocalMin(box, min);
+    Box2D_GetLocalMax(box, max);
 
     vec2 vertices[4];
     vertices[0][0] = min[0];
@@ -47,4 +47,13 @@ void Box2D_GetVertices(Box2D* box, vec2* buffer) {
     }
 
     memcpy(vertices, buffer, sizeof(vec2) * 4);
+}
+
+void Box2D_SetSize(Box2D* box, vec2 size) {
+    glm_vec2_copy(size, box->size);
+    glm_vec2_scale(box->size, 0.5f, box->halfSize);
+}
+
+void Box2D_SetRigidbody(Box2D* box, Rigidbody2D* rb) {
+    box->rigidbody = rb;
 }

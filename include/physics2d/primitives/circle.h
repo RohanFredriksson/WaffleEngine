@@ -10,5 +10,7 @@ struct Circle {
 typedef struct Circle Circle;
 
 void Circle_Init(Circle* c, float radius);
+void Circle_SetRadius(Circle* c, float radius);
+void Circle_SetRigidbody(Circle* c, Rigidbody2D* rb);
 
 #endif

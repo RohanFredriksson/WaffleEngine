@@ -17,4 +17,7 @@ void AABB2D_InitRange(AABB2D* box, vec2 min, vec2 max);
 void AABB2D_GetMin(AABB2D* box, vec2 dest);
 void AABB2D_GetMax(AABB2D* box, vec2 dest);
 
+void AABB2D_SetSize(AABB2D* box, vec2 size);
+void AABB2D_SetRigidbody(AABB2D* box, Rigidbody2D* rb);
+
 #endif
