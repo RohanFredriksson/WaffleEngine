@@ -1,4 +1,5 @@
 #include "rigidbody2d.h"
+#include "forceregistration.h"
 #include "forcegenerator.h"
 
 #ifndef FORCEREGISTRY_H
