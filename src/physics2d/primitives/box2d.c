@@ -16,11 +16,11 @@ void Box2D_InitRange(Box2D* box, vec2 min, vec2 max) {
 }
 
 void Box2D_GetLocalMin(Box2D* box, vec2 dest) {
-    glm_vec2_sub(box->rigidbody->pos, box->halfSize, dest);
+    glm_vec2_sub(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
 void Box2D_GetLocalMax(Box2D* box, vec2 dest) {
-    glm_vec2_add(box->rigidbody->pos, box->halfSize, dest);
+    glm_vec2_add(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
 void Box2D_GetVertices(Box2D* box, vec2* buffer) {
@@ -40,9 +40,9 @@ void Box2D_GetVertices(Box2D* box, vec2* buffer) {
     vertices[3][0] = max[0];
     vertices[3][1] = max[1];
 
-    if (box->rigidbody->rotation != 0.0f) {
+    if (box->rigidbody->transform->rotation != 0.0f) {
         for (int i = 0; i < 4; i++) {
-            WMath_Rotate(vertices[i], box->rigidbody->rotation, box->rigidbody->pos);
+            WMath_Rotate(vertices[i], box->rigidbody->transform->rotation, box->rigidbody->transform->pos);
         }
     }
 

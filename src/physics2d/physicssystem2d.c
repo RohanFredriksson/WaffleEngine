@@ -26,7 +26,7 @@ void PhysicsSystem2D_FixedUpdate(PhysicsSystem2D* p) {
 
     // Update velocities of all rigidbodies
     for (int i = 0; i < p->numRigidbodies; i++) {
-        Rigidbody2D_PhysicsUpdate(p->rigidbodies + i, p->fixedUpdate);
+        Rigidbody2D_PhysicsUpdate(p->rigidbodies[i], p->fixedUpdate);
     }
 
 }
@@ -43,6 +43,16 @@ void PhysicsSystem2D_AddRigidbody(PhysicsSystem2D* p, Rigidbody2D* rb) {
 
     // Register gravity
     ForceRegistry_Add(&p->forceRegistry, p->gravity, rb);
+
+}
+
+void PhysicsSystem2D_AddGameObject(PhysicsSystem2D* p, GameObject* go) {
+
+    for (int i = 0; i < go->numComponents; i++) {
+        if (strcmp(go->components[i]->type, "Rigidbody2D") == 0) {
+            PhysicsSystem2D_AddRigidbody(p, (Rigidbody2D*) go->components[i]->data);
+        }
+    }
 
 }
 

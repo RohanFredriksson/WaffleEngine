@@ -16,7 +16,7 @@ void ForceRegistry_Free(ForceRegistry* fr) {
 }
 
 void ForceRegistry_Add(ForceRegistry* fr, ForceGenerator* fg, Rigidbody2D* rb) {
-    
+
     ForceRegistration registration;
     ForceRegistration_Init(&registration, fg, rb);
 

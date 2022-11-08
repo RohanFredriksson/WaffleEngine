@@ -1,6 +1,6 @@
 #include "rigidbody2d.h"
 
-Component* Rigidbody2D_Init(vec2 pos, float rotation) {
+Component* Rigidbody2D_Init(Transform* transform) {
 
     Component* c = Component_Init("Rigidbody2D", &Rigidbody2D_Update, &Rigidbody2D_Free);
 
@@ -9,10 +9,8 @@ Component* Rigidbody2D_Init(vec2 pos, float rotation) {
 
     // Initialise the rigidbody.
     rb->component = c;
-    rb->rawTransform = NULL;
-    glm_vec2_copy(pos, rb->pos);
-    rb->rotation = rotation;
-    rb->mass = 0.0f;
+    rb->transform = transform;
+    rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
     glm_vec2_zero(rb->linearVelocity);
     rb->angularVelocity = 0.0f;
@@ -39,13 +37,6 @@ void Rigidbody2D_ClearAccumulators(Rigidbody2D* rb) {
     glm_vec2_zero(rb->forceAccum);
 }
 
-void Rigidbody2D_SynchCollisionTransforms(Rigidbody2D* rb) {
-    if (rb->rawTransform != NULL) {
-        glm_vec2_copy(rb->pos, rb->rawTransform->pos);
-        rb->rawTransform->rotation = rb->rotation;
-    }
-}
-
 void Rigidbody2D_PhysicsUpdate(Rigidbody2D* rb, float dt) {
     
     if (rb->mass == 0.0f) {return;}
@@ -58,9 +49,7 @@ void Rigidbody2D_PhysicsUpdate(Rigidbody2D* rb, float dt) {
     // Calculate linear position
     vec2 ds;
     glm_vec2_scale(rb->linearVelocity, dt, ds);
-    glm_vec2_add(rb->pos, ds, rb->pos);
-
-    Rigidbody2D_SynchCollisionTransforms(rb);
+    glm_vec2_add(rb->transform->pos, ds, rb->transform->pos);
     Rigidbody2D_ClearAccumulators(rb);
 
 }

@@ -20,9 +20,11 @@ void Title_Init(Scene* s) {
     Sprite* spriteAinsley = SpritePool_Get("./assets/textures/ainsley.jpg");
     Transform* transformAinsley = TransformPool_Add((vec2){ 1, 0 }, (vec2){ 1, 1 }, 0);
 
+    Component* rigidbodyAinsley = Rigidbody2D_Init(transformAinsley);
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
     GameObject* gameObjectAinsley = GameObject_Init(NULL);
     
+    GameObject_AddComponent(gameObjectAinsley, rigidbodyAinsley);
     GameObject_AddComponent(gameObjectAinsley, spriteRendererAinsley);
     Scene_AddGameObject(s, gameObjectAinsley);
 

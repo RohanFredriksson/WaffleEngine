@@ -9,9 +9,7 @@
 struct Rigidbody2D {
     
     Component* component;
-    Transform* rawTransform;
-    vec2 pos;
-    float rotation;
+    Transform* transform;
     float mass;
     vec2 forceAccum;
     vec2 linearVelocity;
@@ -23,13 +21,11 @@ struct Rigidbody2D {
 };
 typedef struct Rigidbody2D Rigidbody2D;
 
-Component* Rigidbody2D_Init(vec2 pos, float rotation);
+Component* Rigidbody2D_Init(Transform* transform);
 
 void Rigidbody2D_Update(Component* c, float dt);
 
 void Rigidbody2D_Free(Component* c);
-
-void Rigidbody2D_SynchCollisionTransforms(Rigidbody2D* rb);
 
 void Rigidbody2D_ClearAccumulators(Rigidbody2D* rb);
 

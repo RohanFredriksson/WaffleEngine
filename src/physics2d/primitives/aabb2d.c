@@ -13,11 +13,11 @@ void AABB2D_InitRange(AABB2D* box, vec2 min, vec2 max) {
 }
 
 void AABB2D_GetMin(AABB2D* box, vec2 dest) {
-    glm_vec2_sub(box->rigidbody->pos, box->halfSize, dest);
+    glm_vec2_sub(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
 void AABB2D_GetMax(AABB2D* box, vec2 dest) {
-    glm_vec2_add(box->rigidbody->pos, box->halfSize, dest);
+    glm_vec2_add(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
 void AABB2D_SetSize(AABB2D* box, vec2 size) {

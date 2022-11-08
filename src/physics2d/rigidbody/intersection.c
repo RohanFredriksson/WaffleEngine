@@ -95,7 +95,7 @@ bool Intersection_PointOnLine(vec2 point, Line2D line) {
 }
 
 bool Intersection_PointInCircle(vec2 point, Circle circle) {
-    float distanceSquared = glm_vec2_distance2(point, circle.rigidbody->pos);
+    float distanceSquared = glm_vec2_distance2(point, circle.rigidbody->transform->pos);
     return distanceSquared <= circle.radius * circle.radius;
 }
 
@@ -113,7 +113,7 @@ bool Intersection_PointInBox2D(vec2 point, Box2D box) {
     
     vec2 pointLocalBoxSpace;
     glm_vec2_copy(point, pointLocalBoxSpace);
-    WMath_Rotate(pointLocalBoxSpace, box.rigidbody->rotation, box.rigidbody->pos);
+    WMath_Rotate(pointLocalBoxSpace, box.rigidbody->transform->rotation, box.rigidbody->transform->pos);
 
     vec2 min;
     vec2 max;
@@ -135,7 +135,7 @@ bool Intersection_LineAndCircle(Line2D line, Circle circle) {
     // Project the point (circle position) onto the line ab (line segment).
     // Parameterised position t
     vec2 circleCentre;
-    glm_vec2_copy(circle.rigidbody->pos, circleCentre);
+    glm_vec2_copy(circle.rigidbody->transform->pos, circleCentre);
     vec2 circleToLineStart;
     glm_vec2_sub(circleCentre, line.from, circleToLineStart);
     float t = glm_vec2_dot(circleToLineStart, ab) /  glm_vec2_dot(ab, ab);
@@ -194,9 +194,9 @@ bool Intersection_LineAndAABB2D(Line2D line, AABB2D box) {
 
 bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
 
-    float theta = -box.rigidbody->rotation;
+    float theta = -box.rigidbody->transform->rotation;
     vec2 centre; 
-    glm_vec2_copy(box.rigidbody->pos, centre);
+    glm_vec2_copy(box.rigidbody->transform->pos, centre);
     vec2 localStart;
     glm_vec2_copy(line.from, localStart);
     vec2 localEnd;
@@ -220,7 +220,7 @@ bool Intersection_LineAndBox2D(Line2D line, Box2D box) {
 
 bool Intersection_CircleAndCircle(Circle c1, Circle c2) {
     vec2 vecBetweenCentres;
-    glm_vec2_sub(c1.rigidbody->pos, c2.rigidbody->pos, vecBetweenCentres);
+    glm_vec2_sub(c1.rigidbody->transform->pos, c2.rigidbody->transform->pos, vecBetweenCentres);
     float radiiSum = c1.radius + c2.radius;
     return glm_vec2_norm2(vecBetweenCentres) < radiiSum;
 }
@@ -233,7 +233,7 @@ bool Intersection_CircleAndAABB2D(Circle circle, AABB2D box) {
     AABB2D_GetMax(&box, max);
 
     vec2 closestPointToCircle;
-    glm_vec2_copy(circle.rigidbody->pos, closestPointToCircle);
+    glm_vec2_copy(circle.rigidbody->transform->pos, closestPointToCircle);
 
     if (closestPointToCircle[0] < min[0]) {closestPointToCircle[0] = min[0];} 
     else if (closestPointToCircle[0] > max[0]) {closestPointToCircle[0] = max[0];}
@@ -242,7 +242,7 @@ bool Intersection_CircleAndAABB2D(Circle circle, AABB2D box) {
     else if (closestPointToCircle[1] > max[1]) {closestPointToCircle[1] = max[1];}
 
     vec2 circleToBox;
-    glm_vec2_sub(circle.rigidbody->pos, closestPointToCircle, circleToBox);
+    glm_vec2_sub(circle.rigidbody->transform->pos, closestPointToCircle, circleToBox);
     return glm_vec2_norm2(circleToBox) < circle.radius * circle.radius;
 
 }
@@ -264,8 +264,8 @@ bool Intersection_CircleAndBox2D(Circle circle, Box2D box) {
 
     // Create a circle in box's local space
     vec2 r;
-    glm_vec2_sub(circle.rigidbody->pos, box.rigidbody->pos, r);
-    WMath_Rotate(r, -box.rigidbody->rotation, min);
+    glm_vec2_sub(circle.rigidbody->transform->pos, box.rigidbody->transform->pos, r);
+    WMath_Rotate(r, -box.rigidbody->transform->rotation, min);
     vec2 localCirclePos;
     glm_vec2_add(r, box.halfSize, localCirclePos);
 
@@ -313,8 +313,8 @@ bool Intersection_AABB2DAndBox2D(AABB2D b1, Box2D b2) {
     axes[3][0] = 1;
     axes[3][1] = 0;
 
-    WMath_Rotate(axes[2], b2.rigidbody->rotation, (vec2) { 0.0f, 0.0f });
-    WMath_Rotate(axes[3], b2.rigidbody->rotation, (vec2) { 0.0f, 0.0f });
+    WMath_Rotate(axes[2], b2.rigidbody->transform->rotation, (vec2) { 0.0f, 0.0f });
+    WMath_Rotate(axes[3], b2.rigidbody->transform->rotation, (vec2) { 0.0f, 0.0f });
 
     for (int i = 0; i < 4; i++) {
         if (!Intersection_OverlapOnAxisAABB2DAndBox2D(b1, b2, axes[i])) {
@@ -331,7 +331,7 @@ bool Intersection_RaycastCircle(Circle circle, Ray2D ray, RaycastResult* result)
     RaycastResult_Reset(result);
     
     vec2 originToCircle;
-    glm_vec2_sub(circle.rigidbody->pos, ray.origin, originToCircle);
+    glm_vec2_sub(circle.rigidbody->transform->pos, ray.origin, originToCircle);
     float radiusSquared = circle.radius * circle.radius;
     float originToCircleLengthSquared = glm_vec2_norm2(originToCircle);
 
@@ -352,7 +352,7 @@ bool Intersection_RaycastCircle(Circle circle, Ray2D ray, RaycastResult* result)
         glm_vec2_scale(ray.direction, t, point);
         glm_vec2_add(ray.origin, point, point);
         vec2 normal;
-        glm_vec2_sub(point, circle.rigidbody->pos, normal);
+        glm_vec2_sub(point, circle.rigidbody->transform->pos, normal);
         glm_vec2_normalize(normal);
         RaycastResult_Init(result, point, normal, t, 1);
     }
@@ -420,11 +420,11 @@ bool Intersection_RaycastBox2D(Box2D box, Ray2D ray, RaycastResult* result) {
     vec2 origin;
     glm_vec2_zero(origin);
 
-    WMath_Rotate(xAxis, -box.rigidbody->rotation, origin);
-    WMath_Rotate(yAxis, -box.rigidbody->rotation, origin);
+    WMath_Rotate(xAxis, -box.rigidbody->transform->rotation, origin);
+    WMath_Rotate(yAxis, -box.rigidbody->transform->rotation, origin);
 
     vec2 p;
-    glm_vec2_sub(box.rigidbody->pos, ray.origin, p);
+    glm_vec2_sub(box.rigidbody->transform->pos, ray.origin, p);
 
     // Project the direction of the ray onto each axis of the box
     vec2 f;
