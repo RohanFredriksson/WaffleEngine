@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 set(project_name waffle)
+set(project_library waffle_core)
 project(${project_name})
 
 MACRO(HEADER_DIRECTORIES return_list)
@@ -22,6 +23,7 @@ set(cimgui dependencies/cimgui)
 set(imgui_impl ${cimgui}/imgui/backends)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall -g")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 include_directories(dependencies)
@@ -48,25 +50,32 @@ target_compile_definitions(cimgui PRIVATE
 
 file(GLOB_RECURSE source_files src/*.c)
 
-add_executable(${project_name} ${source_files})
-#add_executable(${project_name} WIN32 ${source_files})
-
-#add_compile_options(-fsanitize=address)
-#add_link_options(-fsanitize=address)
-
-target_include_directories(${project_name} PUBLIC glfw)
-target_include_directories(${project_name} PUBLIC glad)
-target_include_directories(${project_name} PUBLIC cglm)
+add_library(${project_library} ${source_files})
+target_include_directories(${project_library} PUBLIC glfw)
+target_include_directories(${project_library} PUBLIC glad)
+target_include_directories(${project_library} PUBLIC cglm)
 
 if (WIN32)
 find_library(pthread NAME pthread)
-target_link_libraries(${project_name} pthread)
-target_link_libraries(${project_name} -static)
+target_link_libraries(${project_library} pthread)
+target_link_libraries(${project_library} -static)
 endif()
 
-target_link_libraries(${project_name} glfw)
-target_link_libraries(${project_name} glad)
-target_link_libraries(${project_name} cglm)
-target_link_libraries(${project_name} cimgui)
+target_link_libraries(${project_library} glfw)
+target_link_libraries(${project_library} glad)
+target_link_libraries(${project_library} cglm)
+target_link_libraries(${project_library} cimgui)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+add_executable(${project_name} main.c)
+#add_executable(${project_name} WIN32 main.c)
+
+target_link_libraries(${project_name} ${project_library})
+
+add_executable(waffle_test test.c)
+target_link_libraries(waffle_test ${project_library})
+enable_testing()
+
+add_test(
+    NAME waffle_test
+    COMMAND $<TARGET_FILE:waffle_test>
+)
