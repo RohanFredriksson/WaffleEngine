@@ -7,10 +7,16 @@
 struct Collider2D {
     Component* component;
     vec2 offset;
+    void (*update)(struct Collider2D* c, float dt);
+    void (*free)(struct Collider2D* c);
+    char* type;
+    void* data;
 };
 typedef struct Collider2D Collider2D;
 
-Component* Collider2D_Init();
+Component* Collider2D_Init(char* type, 
+                           void (*update)(Collider2D* c, float dt), 
+                           void (*free)(Collider2D* c));
 
 void Collider2D_Update(Component* c, float dt);
 

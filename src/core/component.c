@@ -20,5 +20,6 @@ Component* Component_Init(char* type,
 
 void Component_Free(Component* c) {
     c->free(c);
+    free(c->data);
     free(c->type);
 }

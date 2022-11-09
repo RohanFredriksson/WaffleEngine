@@ -67,6 +67,5 @@ void SpriteRenderer_Update(Component* c, float dt) {
 }
 
 void SpriteRenderer_Free(Component* c) {
-    Component_Free(c);
-    free(c->data);
+    
 }

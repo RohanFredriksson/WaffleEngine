@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdio.h>
 #include "rigidbody2d.h"
 
 Component* Rigidbody2D_Init(Transform* transform) {
@@ -9,6 +11,7 @@ Component* Rigidbody2D_Init(Transform* transform) {
 
     // Initialise the rigidbody.
     rb->component = c;
+    rb->collider = NULL;
     rb->transform = transform;
     rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
@@ -16,6 +19,7 @@ Component* Rigidbody2D_Init(Transform* transform) {
     rb->angularVelocity = 0.0f;
     rb->linearDamping = 0.0f;
     rb->angularDamping = 0.0f;
+    rb->cor = 1.0f;
     rb->fixedRotation = 0;
 
     // Attach the rigidbody to the component
@@ -29,8 +33,22 @@ void Rigidbody2D_Update(Component* c, float dt) {
 }
 
 void Rigidbody2D_Free(Component* c) {
-    Component_Free(c);
-    free(c->data);
+    
+}
+
+void Rigidbody2D_SetCollider(Component* c, Component* collider) {
+    
+    if (strcmp(c->type, "Rigidbody2D") != 0) {
+        printf("ERROR::RIGIDBODY2D_SETCOLLIDER::COMPONENT_NOT_OF_RIGIDBODY2D_TYPE\n");
+        return;
+    }
+
+    if (strcmp(collider->type, "Collider2D") != 0) {
+        printf("ERROR::RIGIDBODY2D_SETCOLLIDER::COMPONENT_NOT_OF_COLLIDER2D_TYPE");
+        return;
+    }
+
+    ((Rigidbody2D*) c->data)->collider = (Collider2D*) collider->data;
 }
 
 void Rigidbody2D_ClearAccumulators(Rigidbody2D* rb) {
@@ -56,4 +74,8 @@ void Rigidbody2D_PhysicsUpdate(Rigidbody2D* rb, float dt) {
 
 void Rigidbody2D_AddForce(Rigidbody2D* rb, vec2 force) {
     glm_vec2_add(rb->forceAccum, force, rb->forceAccum);
+}
+
+bool Rigidbody2D_HasInfiniteMass(Rigidbody2D* rb) {
+    return rb->mass == 0.0f;
 }

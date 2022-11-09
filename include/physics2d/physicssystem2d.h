@@ -1,6 +1,7 @@
 #include "external.h"
 #include "gameobject.h"
 #include "forceregistry.h"
+#include "collisionmanifold.h"
 
 #ifndef PHYSICSSYSTEM2D_H
 #define PHYSICSSYSTEM2D_H
@@ -8,10 +9,24 @@
 struct PhysicsSystem2D {
     
     ForceRegistry forceRegistry;
+    ForceGenerator* gravity;
+
     Rigidbody2D** rigidbodies;
     int numRigidbodies;
     int sizeRigidbodies;
-    ForceGenerator* gravity;
+    
+    Rigidbody2D** bodies1;
+    int numBodies1;
+    int sizeBodies1;
+
+    Rigidbody2D** bodies2;
+    int numBodies2;
+    int sizeBodies2;
+
+    CollisionManifold** collisions;
+    int numCollisions;
+    int sizeCollisions;
+
     float fixedUpdate;
 
 };

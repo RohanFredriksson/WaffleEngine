@@ -29,7 +29,7 @@ void CollisionManifold_AddContactPoint(CollisionManifold* cm, vec2 contactPoint)
         cm->sizeContactPoints = cm->sizeContactPoints * 2;
     }
 
-    glm_vec2_copy(cm->contactPoints[cm->numContactPoints], contactPoint);
+    glm_vec2_copy(contactPoint, cm->contactPoints[cm->numContactPoints]);
     cm->numContactPoints++;
 
 }

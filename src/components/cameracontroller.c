@@ -66,8 +66,7 @@ void CameraController_Update(Component* c, float dt) {
 }
 
 void CameraController_Free(Component* c) {
-    Component_Free(c);
-    free(c->data);
+    
 }
 
 void CameraController_MoveTo(CameraController* cc, float x, float y, float t) {
