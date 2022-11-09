@@ -11,4 +11,5 @@ Testing
 build
 dependencies/glad/CMakeFiles
 waffle
+waffle_test
 os.txt
