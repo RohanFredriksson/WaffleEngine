@@ -64,6 +64,7 @@ void Scene_Free(Scene* s) {
 
     // Free all renderer data.
     Renderer_Free(&s->renderer);
+    PhysicsSystem2D_Free(&s->physics);
 
 }
 
