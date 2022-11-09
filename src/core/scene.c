@@ -50,6 +50,7 @@ void Scene_Update(Scene* s, float dt) {
 
 void Scene_Render(Scene* s) {
     Renderer_Render(&s->renderer);
+    PhysicsSystem2D_Render(&s->physics);
 }
 
 void Scene_Free(Scene* s) {

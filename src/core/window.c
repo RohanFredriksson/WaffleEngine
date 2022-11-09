@@ -142,6 +142,8 @@ void Window_Loop() {
             //----
             
             FrameBuffer_Bind(&entityTexture);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
             Renderer_BindShader(entityShader);
             Scene_Render(&scene);
             FrameBuffer_Unbind(&entityTexture);
@@ -167,10 +169,6 @@ void Window_Loop() {
             
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
-
-            if (MouseListener_MouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-                DebugDraw_AddCircle((vec2) {2.5f,0.5f}, 0.5f, (vec3) {0,1,0}, 1);
-            }
 
             DebugDraw_BeginFrame();
             DebugDraw_Draw();

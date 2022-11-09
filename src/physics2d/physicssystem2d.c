@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "physicssystem2d.h"
+#include "debugdraw.h"
 #include "collision.h"
 #include "gravity2d.h"
 #include "wmath.h"
@@ -37,6 +38,22 @@ void PhysicsSystem2D_Init(PhysicsSystem2D* p, float fixedUpdate, vec2 gravity) {
 
 void PhysicsSystem2D_Update(PhysicsSystem2D* p, float dt) {
     PhysicsSystem2D_FixedUpdate(p);
+}
+
+void PhysicsSystem2D_Render(PhysicsSystem2D* p) {
+    for (int i = 0 ; i < p->numRigidbodies; i++) {
+
+        Rigidbody2D* rigidbody = p->rigidbodies[i];
+        Collider2D* collider = rigidbody->collider;
+
+        if (collider == NULL) {continue;}
+
+        if (strcmp(collider->type, "Circle") == 0) {
+            Circle* circle = (Circle*) collider->data;
+            DebugDraw_AddCircle(rigidbody->transform->pos, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
+        }
+
+    }
 }
 
 void PhysicsSystem2D_ClearCollisionLists(PhysicsSystem2D* p) {
