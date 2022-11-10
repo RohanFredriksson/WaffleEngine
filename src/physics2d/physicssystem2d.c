@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "physicssystem2d.h"
+#include "primitives.h"
 #include "debugdraw.h"
 #include "collision.h"
 #include "gravity2d.h"
@@ -51,6 +52,9 @@ void PhysicsSystem2D_Render(PhysicsSystem2D* p) {
         if (strcmp(collider->type, "Circle") == 0) {
             Circle* circle = (Circle*) collider->data;
             DebugDraw_AddCircle(rigidbody->transform->pos, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
+        } else if (strcmp(collider->type, "Box2D") == 0) {
+            Box2D* box = (Box2D*) collider->data;
+            DebugDraw_AddBox2D(rigidbody->transform->pos, box->size, rigidbody->transform->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
         }
 
     }

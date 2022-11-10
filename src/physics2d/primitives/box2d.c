@@ -3,16 +3,32 @@
 #include "wmath.h"
 #include "box2d.h"
 
-void Box2D_Init(Box2D* box, vec2 size) {
+Component* Box2D_Init(vec2 size, Component* rigidbody) {
+
+    if (rigidbody != NULL && strcmp(rigidbody->type, "Rigidbody2D") != 0) {
+        printf("ERROR::BOX2D::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
+    }
+
+    Component* component = Collider2D_Init("Box2D", &Box2D_Update, &Box2D_Free);
+    Collider2D* collider = (Collider2D*) component->data;
+    Box2D* box = malloc(sizeof(Box2D));
+
+    box->collider = collider;
     glm_vec2_copy(size, box->size);
     glm_vec2_scale(size, 0.5f, box->halfSize);
-    box->rigidbody = NULL;
+    box->rigidbody = rigidbody->data;
+
+    collider->data = box;
+    return component;
+
 }
 
-void Box2D_InitRange(Box2D* box, vec2 min, vec2 max) {
-    vec2 size;
-    glm_vec2_sub(max, min, size);
-    Box2D_Init(box, size);
+void Box2D_Update(Collider2D* c, float dt) {
+
+}
+
+void Box2D_Free(Collider2D* c) {
+    
 }
 
 void Box2D_GetLocalMin(Box2D* box, vec2 dest) {
