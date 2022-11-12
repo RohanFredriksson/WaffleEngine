@@ -12,6 +12,8 @@
 #define INITIAL_COLLISIONS_SIZE 16
 #define IMPULSE_ITERATIONS 6
 
+float PhysicsSystem_Time = 0.0f;
+
 void PhysicsSystem_Init(PhysicsSystem* p, float fixedUpdate, vec2 gravity) {
 
     ForceRegistry_Init(&p->forceRegistry);
@@ -38,7 +40,11 @@ void PhysicsSystem_Init(PhysicsSystem* p, float fixedUpdate, vec2 gravity) {
 }
 
 void PhysicsSystem_Update(PhysicsSystem* p, float dt) {
-    PhysicsSystem_FixedUpdate(p);
+    PhysicsSystem_Time = PhysicsSystem_Time + dt;
+    while (PhysicsSystem_Time >= 0.0f) {
+        PhysicsSystem_FixedUpdate(p);
+        PhysicsSystem_Time = PhysicsSystem_Time - p->fixedUpdate;
+    }
 }
 
 void PhysicsSystem_Render(PhysicsSystem* p) {
