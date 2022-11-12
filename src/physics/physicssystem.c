@@ -74,39 +74,83 @@ void PhysicsSystem_ClearCollisionLists(PhysicsSystem* p) {
 
 void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m) {
 
-    // Linear velocity
-    float invMass1 = 1.0f / a->mass;
-    float invMass2 = 1.0f / b->mass;
-    float invMassSum = invMass1 + invMass2;
-    if (invMassSum == 0.0f) {return;}
+    // Check for infinite mass objects.
+    if (Rigidbody_HasInfiniteMass(a) && Rigidbody_HasInfiniteMass(b)) {return;}
 
-    // Relative velocity
-    vec2 relativeVelocity;
-    glm_vec2_sub(b->velocity, a->velocity, relativeVelocity);
-    vec2 relativeNormal;
-    glm_vec2_normalize_to(m->normal, relativeNormal);
+    // If one rigidbody is static.
+    if (Rigidbody_HasInfiniteMass(a) || Rigidbody_HasInfiniteMass(b)) {
+        
+        // Relative velocity
+        vec2 relativeVelocity;
+        glm_vec2_sub(b->velocity, a->velocity, relativeVelocity);
+        vec2 relativeNormal;
+        glm_vec2_normalize_to(m->normal, relativeNormal);
 
-    // Moving away from each other? Do nothing.
-    if (glm_vec2_dot(relativeVelocity, relativeNormal) > 0.0f) {return;}
+        // Moving away from each other? Do nothing.
+        if (glm_vec2_dot(relativeVelocity, relativeNormal) > 0.0f) {return;}
 
-    float e = WMath_MinFloat(a->cor, b->cor);
-    float numerator = -(1.0f + e) * glm_vec2_dot(relativeVelocity, relativeNormal);
-    float j = numerator / invMassSum;
+        float e = WMath_MinFloat(a->cor, b->cor);
+        float numerator = -(1.0f + e) * glm_vec2_dot(relativeVelocity, relativeNormal);
+        float j = numerator / ((Rigidbody_HasInfiniteMass(a)) ? 1.0f / b->mass : 1.0f / a->mass);
 
-    if (m->numContactPoints > 0 && j != 0.0f) {
-        j = j / (float) m->numContactPoints;
+        if (m->numContactPoints > 0 && j != 0.0f) {
+            j = j / (float) m->numContactPoints;
+        }
+
+        vec2 impulse;
+        glm_vec2_scale(relativeNormal, j, impulse);
+
+        if (Rigidbody_HasInfiniteMass(a)) {
+            vec2 btmp;
+            glm_vec2_scale(impulse, 1.0f / b->mass, btmp);
+            glm_vec2_add(b->velocity, btmp, b->velocity);
+        }
+
+        else {
+            vec2 atmp;
+            glm_vec2_scale(impulse, -1.0f / a->mass, atmp);
+            glm_vec2_add(a->velocity, atmp, a->velocity);
+        }
+
     }
 
-    vec2 impulse;
-    glm_vec2_scale(relativeNormal, j, impulse);
+    else {
 
-    vec2 atmp;
-    glm_vec2_scale(impulse, -1.0f * invMass1, atmp);
-    glm_vec2_add(a->velocity, atmp, a->velocity);
+        // Linear velocity
+        float invMass1 = 1.0f / a->mass;
+        float invMass2 = 1.0f / b->mass;
+        float invMassSum = invMass1 + invMass2;
+        if (invMassSum == 0.0f) {return;}
 
-    vec2 btmp;
-    glm_vec2_scale(impulse, invMass2, btmp);
-    glm_vec2_add(b->velocity, btmp, b->velocity);
+        // Relative velocity
+        vec2 relativeVelocity;
+        glm_vec2_sub(b->velocity, a->velocity, relativeVelocity);
+        vec2 relativeNormal;
+        glm_vec2_normalize_to(m->normal, relativeNormal);
+
+        // Moving away from each other? Do nothing.
+        if (glm_vec2_dot(relativeVelocity, relativeNormal) > 0.0f) {return;}
+
+        float e = WMath_MinFloat(a->cor, b->cor);
+        float numerator = -(1.0f + e) * glm_vec2_dot(relativeVelocity, relativeNormal);
+        float j = numerator / invMassSum;
+
+        if (m->numContactPoints > 0 && j != 0.0f) {
+            j = j / (float) m->numContactPoints;
+        }
+
+        vec2 impulse;
+        glm_vec2_scale(relativeNormal, j, impulse);
+
+        vec2 atmp;
+        glm_vec2_scale(impulse, -1.0f * invMass1, atmp);
+        glm_vec2_add(a->velocity, atmp, a->velocity);
+
+        vec2 btmp;
+        glm_vec2_scale(impulse, invMass2, btmp);
+        glm_vec2_add(b->velocity, btmp, b->velocity);
+
+    }
 
 }
 
