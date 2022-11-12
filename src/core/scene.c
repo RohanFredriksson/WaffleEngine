@@ -16,7 +16,7 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     s->gameObjects = (GameObject**) malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject*));
     Camera_Init(&s->camera);
     Renderer_Init(&s->renderer);
-    PhysicsSystem2D_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, 0.0f });
+    PhysicsSystem_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, 0.0f });
 
     if (init != NULL) {
         init(s);
@@ -29,7 +29,7 @@ void Scene_Start(Scene* s) {
     // Add all gameobjects to the renderer.
     for (int i = 0; i < s->numGameObjects; i++) {
         Renderer_AddGameObject(&s->renderer, s->gameObjects[i]);
-        PhysicsSystem2D_AddGameObject(&s->physics, s->gameObjects[i]);
+        PhysicsSystem_AddGameObject(&s->physics, s->gameObjects[i]);
     }
     s->isRunning = 1;
 
@@ -44,13 +44,13 @@ void Scene_Update(Scene* s, float dt) {
         GameObject_Update(s->gameObjects[i], dt);
     }
 
-    PhysicsSystem2D_Update(&s->physics, dt);
+    PhysicsSystem_Update(&s->physics, dt);
 
 }
 
 void Scene_Render(Scene* s) {
     Renderer_Render(&s->renderer);
-    PhysicsSystem2D_Render(&s->physics);
+    PhysicsSystem_Render(&s->physics);
 }
 
 void Scene_Free(Scene* s) {
@@ -64,7 +64,7 @@ void Scene_Free(Scene* s) {
 
     // Free all renderer data.
     Renderer_Free(&s->renderer);
-    PhysicsSystem2D_Free(&s->physics);
+    PhysicsSystem_Free(&s->physics);
 
 }
 
@@ -82,7 +82,7 @@ void Scene_AddGameObject(Scene* s, GameObject* go) {
     // If the scene is running, add all renderable components to the renderer.
     if (s->isRunning) {
         Renderer_AddGameObject(&s->renderer, go);
-        PhysicsSystem2D_AddGameObject(&s->physics, go);
+        PhysicsSystem_AddGameObject(&s->physics, go);
     }
     
     s->numGameObjects++;

@@ -137,7 +137,7 @@ void DebugDraw_Free() {
     free(DebugDraw_Vertices);
 }
 
-void DebugDraw_AddLine2D(vec2 from, vec2 to, vec3 colour, int lifetime) {
+void DebugDraw_AddLine(vec2 from, vec2 to, vec3 colour, int lifetime) {
 
     if (DebugDraw_NumLines >= MAX_LINES) {
         return;
@@ -174,7 +174,7 @@ void DebugDraw_AddLine2D(vec2 from, vec2 to, vec3 colour, int lifetime) {
 
 }
 
-void DebugDraw_AddBox2D(vec2 centre, vec2 dimensions, float rotation, vec3 colour, int lifetime) {
+void DebugDraw_AddBox(vec2 centre, vec2 dimensions, float rotation, vec3 colour, int lifetime) {
 
     vec2 min;
     glm_vec2_scale(dimensions, 0.5f, min);
@@ -200,10 +200,10 @@ void DebugDraw_AddBox2D(vec2 centre, vec2 dimensions, float rotation, vec3 colou
         }
     }
 
-    DebugDraw_AddLine2D(vertices[0], vertices[1], colour, lifetime);
-    DebugDraw_AddLine2D(vertices[0], vertices[3], colour, lifetime);
-    DebugDraw_AddLine2D(vertices[1], vertices[2], colour, lifetime);
-    DebugDraw_AddLine2D(vertices[2], vertices[3], colour, lifetime);
+    DebugDraw_AddLine(vertices[0], vertices[1], colour, lifetime);
+    DebugDraw_AddLine(vertices[0], vertices[3], colour, lifetime);
+    DebugDraw_AddLine(vertices[1], vertices[2], colour, lifetime);
+    DebugDraw_AddLine(vertices[2], vertices[3], colour, lifetime);
 
 }
 
@@ -219,10 +219,10 @@ void DebugDraw_AddCircle(vec2 centre, float radius, vec3 colour, int lifetime) {
         WMath_Rotate(tmp, currentAngle, (vec2) { 0, 0 });
         glm_vec2_add(tmp, centre, points[i]);
 
-        if (i > 0) {DebugDraw_AddLine2D(points[i - 1], points[i], colour, lifetime);}
+        if (i > 0) {DebugDraw_AddLine(points[i - 1], points[i], colour, lifetime);}
         currentAngle = currentAngle + increment;
 
     }
-    DebugDraw_AddLine2D(points[CIRCLE_POINTS - 1], points[0], colour, lifetime);
+    DebugDraw_AddLine(points[CIRCLE_POINTS - 1], points[0], colour, lifetime);
 
 }

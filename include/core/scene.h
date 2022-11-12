@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "gameobject.h"
 #include "renderer.h"
-#include "physicssystem2d.h"
+#include "physicssystem.h"
 #include "camera.h"
 
 #ifndef SCENE_H
@@ -14,7 +14,7 @@ struct Scene {
     GameObject** gameObjects;
     Camera camera;
     Renderer renderer;
-    PhysicsSystem2D physics;
+    PhysicsSystem physics;
 };
 typedef struct Scene Scene;
 

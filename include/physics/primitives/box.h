@@ -1,0 +1,26 @@
+#include "external.h"
+#include "rigidbody.h"
+
+#ifndef BOX_H
+#define BOX_H
+
+struct Box {
+    Collider* collider;
+    Rigidbody* rigidbody;
+    vec2 size;
+    vec2 halfSize;
+};
+typedef struct Box Box;
+
+Component* Box_Init(vec2 size, Component* rigidbody);
+void Box_Update(Collider* c, float dt);
+void Box_Free(Collider* c);
+
+void Box_GetLocalMin(Box* box, vec2 dest);
+void Box_GetLocalMax(Box* box, vec2 dest);
+void Box_GetVertices(Box* box, vec2* buffer);
+
+void Box_SetSize(Box* box, vec2 size);
+void Box_SetRigidbody(Box* box, Rigidbody* rb);
+
+#endif
