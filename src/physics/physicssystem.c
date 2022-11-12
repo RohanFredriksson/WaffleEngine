@@ -101,15 +101,27 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
         glm_vec2_scale(relativeNormal, j, impulse);
 
         if (Rigidbody_HasInfiniteMass(a)) {
+            
             vec2 btmp;
             glm_vec2_scale(impulse, 1.0f / b->mass, btmp);
             glm_vec2_add(b->velocity, btmp, b->velocity);
+
+            // For static objects, move them outside of the obstacles, so they dont eventually sink through.
+            glm_vec2_scale(m->normal, 2.0f * m->depth, btmp);
+            glm_vec2_add(b->transform->pos, btmp, b->transform->pos);
+
         }
 
         else {
+
             vec2 atmp;
             glm_vec2_scale(impulse, -1.0f / a->mass, atmp);
             glm_vec2_add(a->velocity, atmp, a->velocity);
+
+            // For static objects, move them outside of the obstacles, so they dont eventually sink through.
+            glm_vec2_scale(m->normal, -2.0f * m->depth, atmp);
+            glm_vec2_add(a->transform->pos, atmp, a->transform->pos);
+
         }
 
     }

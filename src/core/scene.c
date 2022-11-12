@@ -16,7 +16,7 @@ void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
     s->gameObjects = (GameObject**) malloc(INITIAL_GAMEOBJECTS_SIZE * sizeof(GameObject*));
     Camera_Init(&s->camera);
     Renderer_Init(&s->renderer);
-    PhysicsSystem_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, 0.0f });
+    PhysicsSystem_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, -10.0f });
 
     if (init != NULL) {
         init(s);
