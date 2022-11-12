@@ -15,12 +15,8 @@ Component* Rigidbody_Init(Transform* transform) {
     rb->transform = transform;
     rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
-    glm_vec2_zero(rb->linearVelocity);
-    rb->angularVelocity = 0.0f;
-    rb->linearDamping = 0.0f;
-    rb->angularDamping = 0.0f;
+    glm_vec2_zero(rb->velocity);
     rb->cor = 1.0f;
-    rb->fixedRotation = 0;
 
     // Attach the rigidbody to the component
     c->data = rb;
@@ -62,11 +58,11 @@ void Rigidbody_PhysicsUpdate(Rigidbody* rb, float dt) {
     // Calculate linear velocity
     vec2 dv;
     glm_vec2_scale(rb->forceAccum, dt/rb->mass, dv);
-    glm_vec2_add(rb->linearVelocity, dv, rb->linearVelocity);
+    glm_vec2_add(rb->velocity, dv, rb->velocity);
 
     // Calculate linear position
     vec2 ds;
-    glm_vec2_scale(rb->linearVelocity, dt, ds);
+    glm_vec2_scale(rb->velocity, dt, ds);
     glm_vec2_add(rb->transform->pos, ds, rb->transform->pos);
     Rigidbody_ClearAccumulators(rb);
 

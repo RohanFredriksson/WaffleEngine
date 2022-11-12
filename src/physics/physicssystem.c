@@ -82,7 +82,7 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
     // Relative velocity
     vec2 relativeVelocity;
-    glm_vec2_sub(b->linearVelocity, a->linearVelocity, relativeVelocity);
+    glm_vec2_sub(b->velocity, a->velocity, relativeVelocity);
     vec2 relativeNormal;
     glm_vec2_normalize_to(m->normal, relativeNormal);
 
@@ -102,11 +102,11 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
     vec2 atmp;
     glm_vec2_scale(impulse, -1.0f * invMass1, atmp);
-    glm_vec2_add(a->linearVelocity, atmp, a->linearVelocity);
+    glm_vec2_add(a->velocity, atmp, a->velocity);
 
     vec2 btmp;
     glm_vec2_scale(impulse, invMass2, btmp);
-    glm_vec2_add(b->linearVelocity, btmp, b->linearVelocity);
+    glm_vec2_add(b->velocity, btmp, b->velocity);
 
 }
 

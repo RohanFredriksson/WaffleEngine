@@ -16,8 +16,8 @@ Component* Box_Init(vec2 size, Component* rigidbody);
 void Box_Update(Collider* c, float dt);
 void Box_Free(Collider* c);
 
-void Box_GetLocalMin(Box* box, vec2 dest);
-void Box_GetLocalMax(Box* box, vec2 dest);
+void Box_GetMin(Box* box, vec2 dest);
+void Box_GetMax(Box* box, vec2 dest);
 void Box_GetVertices(Box* box, vec2* buffer);
 
 void Box_SetSize(Box* box, vec2 size);

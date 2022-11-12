@@ -1,4 +1,4 @@
-#include "circle.h"
+#include "primitives.h"
 #include "collider.h"
 #include "collisionmanifold.h"
 
@@ -7,5 +7,6 @@
 
 CollisionManifold* Collision_FindCollisionFeatures(Collider* c1, Collider* c2);
 CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Circle* b);
+CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b);
 
 #endif

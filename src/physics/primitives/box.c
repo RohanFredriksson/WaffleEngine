@@ -31,11 +31,11 @@ void Box_Free(Collider* c) {
     
 }
 
-void Box_GetLocalMin(Box* box, vec2 dest) {
+void Box_GetMin(Box* box, vec2 dest) {
     glm_vec2_sub(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
-void Box_GetLocalMax(Box* box, vec2 dest) {
+void Box_GetMax(Box* box, vec2 dest) {
     glm_vec2_add(box->rigidbody->transform->pos, box->halfSize, dest);
 }
 
@@ -43,8 +43,8 @@ void Box_GetVertices(Box* box, vec2* buffer) {
 
     vec2 min;
     vec2 max;
-    Box_GetLocalMin(box, min);
-    Box_GetLocalMax(box, max);
+    Box_GetMin(box, min);
+    Box_GetMax(box, max);
 
     vec2 vertices[4];
     vertices[0][0] = min[0];
@@ -55,14 +55,8 @@ void Box_GetVertices(Box* box, vec2* buffer) {
     vertices[2][1] = min[1];
     vertices[3][0] = max[0];
     vertices[3][1] = max[1];
-
-    if (box->rigidbody->transform->rotation != 0.0f) {
-        for (int i = 0; i < 4; i++) {
-            WMath_Rotate(vertices[i], box->rigidbody->transform->rotation, box->rigidbody->transform->pos);
-        }
-    }
-
     memcpy(vertices, buffer, sizeof(vec2) * 4);
+
 }
 
 void Box_SetSize(Box* box, vec2 size) {

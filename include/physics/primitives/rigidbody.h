@@ -14,12 +14,8 @@ struct Rigidbody {
     Transform* transform;
     float mass;
     vec2 forceAccum;
-    vec2 linearVelocity;
-    float angularVelocity;
-    float linearDamping;
-    float angularDamping;
+    vec2 velocity;
     float cor;
-    bool fixedRotation;
     
 };
 typedef struct Rigidbody Rigidbody;
