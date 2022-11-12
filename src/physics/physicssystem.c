@@ -174,6 +174,11 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
 void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
     
+    // Update velocities of all rigidbodies
+    for (int i = 0; i < p->numRigidbodies; i++) {
+        Rigidbody_PhysicsUpdate(p->rigidbodies[i], p->fixedUpdate);
+    }
+
     // Clear the collision lists
     PhysicsSystem_ClearCollisionLists(p);
 
@@ -237,11 +242,6 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
                 PhysicsSystem_ApplyImpulse(r1, r2, p->collisions[i]);
             }
         }
-    }
-
-    // Update velocities of all rigidbodies
-    for (int i = 0; i < p->numRigidbodies; i++) {
-        Rigidbody_PhysicsUpdate(p->rigidbodies[i], p->fixedUpdate);
     }
 
 }
