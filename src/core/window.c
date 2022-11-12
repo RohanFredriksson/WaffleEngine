@@ -75,7 +75,7 @@ int Window_Init() {
     igStyleColorsDark(NULL);
 
     // Set the window configuration.
-    //Window_SetFullscreenWindowed();
+    Window_SetFullscreenWindowed();
 
     // Set up the framebuffers.
     PickingTexture_Init(&entityTexture, windowSize[0], windowSize[1]);

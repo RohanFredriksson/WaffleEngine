@@ -8,5 +8,7 @@
 CollisionManifold* Collision_FindCollisionFeatures(Collider* c1, Collider* c2);
 CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Circle* b);
 CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b);
+CollisionManifold* Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* b);
+CollisionManifold* Collision_FindCollisionFeaturesBoxAndCircle(Box* b, Circle* c);
 
 #endif

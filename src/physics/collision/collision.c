@@ -15,6 +15,14 @@ CollisionManifold* Collision_FindCollisionFeatures(Collider* c1, Collider* c2) {
         return Collision_FindCollisionFeaturesCircleAndCircle((Circle*) c1->data, (Circle*) c2->data);
     }
     
+    if (strcmp(c1->type, "Circle") == 0 && strcmp(c2->type, "Box") == 0) {
+        return Collision_FindCollisionFeaturesCircleAndBox((Circle*) c1->data, (Box*) c2->data);
+    }
+
+    if (strcmp(c1->type, "Box") == 0 && strcmp(c2->type, "Circle") == 0) {
+        return Collision_FindCollisionFeaturesBoxAndCircle((Box*) c1->data, (Circle*) c2->data);
+    }
+
     return NULL;
 }
 
@@ -185,4 +193,173 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
 
     CollisionManifold_Set(result, normal, &contactPoint, 1, depth);
     return result;
+}
+
+CollisionManifold* _Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* b, bool flip) {
+
+    float depth;
+    vec2 normal;
+    vec2 contactPoint;
+
+    vec2 cPos;
+    vec2 bPos;
+    vec2 bMin;
+    vec2 bMax;
+    glm_vec2_copy(c->rigidbody->transform->pos, cPos);
+    glm_vec2_copy(b->rigidbody->transform->pos, bPos);
+    Box_GetMin(b, bMin);
+    Box_GetMax(b, bMax);
+
+    CollisionManifold* result = NULL;
+
+    // Colliding with the top face of the box.
+    if (cPos[0] >= bMin[0] && cPos[0] <= bMax[0] && cPos[1] >= bMax[1] && cPos[1] < bMax[1] + c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        depth = (bMax[1] - (cPos[1] - c->radius)) * 0.5f;
+        normal[0] = 0.0f;
+        normal[1] = -1.0f;
+        contactPoint[0] = cPos[0];
+        contactPoint[1] = bMax[1] - depth;
+
+    }
+
+    // Colliding with the bottom face of the box.
+    else if (cPos[0] >= bMin[0] && cPos[0] <= bMax[0] && cPos[1] > bMin[1] - c->radius && cPos[1] <= bMin[1]) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        depth = ((cPos[1] + c->radius) - bMin[1]) * 0.5f;
+        normal[0] = 0.0f;
+        normal[1] = 1.0f;
+        contactPoint[0] = cPos[0];
+        contactPoint[1] = bMin[1] + depth;
+
+    }
+
+    // Colliding with the right face of the box
+    else if (cPos[1] >= bMin[1] && cPos[1] <= bMax[1] && cPos[0] >= bMax[0] && cPos[0] < bMax[0] + c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        depth = (bMax[0] - (cPos[0] - c->radius)) * 0.5f;
+        normal[0] = -1.0f;
+        normal[1] = 0.0f;
+        contactPoint[0] = cPos[1];
+        contactPoint[1] = bMax[0] - depth;
+
+    }
+
+    // Colliding with the left face of the box.
+    else if (cPos[1] >= bMin[1] && cPos[1] <= bMax[1] && cPos[0] > bMin[0] - c->radius && cPos[0] <= bMin[0]) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        depth = ((cPos[0] + c->radius) - bMin[0]) * 0.5f;
+        normal[0] = 1.0f;
+        normal[1] = 0.0f;
+        contactPoint[0] = cPos[1];
+        contactPoint[1] = bMin[0] + depth;
+
+    }
+
+    // Colliding with the top left corner of the box.
+    else if (glm_vec2_norm2((vec2) { cPos[0] - bMin[0], cPos[1] - bMax[1] }) < c->radius * c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        vec2 difference;
+        glm_vec2_sub((vec2) { bMin[0], bMax[1] }, cPos, difference);
+        glm_vec2_normalize_to(difference, normal);
+
+        vec2 depthVector;
+        glm_vec2_scale(normal, c->radius, depthVector);
+        glm_vec2_sub(depthVector, difference, depthVector);
+        glm_vec2_scale(depthVector, 0.5f, depthVector);
+        
+        depth = glm_vec2_norm(depthVector);
+        glm_vec2_add((vec2) { bMin[0], bMax[1] }, depthVector, contactPoint);
+
+    }
+
+    // Colliding with the top right corner of the box.
+    else if (glm_vec2_norm2((vec2) { cPos[0] - bMax[0], cPos[1] - bMax[1] }) < c->radius * c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        vec2 difference;
+        glm_vec2_sub((vec2) { bMax[0], bMax[1] }, cPos, difference);
+        glm_vec2_normalize_to(difference, normal);
+
+        vec2 depthVector;
+        glm_vec2_scale(normal, c->radius, depthVector);
+        glm_vec2_sub(depthVector, difference, depthVector);
+        glm_vec2_scale(depthVector, 0.5f, depthVector);
+        
+        depth = glm_vec2_norm(depthVector);
+        glm_vec2_add((vec2) { bMax[0], bMax[1] }, depthVector, contactPoint);
+
+    }
+
+    // Colliding with the bottom left corner of the box.
+    else if (glm_vec2_norm2((vec2) { cPos[0] - bMin[0], cPos[1] - bMin[1] }) < c->radius * c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        vec2 difference;
+        glm_vec2_sub((vec2) { bMin[0], bMin[1] }, cPos, difference);
+        glm_vec2_normalize_to(difference, normal);
+
+        vec2 depthVector;
+        glm_vec2_scale(normal, c->radius, depthVector);
+        glm_vec2_sub(depthVector, difference, depthVector);
+        glm_vec2_scale(depthVector, 0.5f, depthVector);
+        
+        depth = glm_vec2_norm(depthVector);
+        glm_vec2_add((vec2) { bMin[0], bMin[1] }, depthVector, contactPoint);
+
+    }
+
+    // Colliding with the bottom right corner of the box.
+    else if (glm_vec2_norm2((vec2) { cPos[0] - bMax[0], cPos[1] - bMin[1] }) < c->radius * c->radius) {
+
+        result = malloc(sizeof(CollisionManifold));
+        CollisionManifold_Init(result);
+
+        vec2 difference;
+        glm_vec2_sub((vec2) { bMax[0], bMin[1] }, cPos, difference);
+        glm_vec2_normalize_to(difference, normal);
+
+        vec2 depthVector;
+        glm_vec2_scale(normal, c->radius, depthVector);
+        glm_vec2_sub(depthVector, difference, depthVector);
+        glm_vec2_scale(depthVector, 0.5f, depthVector);
+        
+        depth = glm_vec2_norm(depthVector);
+        glm_vec2_add((vec2) { bMax[0], bMin[1] }, depthVector, contactPoint);
+
+    }
+
+    if (result != NULL) {
+        if (flip) {glm_vec2_scale(normal, -1.0f, normal);}
+        CollisionManifold_Set(result, normal, &contactPoint, 1, depth);
+    }
+
+    return result;
+}
+
+CollisionManifold* Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* b) {
+    return _Collision_FindCollisionFeaturesCircleAndBox(c, b, 0);
+}
+
+CollisionManifold* Collision_FindCollisionFeaturesBoxAndCircle(Box* b, Circle* c) {
+    return _Collision_FindCollisionFeaturesCircleAndBox(c, b, 1);
 }
