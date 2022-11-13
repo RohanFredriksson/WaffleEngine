@@ -183,6 +183,7 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
     PhysicsSystem_ClearCollisionLists(p);
 
     // Find any collisions
+    // TODO: IMPROVE THIS WITH SPATIAL HASHING
     int size = p->numRigidbodies;
     for (int i = 0; i < size; i++) {
         for (int j = i; j < size; j++) {
@@ -268,6 +269,33 @@ void PhysicsSystem_AddGameObject(PhysicsSystem* p, GameObject* go) {
             PhysicsSystem_AddRigidbody(p, (Rigidbody*) go->components[i]->data);
         }
     }
+
+}
+
+bool PhysicsSystem_Raycast(PhysicsSystem*p, Ray ray, RaycastResult* result) {
+
+    bool hit = 0;
+    RaycastResult best;
+    RaycastResult current;
+    best.t = FLT_MAX;
+
+    // TODO: IMPROVE THIS WITH SPATIAL HASHING
+    for (int i = 0; i < p->numRigidbodies; i++) {
+
+        if (Raycast_Rigidbody(p->rigidbodies[i], ray, &current)) {
+            if (current.t < best.t) {
+                best = current;
+                hit = 1;
+            }
+        }
+
+    }
+
+    if (hit) {
+        memcpy(result, &best, sizeof(RaycastResult));
+    }
+
+    return hit;
 
 }
 
