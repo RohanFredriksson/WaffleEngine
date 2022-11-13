@@ -66,9 +66,9 @@ target_include_directories(${project_library} PUBLIC cglm)
 target_include_directories(${project_library} PUBLIC cdsl)
 
 if (WIN32)
-find_library(pthread NAME pthread)
-target_link_libraries(${project_library} pthread)
-target_link_libraries(${project_library} -static)
+    find_library(pthread NAME pthread)
+    target_link_libraries(${project_library} pthread)
+    target_link_libraries(${project_library} -static)
 endif()
 
 target_link_libraries(${project_library} glfw)
