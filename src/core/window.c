@@ -152,7 +152,7 @@ void Window_Loop() {
                 
                 int x = MouseListener_GetX();
                 int y = MouseListener_GetY();
-                int id = Window_ReadPixel(x, y); // THIS IS LAGGY
+                int id = Window_ReadPixel(x, y);
                 
                 GameObject* go = Scene_GetGameObjectByID(&scene, id);
                 if (go != NULL) {
@@ -181,6 +181,7 @@ void Window_Loop() {
 
         glfwSwapBuffers(window);
         MouseListener_EndFrame();
+        Window_ReadPixel(0, 0); // Read now to stop a pipeline stall.
         endTime = (float)glfwGetTime();
         dt = endTime - beginTime;
         beginTime = endTime;
@@ -347,14 +348,14 @@ void Window_ResetFramebuffers() {
 int Window_ReadPixel(int x, int y) {
 
     // Create a buffer to store pixel data.
-    float pixel[3];
+    float pixel;
 
     // Bind the framebuffer and read the corresponding pixel.
     FrameBuffer_Bind(&entityTexture);
-    glReadPixels(x, windowSize[1]-y-1, 1, 1, GL_RGB, GL_FLOAT, pixel);
+    glReadPixels(x, windowSize[1]-y-1, 1, 1, GL_RED, GL_FLOAT, &pixel);
     FrameBuffer_Unbind(&entityTexture);
 
     // Return the value of this pixel.
-    return (int)pixel[0] - 1;
+    return (int)pixel - 1;
 
 }
