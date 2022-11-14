@@ -152,7 +152,7 @@ void Window_Loop() {
                 
                 int x = MouseListener_GetX();
                 int y = MouseListener_GetY();
-                int id = Window_ReadPixel(x, y);
+                int id = Window_ReadPixel(x, y); // THIS IS LAGGY
                 
                 GameObject* go = Scene_GetGameObjectByID(&scene, id);
                 if (go != NULL) {
