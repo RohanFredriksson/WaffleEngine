@@ -145,20 +145,20 @@ void DebugDraw_AddLine(vec2 from, vec2 to, vec3 colour, int lifetime) {
 
     Camera* camera = &Window_GetScene()->camera;
 
-    vec2 min;
-    glm_vec2_copy(camera->projectionSize, min);
-    glm_vec2_scale(min, 0.5f / camera->zoom, min);
-    glm_vec2_sub(camera->pos, min, min);
+    vec2 pMin;
+    glm_vec2_copy(camera->projectionSize, pMin);
+    glm_vec2_scale(pMin, 0.5f / camera->zoom, pMin);
+    glm_vec2_sub(camera->pos, pMin, pMin);
 
-    vec2 max;
-    glm_vec2_copy(camera->projectionSize, max);
-    glm_vec2_scale(max, 0.5f / camera->zoom, max);
-    glm_vec2_add(camera->pos, max, max);
+    vec2 pMax;
+    glm_vec2_copy(camera->projectionSize, pMax);
+    glm_vec2_scale(pMax, 0.5f / camera->zoom, pMax);
+    glm_vec2_add(camera->pos, pMax, pMax);
 
-    bool fromInView = ((from[0] >= min[0] && from[0] <= max[0]) && (from[1] >= min[1] && from[1] <= max[1]));
-    bool toInView = ((to[0] >= min[0] && to[0] <= max[0]) && (to[1] >= min[1] && to[1] <= max[1]));
-    bool inView = fromInView || toInView;
+    vec2 lMin = { WMath_MinFloat(from[0], to[0]), WMath_MinFloat(from[1], to[1]) };
+    vec2 lMax = { WMath_MaxFloat(from[0], to[0]), WMath_MaxFloat(from[1], to[1]) };
 
+    bool inView = lMax[0] > pMin[0] && pMax[0] > lMin[0] && lMax[1] > pMin[1] && pMax[1] > lMin[1];
     if (!inView) {
         return;
     }
