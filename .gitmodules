@@ -10,4 +10,4 @@
 	url = https://github.com/cimgui/cimgui.git
 [submodule "dependencies/cdsl"]
 	path = dependencies/cdsl
-	url = https://github.com/RohanFredriksson/cdsl.git
+	url = https://github.com/RohanFredriksson/CDatastructures.git
