@@ -13,11 +13,29 @@ void SpritePool_Init() {
 }
 
 void SpritePool_Clear() {
+
+    // Free all sprite data.
+    KeyValue* current = HashMap_Elements(&SpritePool);
+    while (current != NULL) {
+        Sprite* sprite = (Sprite*) current->value;
+        free(sprite);
+        current = current->next;
+    }
     HashMap_Clear(&SpritePool);
+
 }
 
 void SpritePool_Free() {
+
+    // Free all sprite data.
+    KeyValue* current = HashMap_Elements(&SpritePool);
+    while (current != NULL) {
+        Sprite* sprite = (Sprite*) current->value;
+        free(sprite);
+        current = current->next;
+    }
     HashMap_Free(&SpritePool);
+    
 }
 
 Sprite* SpritePool_Get(const char* filename) {

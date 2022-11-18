@@ -33,6 +33,7 @@ void ShaderPool_Clear() {
     while (current != NULL) {
         Shader* shader = (Shader*) current->value;
         Shader_Free(shader);
+        free(shader);
         current = current->next;
     }
     HashMap_Clear(&ShaderPool);
@@ -46,6 +47,7 @@ void ShaderPool_Free() {
     while (current != NULL) {
         Shader* shader = (Shader*) current->value;
         Shader_Free(shader);
+        free(shader);
         current = current->next;
     }
     HashMap_Free(&ShaderPool);

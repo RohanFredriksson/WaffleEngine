@@ -18,6 +18,7 @@ void TexturePool_Clear() {
     while (current != NULL) {
         Texture* texture = (Texture*) current->value;
         Texture_Free(texture);
+        free(texture);
         current = current->next;
     }
     HashMap_Clear(&TexturePool);
@@ -31,6 +32,7 @@ void TexturePool_Free() {
     while (current != NULL) {
         Texture* texture = (Texture*) current->value;
         Texture_Free(texture);
+        free(texture);
         current = current->next;
     }
     HashMap_Free(&TexturePool);

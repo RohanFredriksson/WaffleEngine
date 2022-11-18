@@ -1,70 +1,62 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "external.h"
 #include "transform.h"
 #include "transformpool.h"
 
-#define INITIAL_TRANSFORMPOOL_SIZE 16
-
-Transform** TransformPool_Pool;
-size_t TransformPool_Size;
-size_t TransformPool_Length;
+static List TransformPool;
 
 void TransformPool_Init() {
-    TransformPool_Pool = (Transform**) malloc(INITIAL_TRANSFORMPOOL_SIZE * sizeof(Transform*));
-    TransformPool_Size = INITIAL_TRANSFORMPOOL_SIZE;
-    TransformPool_Length = 0;
+    List_Init(&TransformPool, sizeof(Transform*));
 }
 
 void TransformPool_Clear() {
 
     // Free all transform data.
-    for (int i = 0; i < TransformPool_Length; i++) {
-        free(TransformPool_Pool[i]);
+    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    int n = List_Length(&TransformPool);
+    for (int i = 0; i < n; i++) {
+        free(transforms[i]);
     }
-
-    // Set the length of the pool list to 0.
-    TransformPool_Length = 0;
+    List_Clear(&TransformPool);
 
 }
 
 void TransformPool_Free() {
 
     // Free all transform data.
-    for (int i = 0; i < TransformPool_Length; i++) {
-        free(TransformPool_Pool[i]);
+    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    int n = List_Length(&TransformPool);
+    for (int i = 0; i < n; i++) {
+        free(transforms[i]);
     }
-
-    // Free the pool.
-    free(TransformPool_Pool);
+    List_Free(&TransformPool);
 
 }
 
 Transform* TransformPool_Add(vec2 pos, vec2 size, float rotation) {
 
-    // If the pool is not big enough, allocate more memory.
-    if (TransformPool_Length >= TransformPool_Size) {
-        TransformPool_Pool = (Transform**) realloc(TransformPool_Pool, TransformPool_Size * 2 * sizeof(Transform*));
-        TransformPool_Size = TransformPool_Size * 2;
-    }
-
     // Initialise the transform.
-    Transform* newTransform = (Transform*) malloc(sizeof(Transform));
-    Transform_Init(newTransform, pos, size, rotation);
-    TransformPool_Pool[TransformPool_Length] = newTransform;
-    TransformPool_Length++;
+    Transform* transform = (Transform*) malloc(sizeof(Transform));
+    Transform_Init(transform, pos, size, rotation);
+
+    // Push it on the list.
+    List_Push(&TransformPool, &transform);
 
     // Return the new transform.
-    return newTransform;
-
+    return transform;
 
 }
 
 void TransformPool_Remove(Transform* t) {
 
-    for (int i = 0; i < TransformPool_Length; i++) {
-        if (TransformPool_Pool[i] == t) {
-            memmove(TransformPool_Pool + i, TransformPool_Pool + i + 1, (TransformPool_Length - i - 1) * sizeof(Transform*));
-            TransformPool_Length--;
+    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    int n = List_Length(&TransformPool);
+    for (int i = 0; i < n; i++) {
+        if (t == transforms[i]) {
+            List_Remove(&TransformPool, i);
+            break;
         }
     }
 
