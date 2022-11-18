@@ -1,71 +1,61 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "external.h"
 #include "texture.h"
 #include "texturepool.h"
 
-#define INITIAL_TEXTUREPOOL_SIZE 16
-
-Texture** TexturePool_Pool;
-size_t TexturePool_Size;
-size_t TexturePool_Length;
+static HashMap TexturePool;
 
 void TexturePool_Init() {
-    TexturePool_Pool = (Texture**) malloc(INITIAL_TEXTUREPOOL_SIZE * sizeof(Texture*));
-    TexturePool_Size = INITIAL_TEXTUREPOOL_SIZE;
-    TexturePool_Length = 0;
+    HashMap_Init(&TexturePool, sizeof(uint64_t), sizeof(Texture*));
 }
 
 void TexturePool_Clear() {
 
     // Free all texture data.
-    for (int i = 0; i < TexturePool_Length; i++) {
-        Texture_Free(TexturePool_Pool[i]);
-        free(TexturePool_Pool[i]);
+    KeyValue* current = HashMap_Elements(&TexturePool);
+    while (current != NULL) {
+        Texture* texture = (Texture*) current->value;
+        Texture_Free(texture);
+        current = current->next;
     }
-
-    // Set the length of the pool list to 0.
-    TexturePool_Length = 0;
+    HashMap_Clear(&TexturePool);
 
 }
 
 void TexturePool_Free() {
-    
-    // Free all texture data.
-    for (int i = 0; i < TexturePool_Length; i++) {
-        Texture_Free(TexturePool_Pool[i]);
-        free(TexturePool_Pool[i]);
-    }
 
-    // Free the pool.
-    free(TexturePool_Pool);
+    // Free all texture data.
+    KeyValue* current = HashMap_Elements(&TexturePool);
+    while (current != NULL) {
+        Texture* texture = (Texture*) current->value;
+        Texture_Free(texture);
+        current = current->next;
+    }
+    HashMap_Free(&TexturePool);
 
 }
 
 Texture* TexturePool_Get(const char* filename) {
 
-    // If the texture already exists, return the texture.
-    for (int i = 0; i < TexturePool_Length; i++) {
-        Texture* currentTexture = TexturePool_Pool[i];
-        if (strcmp(currentTexture->filename, filename) == 0) {
-            return currentTexture;
-        }
-    }
+    // Compute a string hash.
+    uint64_t hash = OAAT(filename);
+    Texture* texture;
 
-    // The texture does not exist. Add it.
-    // If the pool is not big enough, allocate more memory.
-    if (TexturePool_Length >= TexturePool_Size) {
-        TexturePool_Pool = (Texture**) realloc(TexturePool_Pool, TexturePool_Size * 2 * sizeof(Texture*));
-        TexturePool_Size = TexturePool_Size * 2;
+    // If the texture already exists, return the texture.
+    if (HashMap_Get(&TexturePool, &hash, &texture)) {
+        return texture;
     }
 
     // Initialise the texture.
-    Texture* newTexture = (Texture*) malloc(sizeof(Texture));
-    Texture_Init(newTexture, filename);
-    TexturePool_Pool[TexturePool_Length] = newTexture;
-    TexturePool_Length++;
+    texture = malloc(sizeof(Texture));
+    Texture_Init(texture, filename);
+    
+    // Add the texture to the texture pool.
+    HashMap_Put(&TexturePool, &hash, &texture);
 
     // Return the new texture.
-    return newTexture;
+    return texture;
 
 }
