@@ -8,3 +8,6 @@
 [submodule "dependencies/cimgui"]
 	path = dependencies/cimgui
 	url = https://github.com/cimgui/cimgui.git
+[submodule "dependencies/cdsl"]
+	path = dependencies/cdsl
+	url = https://github.com/RohanFredriksson/CDataStructures.git
