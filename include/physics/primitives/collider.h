@@ -15,8 +15,8 @@ struct Collider {
 typedef struct Collider Collider;
 
 Component* Collider_Init(char* type, 
-                           void (*update)(Collider* c, float dt), 
-                           void (*free)(Collider* c));
+                         void (*update)(Collider* c, float dt), 
+                         void (*free)(Collider* c));
 
 void Collider_Update(Component* c, float dt);
 

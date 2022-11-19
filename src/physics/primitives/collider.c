@@ -4,8 +4,8 @@
 #include "collider.h"
 
 Component* Collider_Init(char* type, 
-                           void (*update)(Collider* c, float dt), 
-                           void (*free)(Collider* c)) {
+                         void (*update)(Collider* c, float dt), 
+                         void (*free)(Collider* c)) {
 
     Component* c = Component_Init("Collider", &Collider_Update, &Collider_Free);
     Collider* co = malloc(sizeof(Collider));

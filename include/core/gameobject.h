@@ -28,6 +28,8 @@ void GameObject_Free(GameObject* g);
 
 void GameObject_AddComponent(GameObject* g, Component* c);
 
+void GameObject_RemoveComponent(GameObject* g, Component* c);
+
 Component* GameObject_GetComponent(GameObject* g, const char* type);
 
 Component* Component_Init(char* type, 

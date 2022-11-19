@@ -47,6 +47,22 @@ void GameObject_AddComponent(GameObject* g, Component* c) {
     List_Push(&g->components, &c);
 }
 
+void GameObject_RemoveComponent(GameObject* g, Component* c) {
+
+    Component*** components = (Component***) List_Elements(&g->components);
+    int n = List_Length(&g->components);
+    for (int i = 0; i < n; i++) {
+        Component* component = *components[i];
+        if (component == c) {
+            Component_Free(component);
+            free(component);
+            List_Remove(&g->components, i);
+            break;
+        }
+    }
+
+}
+
 Component* GameObject_GetComponent(GameObject* g, const char* type) {
 
     Component*** components = (Component***) List_Elements(&g->components);
