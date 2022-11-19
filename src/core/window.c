@@ -18,7 +18,7 @@ FrameBuffer entityTexture;
 Shader* defaultShader;
 Shader* entityShader;
 
-ivec2 windowSize = { 800, 800 };
+ivec2 windowSize = { 1366, 768 };
 float fps = -1.0f;
 
 int Window_Init() {
@@ -75,7 +75,7 @@ int Window_Init() {
     igStyleColorsDark(NULL);
 
     // Set the window configuration.
-    Window_SetFullscreenWindowed();
+    //Window_SetFullscreenWindowed();
 
     // Set up the framebuffers.
     PickingTexture_Init(&entityTexture, windowSize[0], windowSize[1]);

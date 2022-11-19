@@ -22,12 +22,13 @@ Component* Collider_Init(char* type,
 }
 
 void Collider_Update(Component* c, float dt) {
-
+    Collider* co = (Collider*) c->data;
+    if (co->update != NULL) {co->update(co, dt);}
 }
 
 void Collider_Free(Component* c) {
     Collider* co = (Collider*) c->data;
-    co->free(co);
-    free(co->data);
+    if (co->free != NULL) {co->free(co);}
+    if (co->data != NULL) {free(co->data);}
     free(co->type);
 }

@@ -23,7 +23,7 @@ void Component_Update(Component* c, float dt) {
 }
 
 void Component_Free(Component* c) {
-    c->free(c);
-    free(c->data);
+    if (c->free != NULL) {c->free(c);}
+    if (c->data != NULL) {free(c->data);}
     free(c->type);
 }
