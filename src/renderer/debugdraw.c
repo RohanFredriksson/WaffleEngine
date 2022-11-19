@@ -7,7 +7,7 @@
 #include "window.h"
 #include "camera.h"
 #include "shader.h"
-#include "shaderpool.h"
+#include "assetpool.h"
 
 #define MAX_LINES 5000
 #define VERTEX_ARRAY_LENGTH (MAX_LINES * 6 * 2)

@@ -2,7 +2,7 @@
 #include <string.h>
 #include "sprite.h"
 #include "texture.h"
-#include "texturepool.h"
+#include "assetpool.h"
 
 void Sprite_Init(Sprite* s, Texture* t) {
     
