@@ -45,6 +45,7 @@ void Title_Init(Scene* s) {
     Command* printCommandAinsley = Print_Init("THIS IS MAGICAL\n");
     Component* clickEventAinsley = Click_Init(GLFW_MOUSE_BUTTON_LEFT, 1);
     Event_AddCommand(clickEventAinsley, printCommandAinsley);
+    Event_SetMulti(clickEventAinsley, 0);
 
     GameObject* gameObjectAinsley = GameObject_Init(NULL);
 
