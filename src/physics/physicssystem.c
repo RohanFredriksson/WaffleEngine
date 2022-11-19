@@ -69,13 +69,14 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
 
 void PhysicsSystem_ClearCollisionLists(PhysicsSystem* p) {
 
-    p->numBodies1 = 0;
-    p->numBodies2 = 0;
-    p->numCollisions = 0;
     for (int i = 0; i < p->numCollisions; i++) {
         CollisionManifold_Free(p->collisions[i]);
         free(p->collisions[i]);
     }
+
+    p->numBodies1 = 0;
+    p->numBodies2 = 0;
+    p->numCollisions = 0;
 
 }
 
