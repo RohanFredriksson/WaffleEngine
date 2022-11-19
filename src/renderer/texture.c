@@ -125,5 +125,6 @@ void Texture_Unbind(Texture* t) {
 }
 
 void Texture_Free(Texture* t) {
+    glDeleteTextures(1, &t->id);
     free(t->filename);
 }

@@ -63,5 +63,6 @@ void FrameBuffer_Unbind(FrameBuffer* f) {
 }
 
 void FrameBuffer_Free(FrameBuffer* f) {
+    glDeleteFramebuffers(1, &f->fbo);
     Texture_Free(&f->texture);
 }
