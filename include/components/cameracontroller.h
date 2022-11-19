@@ -29,8 +29,6 @@ Component* CameraController_Init(Transform* follow);
 
 void CameraController_Update(Component* c, float dt);
 
-void CameraController_Free(Component* c);
-
 void CameraController_MoveTo(CameraController* cc, float x, float y, float t);
 
 #endif

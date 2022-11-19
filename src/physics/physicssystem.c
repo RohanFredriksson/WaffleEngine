@@ -70,7 +70,6 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
 void PhysicsSystem_ClearCollisionLists(PhysicsSystem* p) {
 
     for (int i = 0; i < p->numCollisions; i++) {
-        CollisionManifold_Free(p->collisions[i]);
         free(p->collisions[i]);
     }
 
@@ -100,10 +99,6 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
         float e = WMath_MinFloat(a->cor, b->cor);
         float numerator = -(1.0f + e) * glm_vec2_dot(relativeVelocity, relativeNormal);
         float j = numerator / ((Rigidbody_HasInfiniteMass(a)) ? 1.0f / b->mass : 1.0f / a->mass);
-
-        if (m->numContactPoints > 0 && j != 0.0f) {
-            j = j / (float) m->numContactPoints;
-        }
 
         vec2 impulse;
         glm_vec2_scale(relativeNormal, j, impulse);
@@ -155,10 +150,6 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
         float numerator = -(1.0f + e) * glm_vec2_dot(relativeVelocity, relativeNormal);
         float j = numerator / invMassSum;
 
-        if (m->numContactPoints > 0 && j != 0.0f) {
-            j = j / (float) m->numContactPoints;
-        }
-
         vec2 impulse;
         glm_vec2_scale(relativeNormal, j, impulse);
 
@@ -204,6 +195,10 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
 
             if (result != NULL && result->isColliding) {
 
+                // Execute on collision
+                GameObject_OnCollision(c1->component->go, c2->component->go, result->contactPoint, result->normal);
+                GameObject_OnCollision(c2->component->go, c1->component->go, result->contactPoint, result->normal);
+
                 if (p->numBodies1 >= p->sizeBodies1) {
                     p->bodies1 = realloc(p->bodies1, 2 * p->sizeBodies1 * sizeof(Rigidbody*));
                     p->sizeBodies1 = p->sizeBodies1 * 2;
@@ -226,7 +221,6 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
                 p->numCollisions++;
 
             } else if (result != NULL) {
-                CollisionManifold_Free(result);
                 free(result);
             }
         }
@@ -238,12 +232,9 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
     // Resolve collisions via iterative impulse resolution
     for (int k = 0; k < IMPULSE_ITERATIONS; k++) {
         for (int i = 0; i < p->numCollisions; i++) {
-            int jSize = p->collisions[i]->numContactPoints;
-            for (int j=0; j < jSize; j++) {
-                Rigidbody* r1 = p->bodies1[i];
-                Rigidbody* r2 = p->bodies2[i];
-                PhysicsSystem_ApplyImpulse(r1, r2, p->collisions[i]);
-            }
+            Rigidbody* r1 = p->bodies1[i];
+            Rigidbody* r2 = p->bodies2[i];
+            PhysicsSystem_ApplyImpulse(r1, r2, p->collisions[i]);
         }
     }
 
@@ -314,7 +305,6 @@ void PhysicsSystem_Free(PhysicsSystem* p) {
     free(p->bodies2);
 
     for (int i = 0; i < p->numCollisions; i++) {
-        CollisionManifold_Free(p->collisions[i]);
         free(p->collisions[i]);
     }
     free(p->collisions);

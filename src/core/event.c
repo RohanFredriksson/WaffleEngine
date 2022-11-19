@@ -2,14 +2,16 @@
 
 Component* Event_Init(char* type, 
                       bool (*check)(Event* e, float dt), 
+                      void (*collision) (struct Event* e, GameObject* with, vec2 contact, vec2 normal), 
                       void (*free)(Event* e)) {
 
-    Component* c = Component_Init("Event", &Event_Update, &Event_Free);
+    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Free);
     Event* e = malloc(sizeof(Event));
 
     e->type = malloc(strlen(type)+1);
     memcpy(e->type, type, strlen(type)+1);
     e->check = check;
+    e->collision = collision;
     e->free = free;
 
     e->component = c;
@@ -75,6 +77,11 @@ void Event_Update(Component* c, float dt) {
             }
         }
     }
+}
+
+void Event_OnCollision(Component* c, GameObject* with, vec2 contact, vec2 normal) {
+    Event* e = (Event*) c->data;
+    if (e->collision != NULL) {e->collision(e, with, contact, normal);}
 }
 
 void Event_Free(Component* c) {

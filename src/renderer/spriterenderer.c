@@ -7,7 +7,7 @@
 
 Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform, int zIndex) {
     
-    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, &SpriteRenderer_Free);
+    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, NULL, NULL);
 
     // Allocate some memory for the sprite renderer.
     SpriteRenderer* s = malloc(sizeof(SpriteRenderer));
@@ -64,8 +64,4 @@ void SpriteRenderer_Update(Component* c, float dt) {
         s->isDirty = 1;
     }
 
-}
-
-void SpriteRenderer_Free(Component* c) {
-    
 }

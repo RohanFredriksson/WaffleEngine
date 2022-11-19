@@ -10,7 +10,7 @@ Component* Circle_Init(float radius, Component* rigidbody) {
         printf("ERROR::CIRCLE::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Circle", &Circle_Update, &Circle_Free);
+    Component* component = Collider_Init("Circle", NULL, NULL, NULL);
     Collider* collider = (Collider*) component->data;
     Circle* circle = malloc(sizeof(Circle));
 
@@ -21,14 +21,6 @@ Component* Circle_Init(float radius, Component* rigidbody) {
     collider->data = circle;
     return component;
 
-}
-
-void Circle_Update(Collider* c, float dt) {
-
-}
-
-void Circle_Free(Collider* c) {
-    
 }
 
 void Circle_SetRadius(Circle* c, float radius) {

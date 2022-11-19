@@ -4,7 +4,7 @@
 
 Component* Rigidbody_Init(Transform* transform) {
 
-    Component* c = Component_Init("Rigidbody", &Rigidbody_Update, &Rigidbody_Free);
+    Component* c = Component_Init("Rigidbody", NULL, NULL, NULL);
 
     // Allocate some memory for the rigidbody.
     Rigidbody* rb = malloc(sizeof(Rigidbody));
@@ -22,14 +22,6 @@ Component* Rigidbody_Init(Transform* transform) {
     c->data = rb;
     return c;
 
-}
-
-void Rigidbody_Update(Component* c, float dt) {
-    
-}
-
-void Rigidbody_Free(Component* c) {
-    
 }
 
 void Rigidbody_SetCollider(Component* c, Component* collider) {

@@ -2,7 +2,7 @@
 
 Component* Click_Init(int button, bool usePickingTexture) {
 
-    Component* component = Event_Init("Click", &Click_Check, &Click_Free);
+    Component* component = Event_Init("Click", &Click_Check, NULL, NULL);
     Event* event = (Event*) component->data;
     Click* click = malloc(sizeof(Click));
 
@@ -46,10 +46,6 @@ bool Click_Check(Event* e, float dt) {
         }
 
     }
-    
+
     return 0;
-}
-
-void Click_Free(Event* e) {
-
 }

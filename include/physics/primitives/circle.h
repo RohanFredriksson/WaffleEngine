@@ -13,8 +13,6 @@ struct Circle {
 typedef struct Circle Circle;
 
 Component* Circle_Init(float radius, Component* rigidbody);
-void Circle_Update(Collider* c, float dt);
-void Circle_Free(Collider* c);
 
 void Circle_SetRadius(Circle* c, float radius);
 void Circle_SetRigidbody(Circle* c, Rigidbody* rb);

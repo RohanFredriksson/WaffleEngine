@@ -7,19 +7,13 @@
 struct CollisionManifold {
     bool isColliding;
     vec2 normal;
-    vec2* contactPoints;
-    int numContactPoints;
-    int sizeContactPoints;
+    vec2 contactPoint;
     float depth;
 };
 typedef struct CollisionManifold CollisionManifold;
 
 void CollisionManifold_Init(CollisionManifold* cm);
 
-void CollisionManifold_Set(CollisionManifold* cm, vec2 normal, vec2* contactPoints, int numContactPoints, float depth);
-
-void CollisionManifold_AddContactPoint(CollisionManifold* cm, vec2 contactPoint);
-
-void CollisionManifold_Free(CollisionManifold* cm);
+void CollisionManifold_Set(CollisionManifold* cm, vec2 normal, vec2 contactPoint, float depth);
 
 #endif

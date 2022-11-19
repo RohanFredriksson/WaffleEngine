@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include "external.h"
 #include "gameobject.h"
 #include "command.h"
 #include "list.h"
@@ -17,6 +18,7 @@ struct Event {
     float cooldownTimeLeft;
     char* type;
     bool (*check)(struct Event* e, float dt);
+    void (*collision) (struct Event* e, GameObject* with, vec2 contact, vec2 normal);
     void (*free)(struct Event* e);
     void* data;
 };
@@ -24,9 +26,12 @@ typedef struct Event Event;
 
 Component* Event_Init(char* type, 
                       bool (*check)(Event* e, float dt), 
+                      void (*collision) (struct Event* e, GameObject* with, vec2 contact, vec2 normal), 
                       void (*free)(Event* e));
 
 void Event_Update(Component* c, float dt);
+
+void Event_OnCollision(Component* c, GameObject* with, vec2 contact, vec2 normal);
 
 void Event_Free(Component* c);
 

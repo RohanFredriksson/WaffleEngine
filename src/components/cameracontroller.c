@@ -9,7 +9,7 @@
 
 Component* CameraController_Init(Transform* follow) {
 
-    Component* c = Component_Init("CameraController", &CameraController_Update, &CameraController_Free);
+    Component* c = Component_Init("CameraController", &CameraController_Update, NULL, NULL);
 
     // Allocate some memory for the camera controller.
     CameraController* cc = malloc(sizeof(CameraController));
@@ -63,10 +63,6 @@ void CameraController_Update(Component* c, float dt) {
 
     }
 
-}
-
-void CameraController_Free(Component* c) {
-    
 }
 
 void CameraController_MoveTo(CameraController* cc, float x, float y, float t) {

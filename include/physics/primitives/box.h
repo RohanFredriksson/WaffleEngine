@@ -13,8 +13,6 @@ struct Box {
 typedef struct Box Box;
 
 Component* Box_Init(vec2 size, Component* rigidbody);
-void Box_Update(Collider* c, float dt);
-void Box_Free(Collider* c);
 
 void Box_GetMin(Box* box, vec2 dest);
 void Box_GetMax(Box* box, vec2 dest);

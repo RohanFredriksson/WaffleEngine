@@ -9,7 +9,7 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
         printf("ERROR::BOX::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Box", &Box_Update, &Box_Free);
+    Component* component = Collider_Init("Box", NULL, NULL, NULL);
     Collider* collider = (Collider*) component->data;
     Box* box = malloc(sizeof(Box));
 
@@ -21,14 +21,6 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
     collider->data = box;
     return component;
 
-}
-
-void Box_Update(Collider* c, float dt) {
-
-}
-
-void Box_Free(Collider* c) {
-    
 }
 
 void Box_GetMin(Box* box, vec2 dest) {

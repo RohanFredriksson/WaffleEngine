@@ -22,10 +22,6 @@ typedef struct Rigidbody Rigidbody;
 
 Component* Rigidbody_Init(Transform* transform);
 
-void Rigidbody_Update(Component* c, float dt);
-
-void Rigidbody_Free(Component* c);
-
 void Rigidbody_SetCollider(Component* c, Component* collider);
 
 void Rigidbody_ClearAccumulators(Rigidbody* rb);

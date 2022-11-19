@@ -48,7 +48,7 @@ CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Cir
     glm_vec2_scale(normal, distanceToPoint, contactPoint);
     glm_vec2_add(contactPoint, a->rigidbody->transform->pos, contactPoint);
 
-    CollisionManifold_Set(result, normal, &contactPoint, 1, depth);
+    CollisionManifold_Set(result, normal, contactPoint, depth);
     return result;
 
 }
@@ -191,7 +191,7 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
 
     }
 
-    CollisionManifold_Set(result, normal, &contactPoint, 1, depth);
+    CollisionManifold_Set(result, normal, contactPoint, depth);
     return result;
 }
 
@@ -350,7 +350,7 @@ CollisionManifold* _Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* 
 
     if (result != NULL) {
         if (flip) {glm_vec2_scale(normal, -1.0f, normal);}
-        CollisionManifold_Set(result, normal, &contactPoint, 1, depth);
+        CollisionManifold_Set(result, normal, contactPoint, depth);
     }
 
     return result;

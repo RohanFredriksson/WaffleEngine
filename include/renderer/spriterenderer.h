@@ -31,6 +31,4 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform
 
 void SpriteRenderer_Update(Component* c, float dt);
 
-void SpriteRenderer_Free(Component* c);
-
 #endif

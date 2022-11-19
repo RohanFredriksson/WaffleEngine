@@ -27,6 +27,17 @@ void GameObject_Update(GameObject* g, float dt) {
 
 }
 
+void GameObject_OnCollision(GameObject* g, GameObject* with, vec2 contact, vec2 normal) {
+
+    // Run on collision of each component
+    Component*** components = (Component***) List_Elements(&g->components);
+    int n = List_Length(&g->components);
+    for (int i = 0; i < n; i++) {
+        Component_OnCollision(*components[i], with, contact, normal);
+    }
+
+}
+
 void GameObject_Free(GameObject* g) {
 
     // Free all component data in the array.
