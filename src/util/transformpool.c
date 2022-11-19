@@ -14,10 +14,10 @@ void TransformPool_Init() {
 void TransformPool_Clear() {
 
     // Free all transform data.
-    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    Transform*** transforms = (Transform***) List_Elements(&TransformPool);
     int n = List_Length(&TransformPool);
     for (int i = 0; i < n; i++) {
-        free(transforms[i]);
+        free(*transforms[i]);
     }
     List_Clear(&TransformPool);
 
@@ -26,10 +26,10 @@ void TransformPool_Clear() {
 void TransformPool_Free() {
 
     // Free all transform data.
-    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    Transform*** transforms = (Transform***) List_Elements(&TransformPool);
     int n = List_Length(&TransformPool);
     for (int i = 0; i < n; i++) {
-        free(transforms[i]);
+        free(*transforms[i]);
     }
     List_Free(&TransformPool);
 
@@ -51,10 +51,10 @@ Transform* TransformPool_Add(vec2 pos, vec2 size, float rotation) {
 
 void TransformPool_Remove(Transform* t) {
 
-    Transform** transforms = (Transform**) List_Elements(&TransformPool);
+    Transform*** transforms = (Transform***) List_Elements(&TransformPool);
     int n = List_Length(&TransformPool);
     for (int i = 0; i < n; i++) {
-        if (t == transforms[i]) {
+        if (t == *transforms[i]) {
             List_Remove(&TransformPool, i);
             break;
         }

@@ -9,6 +9,7 @@
 #include "shader.h"
 #include "window.h"
 #include "camera.h"
+#include "list.h"
 
 #define POS_SIZE 2
 #define COLOUR_SIZE 4
@@ -39,9 +40,11 @@ void Renderer_Init(Renderer* r) {
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
-    for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i]->type, "SpriteRenderer") == 0) {
-            Renderer_AddSprite(r, (SpriteRenderer*) go->components[i]->data);
+    Component*** components = (Component***) List_Elements(&go->components);
+    int n = List_Length(&go->components);
+    for (int i = 0; i < n; i++) {
+        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
+            Renderer_AddSprite(r, (SpriteRenderer*) (*components[i])->data);
         }
     }
 
@@ -270,9 +273,11 @@ void RenderBatch_Render(RenderBatch* r) {
 
 void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
-    for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i]->type, "SpriteRenderer")) {
-            RenderBatch_AddSprite(r, (SpriteRenderer*) go->components[i]->data);
+    Component*** components = (Component***) List_Elements(&go->components);
+    int n = List_Length(&go->components);
+    for (int i = 0; i < n; i++) {
+        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
+            RenderBatch_AddSprite(r, (SpriteRenderer*) (*components[i])->data);
         }
     }
 
@@ -308,9 +313,11 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
 void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 
-    for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i]->type, "SpriteRenderer") == 0) {
-            RenderBatch_RemoveSprite(r, (SpriteRenderer*) go->components[i]->data);
+    Component*** components = (Component***) List_Elements(&go->components);
+    int n = List_Length(&go->components);
+    for (int i = 0; i < n; i++) {
+        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
+            RenderBatch_RemoveSprite(r, (SpriteRenderer*) (*components[i])->data);
         }
     }
 

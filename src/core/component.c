@@ -18,6 +18,10 @@ Component* Component_Init(char* type,
     return c;
 }
 
+void Component_Update(Component* c, float dt) {
+    if (c->update != NULL) {c->update(c, dt);}
+}
+
 void Component_Free(Component* c) {
     c->free(c);
     free(c->data);

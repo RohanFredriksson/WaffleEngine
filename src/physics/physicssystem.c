@@ -6,6 +6,7 @@
 #include "collision.h"
 #include "gravity.h"
 #include "wmath.h"
+#include "list.h"
 
 #define INITIAL_RIGIDBODIES_SIZE 16
 #define INITIAL_BODIES_SIZE 16
@@ -264,9 +265,11 @@ void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 void PhysicsSystem_AddGameObject(PhysicsSystem* p, GameObject* go) {
 
-    for (int i = 0; i < go->numComponents; i++) {
-        if (strcmp(go->components[i]->type, "Rigidbody") == 0) {
-            PhysicsSystem_AddRigidbody(p, (Rigidbody*) go->components[i]->data);
+    Component*** components = (Component***) List_Elements(&go->components);
+    int n = List_Length(&go->components);
+    for (int i = 0; i < n; i++) {
+        if (strcmp((*components[i])->type, "Rigidbody") == 0) {
+            PhysicsSystem_AddRigidbody(p, (Rigidbody*) (*components[i])->data);
         }
     }
 

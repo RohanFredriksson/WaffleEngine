@@ -1,32 +1,28 @@
 #include <string.h>
 #include <stdlib.h>
+#include "list.h"
 #include "gameobject.h"
 
-#define INITIAL_COMPONENTS_SIZE 16
-int nextGameObjectId = 0;
+static int next = 0;
 
 GameObject* GameObject_Init(Transform* t) {
     
     GameObject* g = (GameObject*) malloc(sizeof(GameObject));
-
-    g->id = nextGameObjectId;
-    g->numComponents = 0;
-    g->sizeComponents = INITIAL_COMPONENTS_SIZE;
-    g->components = (Component**) malloc(INITIAL_COMPONENTS_SIZE * sizeof(Component*));
+    g->id = next;
+    List_Init(&g->components, sizeof(Component*));
     g->transform = t;
 
-    nextGameObjectId++;
+    next++;
     return g;
 }
 
 void GameObject_Update(GameObject* g, float dt) {
-    
+
     // Update all components.
-    for (int i = 0; i < g->numComponents; i++) {
-        Component* c = g->components[i];
-        if (c->update != NULL) {
-            c->update(c, dt);
-        }
+    Component*** components = (Component***) List_Elements(&g->components);
+    int n = List_Length(&g->components);
+    for (int i = 0; i < n; i++) {
+        Component_Update(*components[i], dt);
     }
 
 }
@@ -34,40 +30,30 @@ void GameObject_Update(GameObject* g, float dt) {
 void GameObject_Free(GameObject* g) {
 
     // Free all component data in the array.
-    for (int i = 0; i < g->numComponents; i++) {
-        g->components[i]->free(g->components[i]);
-        free(g->components[i]);
+    Component*** components = (Component***) List_Elements(&g->components);
+    int n = List_Length(&g->components);
+    for (int i = 0; i < n; i++) {
+        Component_Free(*components[i]);
+        free(*components[i]);
     }
 
     // Free the array itself.
-    free(g->components);
+    List_Free(&g->components);
 
 }
 
 void GameObject_AddComponent(GameObject* g, Component* c) {
-
-    // If there is no more space, allocate some more.
-    if (g->numComponents == g->sizeComponents) {
-        g->components = (Component**) realloc(g->components, g->sizeComponents * 2 * sizeof(Component*));
-        g->sizeComponents = g->sizeComponents * 2;
-    }
-
-    // Add the component.
     c->go = g;
-    g->components[g->numComponents] = c;
-    g->numComponents++;
-
+    List_Push(&g->components, &c);
 }
 
 Component* GameObject_GetComponent(GameObject* g, const char* type) {
 
-    if (g == NULL) {
-        return NULL;
-    }
-
-    for (int i = 0; i < g->numComponents; i++) {
-        if (strcmp(g->components[i]->type, type) == 0) {
-            return g->components[i];
+    Component*** components = (Component***) List_Elements(&g->components);
+    int n = List_Length(&g->components);
+    for (int i = 0; i < n; i++) {
+        if (strcmp((*components[i])->type, type) == 0) {
+            return *components[i];
         }
     }
 
