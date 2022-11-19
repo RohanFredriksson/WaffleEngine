@@ -4,6 +4,10 @@
 #include "rigidbody.h"
 #include "primitives.h"
 
+#include "command.h"
+#include "click.h"
+#include "print.h"
+
 void Title_Init(Scene* s) {
 
     // Armaan
@@ -32,14 +36,22 @@ void Title_Init(Scene* s) {
     ((Rigidbody*) rigidbodyAinsley->data)->velocity[0] = 1.0f;
     ((Rigidbody*) rigidbodyAinsley->data)->velocity[1] = 10.0f;
     ((Rigidbody*) rigidbodyAinsley->data)->cor = 0.75f;
+    
     Component* colliderAinsley = Circle_Init(0.5f, rigidbodyAinsley);
     Rigidbody_SetCollider(rigidbodyAinsley, colliderAinsley);
-    Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
-    GameObject* gameObjectAinsley = GameObject_Init(NULL);
     
+    Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
+
+    Command* printCommandAinsley = Print_Init("THIS IS MAGICAL\n");
+    Component* clickEventAinsley = Click_Init(GLFW_MOUSE_BUTTON_LEFT, 1);
+    Event_AddCommand(clickEventAinsley, printCommandAinsley);
+
+    GameObject* gameObjectAinsley = GameObject_Init(NULL);
+
     GameObject_AddComponent(gameObjectAinsley, rigidbodyAinsley);
     GameObject_AddComponent(gameObjectAinsley, colliderAinsley);
     GameObject_AddComponent(gameObjectAinsley, spriteRendererAinsley);
+    GameObject_AddComponent(gameObjectAinsley, clickEventAinsley);
     Scene_AddGameObject(s, gameObjectAinsley);
 
 }

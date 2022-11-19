@@ -15,9 +15,9 @@ struct Event {
     bool multi;
     float cooldown;
     float cooldownTimeLeft;
-    bool (*check)(struct Event* e, float dt);
-    void (*free)(struct Event* c);
     char* type;
+    bool (*check)(struct Event* e, float dt);
+    void (*free)(struct Event* e);
     void* data;
 };
 typedef struct Event Event;

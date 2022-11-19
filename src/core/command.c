@@ -1,8 +1,8 @@
 #include "command.h"
 
 Command* Command_Init(char* type, 
-                    void (*execute) (Component* c), 
-                    void (*free)(struct Command* a)) {
+                      void (*execute) (struct Command* a, Component* c), 
+                      void (*free)(struct Command* a)) {
 
     Command* a = (Command*) malloc(sizeof(Command));
 
@@ -18,7 +18,7 @@ Command* Command_Init(char* type,
 }
 
 void Command_Execute(Command* a, Component* c) {
-    if (a->execute != NULL) {a->execute(c);}
+    if (a->execute != NULL) {a->execute(a, c);}
 }
 
 void Command_Free(Command* a) {

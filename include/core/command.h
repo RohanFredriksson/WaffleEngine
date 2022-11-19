@@ -5,7 +5,7 @@
 #define COMMAND_H
 
 struct Command {
-    void (*execute) (Component* c);
+    void (*execute) (struct Command* a, Component* c);
     void (*free)(struct Command* a);
     char* type;
     void* data;
@@ -13,8 +13,8 @@ struct Command {
 typedef struct Command Command;
 
 Command* Command_Init(char* type, 
-                    void (*execute) (Component* c), 
-                    void (*free)(struct Command* a));
+                      void (*execute) (struct Command* a, Component* c), 
+                      void (*free)(struct Command* a));
 
 void Command_Execute(Command* a, Component* c);
 
