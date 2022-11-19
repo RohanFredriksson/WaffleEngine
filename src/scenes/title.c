@@ -15,9 +15,9 @@ void Title_Init(Scene* s) {
     Transform* transformArmaan = TransformPool_Add((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
     
     Component* rigidbodyArmaan = Rigidbody_Init(transformArmaan);
-    ((Rigidbody*) rigidbodyArmaan->data)->mass = 0.0f;
     Component* colliderArmaan = Box_Init((vec2) {5.0f, 1.0f}, rigidbodyArmaan);
     Rigidbody_SetCollider(rigidbodyArmaan, colliderArmaan);
+    Rigidbody_SetMass(rigidbodyArmaan, 0.0f);
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, transformArmaan, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
     GameObject* gameObjectArmaan = GameObject_Init(NULL);
@@ -33,12 +33,10 @@ void Title_Init(Scene* s) {
     Transform* transformAinsley = TransformPool_Add((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
     Component* rigidbodyAinsley = Rigidbody_Init(transformAinsley);
-    ((Rigidbody*) rigidbodyAinsley->data)->velocity[0] = 1.0f;
-    ((Rigidbody*) rigidbodyAinsley->data)->velocity[1] = 10.0f;
-    ((Rigidbody*) rigidbodyAinsley->data)->cor = 0.75f;
-    
     Component* colliderAinsley = Circle_Init(0.5f, rigidbodyAinsley);
     Rigidbody_SetCollider(rigidbodyAinsley, colliderAinsley);
+    Rigidbody_SetVelocity(rigidbodyAinsley, (vec2) { 1.0f, 10.0f });
+    Rigidbody_SetCor(rigidbodyAinsley, 0.75f);
     
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
 

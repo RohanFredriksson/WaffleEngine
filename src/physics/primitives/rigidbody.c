@@ -16,6 +16,7 @@ Component* Rigidbody_Init(Transform* transform) {
     rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
     glm_vec2_zero(rb->velocity);
+    rb->sensor = 0;
     rb->cor = 1.0f;
 
     // Attach the rigidbody to the component
@@ -37,6 +38,50 @@ void Rigidbody_SetCollider(Component* c, Component* collider) {
     }
 
     ((Rigidbody*) c->data)->collider = (Collider*) collider->data;
+}
+
+void Rigidbody_SetMass(Component* c, float mass) {
+
+    if (strcmp(c->type, "Rigidbody") != 0) {
+        printf("ERROR::RIGIDBODY_SETMASS::COMPONENT_NOT_OF_RIGIDBODY_TYPE\n");
+        return;
+    }
+
+    ((Rigidbody*) c->data)->mass = mass;
+
+}
+
+void Rigidbody_SetVelocity(Component* c, vec2 velocity) {
+    
+    if (strcmp(c->type, "Rigidbody") != 0) {
+        printf("ERROR::RIGIDBODY_SETVELOCITY::COMPONENT_NOT_OF_RIGIDBODY_TYPE\n");
+        return;
+    }
+
+    glm_vec2_copy(velocity, ((Rigidbody*) c->data)->velocity);
+
+}
+
+void Rigidbody_SetSensor(Component* c, bool sensor) {
+    
+    if (strcmp(c->type, "Rigidbody") != 0) {
+        printf("ERROR::RIGIDBODY_SETSENSOR::COMPONENT_NOT_OF_RIGIDBODY_TYPE\n");
+        return;
+    }
+
+    ((Rigidbody*) c->data)->sensor = sensor;
+
+}
+
+void Rigidbody_SetCor(Component* c, float cor) {
+    
+    if (strcmp(c->type, "Rigidbody") != 0) {
+        printf("ERROR::RIGIDBODY_SETCOR::COMPONENT_NOT_OF_RIGIDBODY_TYPE\n");
+        return;
+    }
+
+    ((Rigidbody*) c->data)->cor = cor;
+
 }
 
 void Rigidbody_ClearAccumulators(Rigidbody* rb) {

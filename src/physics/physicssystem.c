@@ -199,26 +199,33 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
                 GameObject_OnCollision(c1->component->go, c2->component->go, result->contactPoint, result->normal);
                 GameObject_OnCollision(c2->component->go, c1->component->go, result->contactPoint, result->normal);
 
-                if (p->numBodies1 >= p->sizeBodies1) {
-                    p->bodies1 = realloc(p->bodies1, 2 * p->sizeBodies1 * sizeof(Rigidbody*));
-                    p->sizeBodies1 = p->sizeBodies1 * 2;
-                }
-                p->bodies1[p->numBodies1] = r1;
-                p->numBodies1++;
+                // If neither object is a trigger, do the collision.
+                if (!r1->sensor && !r2->sensor) {
 
-                if (p->numBodies2 >= p->sizeBodies2) {
-                    p->bodies2 = realloc(p->bodies2, 2 * p->sizeBodies2 * sizeof(Rigidbody*));
-                    p->sizeBodies2 = p->sizeBodies2 * 2;
-                }
-                p->bodies2[p->numBodies2] = r2;
-                p->numBodies2++;
+                    if (p->numBodies1 >= p->sizeBodies1) {
+                        p->bodies1 = realloc(p->bodies1, 2 * p->sizeBodies1 * sizeof(Rigidbody*));
+                        p->sizeBodies1 = p->sizeBodies1 * 2;
+                    }
+                    p->bodies1[p->numBodies1] = r1;
+                    p->numBodies1++;
 
-                if (p->numCollisions >= p->sizeCollisions) {
-                    p->collisions = realloc(p->collisions, 2 * p->sizeCollisions * sizeof(CollisionManifold*));
-                    p->sizeCollisions = p->sizeCollisions * 2;
+                    if (p->numBodies2 >= p->sizeBodies2) {
+                        p->bodies2 = realloc(p->bodies2, 2 * p->sizeBodies2 * sizeof(Rigidbody*));
+                        p->sizeBodies2 = p->sizeBodies2 * 2;
+                    }
+                    p->bodies2[p->numBodies2] = r2;
+                    p->numBodies2++;
+
+                    if (p->numCollisions >= p->sizeCollisions) {
+                        p->collisions = realloc(p->collisions, 2 * p->sizeCollisions * sizeof(CollisionManifold*));
+                        p->sizeCollisions = p->sizeCollisions * 2;
+                    }
+                    p->collisions[p->numCollisions] = result;
+                    p->numCollisions++;
+
+                } else {
+                    free(result);
                 }
-                p->collisions[p->numCollisions] = result;
-                p->numCollisions++;
 
             } else if (result != NULL) {
                 free(result);
