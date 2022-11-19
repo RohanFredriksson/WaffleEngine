@@ -18,7 +18,6 @@ void Print_Execute(Command* a, Component* c) {
     printf("%s", p->message);
 }
 
-
 void Print_Free(Command* a) {
     Print* p = (Print*) a->data;
     free(p->message);
