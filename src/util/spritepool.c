@@ -17,7 +17,7 @@ void SpritePool_Clear() {
     // Free all sprite data.
     KeyValue* current = HashMap_Elements(&SpritePool);
     while (current != NULL) {
-        Sprite* sprite = (Sprite*) current->value;
+        Sprite* sprite = *((Sprite**) current->value);
         free(sprite);
         current = current->next;
     }
@@ -30,7 +30,7 @@ void SpritePool_Free() {
     // Free all sprite data.
     KeyValue* current = HashMap_Elements(&SpritePool);
     while (current != NULL) {
-        Sprite* sprite = (Sprite*) current->value;
+        Sprite* sprite = *((Sprite**) current->value);
         free(sprite);
         current = current->next;
     }

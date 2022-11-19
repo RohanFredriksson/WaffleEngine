@@ -31,7 +31,7 @@ void ShaderPool_Clear() {
     // Free all shader data.
     KeyValue* current = HashMap_Elements(&ShaderPool);
     while (current != NULL) {
-        Shader* shader = (Shader*) current->value;
+        Shader* shader = *((Shader**) current->value);
         Shader_Free(shader);
         free(shader);
         current = current->next;
@@ -45,7 +45,7 @@ void ShaderPool_Free() {
     // Free all shader data.
     KeyValue* current = HashMap_Elements(&ShaderPool);
     while (current != NULL) {
-        Shader* shader = (Shader*) current->value;
+        Shader* shader = *((Shader**) current->value);
         Shader_Free(shader);
         free(shader);
         current = current->next;

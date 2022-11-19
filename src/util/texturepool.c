@@ -16,7 +16,7 @@ void TexturePool_Clear() {
     // Free all texture data.
     KeyValue* current = HashMap_Elements(&TexturePool);
     while (current != NULL) {
-        Texture* texture = (Texture*) current->value;
+        Texture* texture = *((Texture**) current->value);
         Texture_Free(texture);
         free(texture);
         current = current->next;
@@ -30,7 +30,7 @@ void TexturePool_Free() {
     // Free all texture data.
     KeyValue* current = HashMap_Elements(&TexturePool);
     while (current != NULL) {
-        Texture* texture = (Texture*) current->value;
+        Texture* texture = *((Texture**) current->value);
         Texture_Free(texture);
         free(texture);
         current = current->next;
