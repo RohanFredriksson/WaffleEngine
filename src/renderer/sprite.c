@@ -24,7 +24,16 @@ void Sprite_Init(Sprite* s, Texture* t) {
 }
 
 void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]) {
-    memcpy(s->texCoords, texCoords, sizeof(s->texCoords));
+
+    s->texCoords[0][0] = texCoords[0][0];
+    s->texCoords[0][1] = texCoords[0][1];
+    s->texCoords[1][0] = texCoords[1][0];
+    s->texCoords[1][1] = texCoords[1][1];
+    s->texCoords[2][0] = texCoords[2][0];
+    s->texCoords[2][1] = texCoords[2][1];
+    s->texCoords[3][0] = texCoords[3][0];
+    s->texCoords[3][1] = texCoords[3][1];
+    
 }
 
 void Sprite_SetSize(Sprite* s, vec2 size) {

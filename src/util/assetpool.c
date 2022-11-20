@@ -142,6 +142,11 @@ Sprite* SpritePool_Get(const char* filename) {
 
 }
 
+void SpritePool_Put(const char* name, Sprite* sprite) {
+    uint64_t hash = OAAT(name);
+    HashMap_Put(&SpritePool, &hash, &sprite);
+}
+
 static HashMap TexturePool;
 
 void TexturePool_Init() {

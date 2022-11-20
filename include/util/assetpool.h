@@ -26,6 +26,7 @@ void SpritePool_Clear();
 void SpritePool_Free();
 
 Sprite* SpritePool_Get(const char* filename);
+void SpritePool_Put(const char* name, Sprite* sprite);
 
 void TexturePool_Init();
 void TexturePool_Clear();

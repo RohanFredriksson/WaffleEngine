@@ -11,3 +11,6 @@
 [submodule "dependencies/cdsl"]
 	path = dependencies/cdsl
 	url = https://github.com/RohanFredriksson/CDataStructures.git
+[submodule "dependencies/cjson"]
+	path = dependencies/cjson
+	url = https://github.com/DaveGamble/cJSON.git

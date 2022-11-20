@@ -3,6 +3,7 @@
 #include "cameracontroller.h"
 #include "rigidbody.h"
 #include "primitives.h"
+#include "spritesheet.h"
 
 #include "command.h"
 #include "click.h"
@@ -11,8 +12,11 @@
 
 void Title_Init(Scene* s) {
 
+    Spritesheet_Load("assets/textures/armaan.png");
+
     // Armaan
-    Sprite* spriteArmaan = SpritePool_Get("./assets/textures/armaan.png");
+    Sprite* spriteArmaan = SpritePool_Get("armaan");
+
     Transform* transformArmaan = TransformPool_Add((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
     
     Component* rigidbodyArmaan = Rigidbody_Init(transformArmaan);
