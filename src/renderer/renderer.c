@@ -40,11 +40,12 @@ void Renderer_Init(Renderer* r) {
 
 void Renderer_AddGameObject(Renderer* r, GameObject* go) {
 
-    Component*** components = (Component***) List_Elements(&go->components);
+    Component* component;
     int n = List_Length(&go->components);
     for (int i = 0; i < n; i++) {
-        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
-            Renderer_AddSprite(r, (SpriteRenderer*) (*components[i])->data);
+        List_Get(&go->components, i, &component);
+        if (strcmp(component->type, "SpriteRenderer") == 0) {
+            Renderer_AddSprite(r, (SpriteRenderer*) component->data);
         }
     }
 
@@ -273,11 +274,12 @@ void RenderBatch_Render(RenderBatch* r) {
 
 void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
 
-    Component*** components = (Component***) List_Elements(&go->components);
+    Component* component;
     int n = List_Length(&go->components);
     for (int i = 0; i < n; i++) {
-        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
-            RenderBatch_AddSprite(r, (SpriteRenderer*) (*components[i])->data);
+        List_Get(&go->components, i, &component);
+        if (strcmp(component->type, "SpriteRenderer") == 0) {
+            RenderBatch_AddSprite(r, (SpriteRenderer*) component->data);
         }
     }
 
@@ -313,11 +315,12 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
 void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
 
-    Component*** components = (Component***) List_Elements(&go->components);
+    Component* component;
     int n = List_Length(&go->components);
     for (int i = 0; i < n; i++) {
-        if (strcmp((*components[i])->type, "SpriteRenderer") == 0) {
-            RenderBatch_RemoveSprite(r, (SpriteRenderer*) (*components[i])->data);
+        List_Get(&go->components, i, &component);
+        if (strcmp(component->type, "SpriteRenderer") == 0) {
+            RenderBatch_RemoveSprite(r, (SpriteRenderer*) component->data);
         }
     }
 

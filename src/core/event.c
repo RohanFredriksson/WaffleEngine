@@ -44,11 +44,11 @@ void Event_Update(Component* c, float dt) {
             if (e->check(e, dt)) {
 
                 // Execute all commands.
-                Command*** commands = (Command***) List_Elements(&e->commands);
+                Command* command;
                 int n = List_Length(&e->commands);
                 for (int i = 0; i < n; i++) {
-                    Command* current = *commands[i];
-                    Command_Execute(current, c);
+                    List_Get(&e->commands, i, &command);
+                    Command_Execute(command, c);
                 }
 
                 // Set the cooldown.
@@ -64,11 +64,11 @@ void Event_Update(Component* c, float dt) {
             if (e->check(e, dt)) {
 
                 // Execute all commands.
-                Command*** commands = (Command***) List_Elements(&e->commands);
+                Command* command;
                 int n = List_Length(&e->commands);
                 for (int i = 0; i < n; i++) {
-                    Command* current = *commands[i];
-                    Command_Execute(current, c);
+                    List_Get(&e->commands, i, &command);
+                    Command_Execute(command, c);
                 }
 
                 // Remove the object.
@@ -89,12 +89,12 @@ void Event_Free(Component* c) {
     Event* e = (Event*) c->data;
 
     // Free all commands.
-    Command*** commands = (Command***) List_Elements(&e->commands);
+    Command* command;
     int n = List_Length(&e->commands);
     for (int i = 0; i < n; i++) {
-        Command* current = *commands[i];
-        Command_Free(current);
-        free(current);
+        List_Get(&e->commands, i, &command);
+        Command_Free(command);
+        free(command);
     }
     List_Free(&e->commands);
 

@@ -264,11 +264,12 @@ void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 void PhysicsSystem_AddGameObject(PhysicsSystem* p, GameObject* go) {
 
-    Component*** components = (Component***) List_Elements(&go->components);
+    Component* component;
     int n = List_Length(&go->components);
     for (int i = 0; i < n; i++) {
-        if (strcmp((*components[i])->type, "Rigidbody") == 0) {
-            PhysicsSystem_AddRigidbody(p, (Rigidbody*) (*components[i])->data);
+        List_Get(&go->components, i, &component);
+        if (strcmp(component->type, "Rigidbody") == 0) {
+            PhysicsSystem_AddRigidbody(p, (Rigidbody*) component->data);
         }
     }
 
