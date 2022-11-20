@@ -6,6 +6,7 @@
 
 #include "command.h"
 #include "click.h"
+#include "trigger.h"
 #include "print.h"
 
 void Title_Init(Scene* s) {
@@ -40,17 +41,17 @@ void Title_Init(Scene* s) {
     
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, transformAinsley, 0);
 
-    Command* printCommandAinsley = Print_Init("THIS IS MAGICAL\n");
-    Component* clickEventAinsley = Click_Init(GLFW_MOUSE_BUTTON_LEFT, 1);
-    Event_AddCommand(clickEventAinsley, printCommandAinsley);
-    Event_SetMulti(clickEventAinsley, 0);
+    Command* commandAinsley = Print_Init("COLLISION\n");
+    Component* eventAinsley = Trigger_Init();
+    Event_AddCommand(eventAinsley, commandAinsley);
+    Event_SetMulti(eventAinsley, 1);
 
     GameObject* gameObjectAinsley = GameObject_Init(NULL);
 
     GameObject_AddComponent(gameObjectAinsley, rigidbodyAinsley);
     GameObject_AddComponent(gameObjectAinsley, colliderAinsley);
     GameObject_AddComponent(gameObjectAinsley, spriteRendererAinsley);
-    GameObject_AddComponent(gameObjectAinsley, clickEventAinsley);
+    GameObject_AddComponent(gameObjectAinsley, eventAinsley);
     Scene_AddGameObject(s, gameObjectAinsley);
 
 }
