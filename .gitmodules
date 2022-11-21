@@ -14,3 +14,4 @@
 [submodule "dependencies/cjson"]
 	path = dependencies/cjson
 	url = https://github.com/DaveGamble/cJSON.git
+	ignore = dirty
