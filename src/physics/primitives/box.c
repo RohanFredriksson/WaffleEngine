@@ -24,11 +24,15 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
 }
 
 void Box_GetMin(Box* box, vec2 dest) {
-    glm_vec2_sub(box->rigidbody->component->entity->position, box->halfSize, dest);
+    vec2 position;
+    Component_GetPosition(box->rigidbody->component, position);
+    glm_vec2_sub(position, box->halfSize, dest);
 }
 
 void Box_GetMax(Box* box, vec2 dest) {
-    glm_vec2_add(box->rigidbody->component->entity->position, box->halfSize, dest);
+    vec2 position;
+    Component_GetPosition(box->rigidbody->component, position);
+    glm_vec2_add(position, box->halfSize, dest);
 }
 
 void Box_GetVertices(Box* box, vec2* buffer) {

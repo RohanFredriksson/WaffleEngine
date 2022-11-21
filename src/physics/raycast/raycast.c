@@ -68,8 +68,11 @@ bool Raycast_Circle(Circle circle, Ray ray, RaycastResult* result) {
     
     RaycastResult_Reset(result);
     
+    vec2 position;
+    Component_GetPosition(circle.rigidbody->component, position);
+
     vec2 originToCircle;
-    glm_vec2_sub(circle.rigidbody->component->entity->position, ray.origin, originToCircle);
+    glm_vec2_sub(position, ray.origin, originToCircle);
     float radiusSquared = circle.radius * circle.radius;
     float originToCircleLengthSquared = glm_vec2_norm2(originToCircle);
 
@@ -90,7 +93,7 @@ bool Raycast_Circle(Circle circle, Ray ray, RaycastResult* result) {
         glm_vec2_scale(ray.direction, t, point);
         glm_vec2_add(ray.origin, point, point);
         vec2 normal;
-        glm_vec2_sub(point, circle.rigidbody->component->entity->position, normal);
+        glm_vec2_sub(point, position, normal);
         glm_vec2_normalize(normal);
         RaycastResult_Init(result, point, normal, t, 1);
     }

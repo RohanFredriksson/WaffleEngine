@@ -28,9 +28,14 @@ CollisionManifold* Collision_FindCollisionFeatures(Collider* c1, Collider* c2) {
 
 CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Circle* b) {
 
+    vec2 aPosition;
+    vec2 bPosition;
+    Component_GetPosition(a->rigidbody->component, aPosition);
+    Component_GetPosition(b->rigidbody->component, bPosition);
+
     float sumRadii = a->radius + b->radius;
     vec2 distance;
-    glm_vec2_sub(b->rigidbody->component->entity->position, a->rigidbody->component->entity->position, distance);
+    glm_vec2_sub(bPosition, aPosition, distance);
     if (glm_vec2_norm2(distance) - (sumRadii * sumRadii) > 0) {return NULL;}
 
     CollisionManifold* result = malloc(sizeof(CollisionManifold));
@@ -46,7 +51,7 @@ CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Cir
 
     vec2 contactPoint;
     glm_vec2_scale(normal, distanceToPoint, contactPoint);
-    glm_vec2_add(contactPoint, a->rigidbody->component->entity->position, contactPoint);
+    glm_vec2_add(contactPoint, aPosition, contactPoint);
 
     CollisionManifold_Set(result, normal, contactPoint, depth);
     return result;
@@ -87,10 +92,15 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
     float minYDepth = WMath_MinFloat(yDepths[0], yDepths[1]);
     depth = WMath_MinFloat(minXDepth, minYDepth) * 0.5f;
 
+    vec2 aPosition;
+    vec2 bPosition;
+    Component_GetPosition(a->rigidbody->component, aPosition);
+    Component_GetPosition(b->rigidbody->component, bPosition);
+
     if (minXDepth < minYDepth) {
 
         // Determine the normal of collision
-        normal[0] = (b->rigidbody->component->entity->position[0] > a->rigidbody->component->entity->position[0]) ? 1.0f : -1.0f;
+        normal[0] = (bPosition[0] > aPosition[0]) ? 1.0f : -1.0f;
         normal[1] = 0.0f;
 
         // Find the middle of the contact point
@@ -143,7 +153,7 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
 
         // Determine the normal of collision
         normal[0] = 0.0f;
-        normal[1] = (b->rigidbody->component->entity->position[1] > a->rigidbody->component->entity->position[1]) ? 1.0f : -1.0f;
+        normal[1] = (bPosition[1] > aPosition[1]) ? 1.0f : -1.0f;
 
         // Find the middle of the contact point
         float xValues[4];
@@ -205,8 +215,8 @@ CollisionManifold* _Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* 
     vec2 bPos;
     vec2 bMin;
     vec2 bMax;
-    glm_vec2_copy(c->rigidbody->component->entity->position, cPos);
-    glm_vec2_copy(b->rigidbody->component->entity->position, bPos);
+    Component_GetPosition(c->rigidbody->component, cPos);
+    Component_GetPosition(b->rigidbody->component, bPos);
     Box_GetMin(b, bMin);
     Box_GetMax(b, bMax);
 

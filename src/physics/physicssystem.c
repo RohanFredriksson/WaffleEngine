@@ -56,12 +56,14 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
 
         if (collider == NULL) {continue;}
 
+        vec2 position;
+        Component_GetPosition(rigidbody->component, position);
         if (strcmp(collider->type, "Circle") == 0) {
             Circle* circle = (Circle*) collider->data;
-            DebugDraw_AddCircle(rigidbody->component->entity->position, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddCircle(position, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
         } else if (strcmp(collider->type, "Box") == 0) {
             Box* box = (Box*) collider->data;
-            DebugDraw_AddBox(rigidbody->component->entity->position, box->size, rigidbody->component->entity->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddBox(position, box->size, /*Component_GetRotation(rigidbody->component)*/ 0.0f, (vec3) {0.0f, 1.0f, 0.0f }, 1);
         }
 
     }
