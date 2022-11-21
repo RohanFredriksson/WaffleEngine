@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <string.h>
 #include "external.h"
 #include "list.h"
 
@@ -11,7 +13,7 @@ struct Entity {
     vec2 position;
     vec2 size;
     float rotation;
-
+    
 };
 typedef struct Entity Entity;
 
@@ -24,6 +26,7 @@ struct Component {
     void (*free)(struct Component* c);
 
     vec2 positionOffset;
+    vec2 positionScale;
     vec2 sizeOffset;
     vec2 sizeScale;
     float rotationOffset;

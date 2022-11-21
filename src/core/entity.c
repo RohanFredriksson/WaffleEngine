@@ -1,6 +1,3 @@
-#include <string.h>
-#include <stdlib.h>
-#include "list.h"
 #include "entity.h"
 
 static int next = 0;
