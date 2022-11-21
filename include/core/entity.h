@@ -5,24 +5,33 @@
 #define ENTITY_H
 
 struct Entity {
+
     int id;
     List components;
     vec2 position;
     vec2 size;
     float rotation;
+    
 };
 typedef struct Entity Entity;
 
 struct Component {
+
     Entity* entity;
+    char* type;
     void (*update)(struct Component* c, float dt);
     void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal);
     void (*free)(struct Component* c);
+
     vec2 positionOffset;
+    vec2 positionScale;
     vec2 sizeOffset;
+    vec2 sizeScale;
     float rotationOffset;
-    char* type;
+    float rotationScale;
+    
     void* data;
+
 };
 typedef struct Component Component;
 
