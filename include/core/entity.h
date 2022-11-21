@@ -26,7 +26,6 @@ struct Component {
     void (*free)(struct Component* c);
 
     vec2 positionOffset;
-    vec2 positionScale;
     vec2 sizeOffset;
     vec2 sizeScale;
     float rotationOffset;

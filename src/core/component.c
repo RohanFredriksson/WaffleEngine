@@ -12,7 +12,6 @@ Component* Component_Init(char* type,
     memcpy(c->type, type, strlen(type)+1);
 
     glm_vec2_zero(c->positionOffset);
-    glm_vec2_one(c->positionScale);
     glm_vec2_zero(c->sizeOffset);
     glm_vec2_one(c->sizeScale);
     c->rotationOffset = 0;
@@ -40,8 +39,7 @@ void Component_Free(Component* c) {
 }
 
 void Component_GetPosition(Component* c, vec2 dest) {
-    glm_vec2_mul(c->entity->position, c->positionScale, dest);
-    glm_vec2_add(dest, c->positionOffset, dest);
+    glm_vec2_add(c->entity->position, c->positionOffset, dest);
 }
 
 void Component_GetSize(Component* c, vec2 dest) {
