@@ -172,6 +172,11 @@ void Spritesheet_Load(const char* filename) {
 
     for (int i = 0; i < metadata.num; i++) {
 
+        if (currentY < 0) {
+            printf("ERROR::SPRITESHEET::LOAD::SPRITE_LOAD: \"%s\": Sprite \"%s\" could not be loaded.\n", metaname, metadata.names[i]);
+            continue;
+        }
+
         float topY = (currentY + metadata.height) / (float) texture->height;
         float rightX = (currentX + metadata.width) / (float) texture->width;
         float leftX = currentX / (float) texture->width;
@@ -192,6 +197,12 @@ void Spritesheet_Load(const char* filename) {
         Sprite_SetTexCoords(sprite, texCoords);
         Sprite_SetSize(sprite, (vec2) { metadata.width, metadata.height });
         SpritePool_Put(metadata.names[i], sprite);
+
+        currentX += metadata.width;
+        if (currentX >= texture->width) {
+            currentX = 0;
+            currentY -= metadata.height;
+        }
 
     }
 

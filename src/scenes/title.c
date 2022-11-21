@@ -12,11 +12,10 @@
 
 void Title_Init(Scene* s) {
 
-    Spritesheet_Load("assets/textures/armaan.png");
+    Spritesheet_Load("assets/textures/faces.png");
 
     // Armaan
     Sprite* spriteArmaan = SpritePool_Get("armaan");
-
     Transform* transformArmaan = TransformPool_Add((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
     
     Component* rigidbodyArmaan = Rigidbody_Init(transformArmaan);
@@ -34,7 +33,7 @@ void Title_Init(Scene* s) {
     Scene_AddGameObject(s, gameObjectArmaan);
 
     // Ainsley
-    Sprite* spriteAinsley = SpritePool_Get("./assets/textures/ainsley.jpg");
+    Sprite* spriteAinsley = SpritePool_Get("ainsley");
     Transform* transformAinsley = TransformPool_Add((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
     Component* rigidbodyAinsley = Rigidbody_Init(transformAinsley);
