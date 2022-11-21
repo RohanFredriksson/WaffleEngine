@@ -31,10 +31,4 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex);
 
 void SpriteRenderer_Update(Component* c, float dt);
 
-void SpriteRenderer_GetPosition(SpriteRenderer* s, vec2 dest);
-
-void SpriteRenderer_GetSize(SpriteRenderer* s, vec2 dest);
-
-float SpriteRenderer_GetRotation(SpriteRenderer* s);
-
 #endif

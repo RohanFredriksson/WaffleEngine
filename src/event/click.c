@@ -34,9 +34,9 @@ bool Click_Check(Event* e, float dt) {
 
             vec2 position;
             vec2 size;
-            glm_vec2_copy(e->component->entity->position, position);
-            glm_vec2_copy(e->component->entity->size, size);
-            float rotation = e->component->entity->rotation;
+            Component_GetPosition(e->component, position);
+            Component_GetSize(e->component, size);
+            float rotation = Component_GetRotation(e->component);
 
             float left = position[0] - size[0] / 2.0f;
             float right = position[0] + size[0] / 2.0f;

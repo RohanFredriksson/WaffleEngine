@@ -375,9 +375,9 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     // Get the transform for the sprite renderer.
     vec2 position;
     vec2 size;
-    SpriteRenderer_GetPosition(sprite, position);
-    SpriteRenderer_GetSize(sprite, size);
-    float rotation = SpriteRenderer_GetRotation(sprite);
+    Component_GetPosition(sprite->component, position);
+    Component_GetSize(sprite->component, size);
+    float rotation = Component_GetRotation(sprite->component);
 
     bool isRotated = rotation != 0.0f;
     mat4 transformMatrix;

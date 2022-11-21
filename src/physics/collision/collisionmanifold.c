@@ -2,8 +2,6 @@
 #include <string.h>
 #include "collisionmanifold.h"
 
-#define INITIAL_CONTACTPOINTS_SIZE 8
-
 void CollisionManifold_Init(CollisionManifold* cm) {
     cm->isColliding = 0;
     glm_vec2_zero(cm->normal);

@@ -13,6 +13,10 @@ Component* Component_Init(char* type,
     c->type = malloc(strlen(type)+1);
     memcpy(c->type, type, strlen(type)+1);
 
+    glm_vec2_zero(c->positionOffset);
+    glm_vec2_one(c->sizeOffset);
+    c->rotationOffset = 0;
+
     c->update = update;
     c->collision = collision;
     c->free = free;
@@ -32,4 +36,16 @@ void Component_Free(Component* c) {
     if (c->free != NULL) {c->free(c);}
     if (c->data != NULL) {free(c->data);}
     free(c->type);
+}
+
+void Component_GetPosition(Component* c, vec2 dest) {
+    glm_vec2_add(c->entity->position, c->positionOffset, dest);
+}
+
+void Component_GetSize(Component* c, vec2 dest) {
+    glm_vec2_mul(c->entity->size, c->sizeOffset, dest);
+}
+
+float Component_GetRotation(Component* c) {
+    return c->entity->rotation + c->rotationOffset;
 }

@@ -18,6 +18,9 @@ struct Component {
     void (*update)(struct Component* c, float dt);
     void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal);
     void (*free)(struct Component* c);
+    vec2 positionOffset;
+    vec2 sizeOffset;
+    float rotationOffset;
     char* type;
     void* data;
 };
@@ -47,5 +50,11 @@ void Component_Update(Component* c, float dt);
 void Component_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal);
 
 void Component_Free(Component* c);
+
+void Component_GetPosition(Component* c, vec2 dest);
+
+void Component_GetSize(Component* c, vec2 dest);
+
+float Component_GetRotation(Component* c);
 
 #endif

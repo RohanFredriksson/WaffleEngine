@@ -55,20 +55,20 @@ void SpriteRenderer_Update(Component* c, float dt) {
     }
 
     vec2 position;
-    SpriteRenderer_GetPosition(s, position);
+    Component_GetPosition(c, position);
     if (!glm_vec2_eqv(position, s->lastPosition)) {
         glm_vec2_copy(position, s->lastPosition);
         s->isDirty = 1;
     }
 
     vec2 size;
-    SpriteRenderer_GetSize(s, size);
+    Component_GetSize(c, size);
     if (!glm_vec2_eqv(size, s->lastSize)) {
         glm_vec2_copy(size, s->lastSize);
         s->isDirty = 1;
     }
 
-    float rotation = SpriteRenderer_GetRotation(s);
+    float rotation = Component_GetRotation(c);
     if (rotation != s->lastRotation) {
         s->lastRotation = rotation;
         s->isDirty = 1;
@@ -79,16 +79,4 @@ void SpriteRenderer_Update(Component* c, float dt) {
         s->isDirty = 1;
     }
 
-}
-
-void SpriteRenderer_GetPosition(SpriteRenderer* s, vec2 dest) {
-    glm_vec2_copy(s->component->entity->position, dest);
-}
-
-void SpriteRenderer_GetSize(SpriteRenderer* s, vec2 dest) {
-    glm_vec2_copy(s->component->entity->size, dest);
-}
-
-float SpriteRenderer_GetRotation(SpriteRenderer* s) {
-    return s->component->entity->rotation;
 }
