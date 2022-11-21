@@ -28,6 +28,6 @@ Component* CameraController_Init(vec2* follow);
 
 void CameraController_Update(Component* c, float dt);
 
-void CameraController_MoveTo(CameraController* cc, float x, float y, float t);
+void CameraController_MoveTo(CameraController* cc, vec2 to, float t);
 
 #endif

@@ -5,10 +5,11 @@
 #include "primitives.h"
 #include "spritesheet.h"
 
-#include "command.h"
-#include "click.h"
+#include "movecamera.h"
+#include "console.h"
+#include "mousebutton.h"
 #include "trigger.h"
-#include "print.h"
+#include "command.h"
 
 void Title_Init(Scene* s) {
 
@@ -22,6 +23,9 @@ void Title_Init(Scene* s) {
     Rigidbody_SetMass(rigidbodyArmaan, 0.0f);
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
+    Command* commandArmaan = MoveCamera_Init((vec2) { 1.0f, -1.5f }, 1.0f);
+    Component* eventArmaan = MouseButtonBeginDown_Init(GLFW_MOUSE_BUTTON_LEFT, 1);
+    Event_AddCommand(eventArmaan, commandArmaan);
     
     Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
@@ -29,6 +33,7 @@ void Title_Init(Scene* s) {
     Entity_AddComponent(entityArmaan, rigidbodyArmaan);
     Entity_AddComponent(entityArmaan, colliderArmaan);
     Entity_AddComponent(entityArmaan, cameraControllerArmaan);
+    Entity_AddComponent(entityArmaan, eventArmaan);
     Scene_AddEntity(s, entityArmaan);
 
     // Ainsley
@@ -39,7 +44,7 @@ void Title_Init(Scene* s) {
     Rigidbody_SetVelocity(rigidbodyAinsley, (vec2) { 1.0f, 10.0f });
     Rigidbody_SetCor(rigidbodyAinsley, 0.75f);
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, 0);
-    Command* commandAinsley = Print_Init("COLLISION\n");
+    Command* commandAinsley = Console_Init("COLLISION\n");
     Component* eventAinsley = Trigger_Init();
     Event_AddCommand(eventAinsley, commandAinsley);
     Event_SetMulti(eventAinsley, 1);

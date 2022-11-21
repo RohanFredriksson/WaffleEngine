@@ -65,13 +65,12 @@ void CameraController_Update(Component* c, float dt) {
 
 }
 
-void CameraController_MoveTo(CameraController* cc, float x, float y, float t) {
+void CameraController_MoveTo(CameraController* cc, vec2 to, float t) {
 
     Camera* camera = &Window_GetScene()->camera;
 
     glm_vec2_copy(camera->pos, cc->initialPos);
-    cc->finalPos[0] = x;
-    cc->finalPos[1] = y;
+    glm_vec2_copy(to, cc->finalPos);
     cc->distance = glm_vec2_distance(cc->initialPos, cc->finalPos);
 
     // If the camera, doesn't need to move, don't move it.
@@ -85,8 +84,7 @@ void CameraController_MoveTo(CameraController* cc, float x, float y, float t) {
 
     // If the time required to move is zero, move the camera immediately.
     if (cc->timeTotal <= 0) {
-        camera->pos[0] = x;
-        camera->pos[1] = y;
+        glm_vec2_copy(to, camera->pos);
         return;
     }
 

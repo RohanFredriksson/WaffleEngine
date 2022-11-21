@@ -1,26 +1,40 @@
-#include "click.h"
+#include "mousebutton.h"
 
-Component* Click_Init(int button, bool usePickingTexture) {
+Component* MouseButton_Init(int button, bool beginDown, bool usePickingTexture) {
 
-    Component* component = Event_Init("Click", &Click_Check, NULL, NULL);
+    Component* component = Event_Init("MouseButtonDown", &MouseButton_Check, NULL, NULL);
     Event* event = (Event*) component->data;
-    Click* click = malloc(sizeof(Click));
+    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
 
-    click->event = event;
-    click->button = button;
-    click->usePickingTexture = usePickingTexture;
+    mb->event = event;
+    mb->button = button;
+    mb->beginDown = beginDown;
+    mb->usePickingTexture = usePickingTexture;
 
-    event->data = click;
+    event->data = mb;
     return component;
 
 }
 
-bool Click_Check(Event* e, float dt) {
+Component* MouseButtonDown_Init(int button, bool usePickingTexture) {
+    return MouseButton_Init(button, 0, usePickingTexture);
+}
 
-    Click* c = (Click*) e->data;
-    if (MouseListener_MouseButtonDown(c->button)) {
+Component* MouseButtonBeginDown_Init(int button, bool usePickingTexture) {
+    return MouseButton_Init(button, 1, usePickingTexture);
+}
 
-        if (c->usePickingTexture) {
+bool MouseButton_Check(Event* e, float dt) {
+
+    MouseButtonEvent* mb = (MouseButtonEvent*) e->data;
+    
+    bool flag;
+    if (mb->beginDown) {flag = MouseListener_MouseButtonBeginDown(mb->button);}
+    else {flag = MouseListener_MouseButtonDown(mb->button);}
+
+    if (flag) {
+
+        if (mb->usePickingTexture) {
 
             int x = MouseListener_GetX();
             int y = MouseListener_GetY();

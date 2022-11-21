@@ -147,25 +147,6 @@ void Window_Loop() {
             Renderer_BindShader(entityShader);
             Scene_Render(&scene);
             FrameBuffer_Unbind(&entityTexture);
-
-            if (MouseListener_MouseButtonBeginDown(GLFW_MOUSE_BUTTON_LEFT)) {
-                
-                int x = MouseListener_GetX();
-                int y = MouseListener_GetY();
-                int id = Window_ReadPixel(x, y);
-                
-                Entity* entity = Scene_GetEntityByID(&scene, id);
-                if (entity != NULL) {
-                    
-                    Component* c = Entity_GetComponent(entity, "CameraController");
-                    if (c != NULL) {
-                        CameraController* cc = (CameraController*) c->data;
-                        CameraController_MoveTo(cc, 1.0f, -1.5f, 1.0f);
-                    }
-
-                }
-
-            }
             
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);
