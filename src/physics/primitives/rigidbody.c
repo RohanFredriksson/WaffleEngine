@@ -99,7 +99,7 @@ void Rigidbody_PhysicsUpdate(Rigidbody* rb, float dt) {
     // Calculate linear position
     vec2 ds;
     glm_vec2_scale(rb->velocity, dt, ds);
-    glm_vec2_add(rb->component->go->position, ds, rb->component->go->position);
+    glm_vec2_add(rb->component->entity->position, ds, rb->component->entity->position);
     Rigidbody_ClearAccumulators(rb);
 
 }

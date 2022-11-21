@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
-#include "gameobject.h"
+#include "entity.h"
 
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt), 
-                          void (*collision)(struct Component* c, struct GameObject* with, vec2 contact, vec2 normal),
+                          void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal),
                           void (*free)(Component* c)) {
 
     Component* c = (Component*) malloc(sizeof(Component));
@@ -24,7 +24,7 @@ void Component_Update(Component* c, float dt) {
     if (c->update != NULL) {c->update(c, dt);}
 }
 
-void Component_OnCollision(Component* c, GameObject* with, vec2 contact, vec2 normal) {
+void Component_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
     if (c->collision != NULL) {c->collision(c, with, contact, normal);}
 }
 

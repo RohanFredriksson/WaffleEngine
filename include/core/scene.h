@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "gameobject.h"
+#include "entity.h"
 #include "renderer.h"
 #include "physicssystem.h"
 #include "camera.h"
@@ -9,9 +9,9 @@
 
 struct Scene {
     bool isRunning;
-    int numGameObjects;
-    int sizeGameObjects;
-    GameObject** gameObjects;
+    int numEntities;
+    int sizeEntities;
+    Entity** entities;
     Camera camera;
     Renderer renderer;
     PhysicsSystem physics;
@@ -28,8 +28,8 @@ void Scene_Render(Scene* s);
 
 void Scene_Free(Scene* s);
 
-void Scene_AddGameObject(Scene* s, GameObject* go);
+void Scene_AddEntity(Scene* s, Entity* entity);
 
-GameObject* Scene_GetGameObjectByID(Scene* s, int id);
+Entity* Scene_GetEntityByID(Scene* s, int id);
 
 #endif

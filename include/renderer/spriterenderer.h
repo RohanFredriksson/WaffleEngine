@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
 #include "external.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "sprite.h"
 
 #ifndef SPRITERENDERER_H

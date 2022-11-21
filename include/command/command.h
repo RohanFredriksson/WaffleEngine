@@ -1,5 +1,5 @@
 #include <string.h>
-#include "gameobject.h"
+#include "entity.h"
 
 #ifndef COMMAND_H
 #define COMMAND_H

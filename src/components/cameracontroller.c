@@ -4,7 +4,7 @@
 #include "window.h"
 #include "scene.h"
 #include "cameracontroller.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "camera.h"
 
 Component* CameraController_Init(vec2* follow) {

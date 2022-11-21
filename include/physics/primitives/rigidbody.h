@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "external.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "collider.h"
 
 #ifndef RIGIDBODY_H

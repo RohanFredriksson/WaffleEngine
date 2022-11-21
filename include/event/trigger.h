@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "external.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "event.h"
 
 #ifndef TRIGGER_H
@@ -16,6 +16,6 @@ Component* Trigger_Init();
 
 bool Trigger_Check(Event* e, float dt);
 
-void Trigger_OnCollision(Event* e, GameObject* with, vec2 contact, vec2 normal);
+void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal);
 
 #endif

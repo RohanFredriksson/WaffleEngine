@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "external.h"
 #include "raycast.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "forceregistry.h"
 #include "collisionmanifold.h"
 
@@ -39,7 +39,7 @@ void PhysicsSystem_Update(PhysicsSystem* p, float dt);
 void PhysicsSystem_Render(PhysicsSystem* p);
 void PhysicsSystem_FixedUpdate(PhysicsSystem* p);
 void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb);
-void PhysicsSystem_AddGameObject(PhysicsSystem* p, GameObject* go);
+void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity);
 bool PhysicsSystem_Raycast(PhysicsSystem*p, Ray ray, RaycastResult* result);
 void PhysicsSystem_Free(PhysicsSystem* p);
 

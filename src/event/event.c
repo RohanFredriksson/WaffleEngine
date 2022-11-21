@@ -2,7 +2,7 @@
 
 Component* Event_Init(char* type, 
                       bool (*check)(Event* e, float dt), 
-                      void (*collision) (struct Event* e, GameObject* with, vec2 contact, vec2 normal), 
+                      void (*collision) (struct Event* e, Entity* with, vec2 contact, vec2 normal), 
                       void (*free)(Event* e)) {
 
     Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Free);
@@ -72,14 +72,14 @@ void Event_Update(Component* c, float dt) {
                 }
 
                 // Remove the object.
-                GameObject_RemoveComponent(c->go, c);
+                Entity_RemoveComponent(c->entity, c);
 
             }
         }
     }
 }
 
-void Event_OnCollision(Component* c, GameObject* with, vec2 contact, vec2 normal) {
+void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
     Event* e = (Event*) c->data;
     if (e->collision != NULL) {e->collision(e, with, contact, normal);}
 }

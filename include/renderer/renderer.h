@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "gameobject.h"
+#include "entity.h"
 #include "spriterenderer.h"
 #include "texture.h"
 #include "shader.h"
@@ -16,11 +16,11 @@ typedef struct Renderer Renderer;
 
 void Renderer_Init(Renderer* r);
 
-void Renderer_AddGameObject(Renderer* r, GameObject* go);
+void Renderer_AddEntity(Renderer* r, Entity* entity);
 
 void Renderer_AddSprite(Renderer* r, SpriteRenderer* s);
 
-void Renderer_RemoveGameObject(Renderer* r, GameObject* go);
+void Renderer_RemoveEntity(Renderer* r, Entity* entity);
 
 void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s);
 
@@ -50,13 +50,13 @@ typedef struct RenderBatch RenderBatch;
 
 void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex);
 
-void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go);
+void RenderBatch_AddEntity(RenderBatch* r, Entity* entity);
 
 void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s);
 
 void RenderBatch_Render(RenderBatch* r);
 
-void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go);
+void RenderBatch_RemoveEntity(RenderBatch* r, Entity* entity);
 
 void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s);
 

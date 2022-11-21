@@ -38,12 +38,12 @@ void Renderer_Init(Renderer* r) {
     r->sizeBatches = INITIAL_BATCHES_SIZE;
 }
 
-void Renderer_AddGameObject(Renderer* r, GameObject* go) {
+void Renderer_AddEntity(Renderer* r, Entity* entity) {
 
     Component* component;
-    int n = List_Length(&go->components);
+    int n = List_Length(&entity->components);
     for (int i = 0; i < n; i++) {
-        List_Get(&go->components, i, &component);
+        List_Get(&entity->components, i, &component);
         if (strcmp(component->type, "SpriteRenderer") == 0) {
             Renderer_AddSprite(r, (SpriteRenderer*) component->data);
         }
@@ -116,9 +116,9 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
 
 }
 
-void Renderer_RemoveGameObject(Renderer* r, GameObject* go) {
+void Renderer_RemoveEntity(Renderer* r, Entity* entity) {
     for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_RemoveGameObject(r->batches + i, go);
+        RenderBatch_RemoveEntity(r->batches + i, entity);
     }
 }
 
@@ -272,12 +272,12 @@ void RenderBatch_Render(RenderBatch* r) {
 
 }
 
-void RenderBatch_AddGameObject(RenderBatch* r, GameObject* go) {
+void RenderBatch_AddEntity(RenderBatch* r, Entity* entity) {
 
     Component* component;
-    int n = List_Length(&go->components);
+    int n = List_Length(&entity->components);
     for (int i = 0; i < n; i++) {
-        List_Get(&go->components, i, &component);
+        List_Get(&entity->components, i, &component);
         if (strcmp(component->type, "SpriteRenderer") == 0) {
             RenderBatch_AddSprite(r, (SpriteRenderer*) component->data);
         }
@@ -313,12 +313,12 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
 }
 
-void RenderBatch_RemoveGameObject(RenderBatch* r, GameObject* go) {
+void RenderBatch_RemoveEntity(RenderBatch* r, Entity* entity) {
 
     Component* component;
-    int n = List_Length(&go->components);
+    int n = List_Length(&entity->components);
     for (int i = 0; i < n; i++) {
-        List_Get(&go->components, i, &component);
+        List_Get(&entity->components, i, &component);
         if (strcmp(component->type, "SpriteRenderer") == 0) {
             RenderBatch_RemoveSprite(r, (SpriteRenderer*) component->data);
         }
@@ -431,7 +431,7 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         r->vertices[offset + 8] = texId;
 
         // Load Entity ID
-        r->vertices[offset + 9] = (float) sprite->component->go->id;
+        r->vertices[offset + 9] = (float) sprite->component->entity->id;
 
         offset += VERTEX_SIZE;
 

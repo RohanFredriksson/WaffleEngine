@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "gameobject.h"
+#include "entity.h"
 #include "circle.h"
 
 Component* Circle_Init(float radius, Component* rigidbody) {

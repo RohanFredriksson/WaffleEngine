@@ -1,4 +1,4 @@
-#include "gameobject.h"
+#include "entity.h"
 #include "collider.h"
 #include "rigidbody.h"
 

@@ -23,13 +23,13 @@ void Title_Init(Scene* s) {
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
     
-    GameObject* gameObjectArmaan = GameObject_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+    Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
-    GameObject_AddComponent(gameObjectArmaan, spriteRendererArmaan);
-    GameObject_AddComponent(gameObjectArmaan, rigidbodyArmaan);
-    GameObject_AddComponent(gameObjectArmaan, colliderArmaan);
-    GameObject_AddComponent(gameObjectArmaan, cameraControllerArmaan);
-    Scene_AddGameObject(s, gameObjectArmaan);
+    Entity_AddComponent(entityArmaan, spriteRendererArmaan);
+    Entity_AddComponent(entityArmaan, rigidbodyArmaan);
+    Entity_AddComponent(entityArmaan, colliderArmaan);
+    Entity_AddComponent(entityArmaan, cameraControllerArmaan);
+    Scene_AddEntity(s, entityArmaan);
 
     // Ainsley
     Sprite* spriteAinsley = SpritePool_Get("ainsley");
@@ -44,12 +44,12 @@ void Title_Init(Scene* s) {
     Event_AddCommand(eventAinsley, commandAinsley);
     Event_SetMulti(eventAinsley, 1);
 
-    GameObject* gameObjectAinsley = GameObject_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+    Entity* entityAinsley = Entity_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
-    GameObject_AddComponent(gameObjectAinsley, rigidbodyAinsley);
-    GameObject_AddComponent(gameObjectAinsley, colliderAinsley);
-    GameObject_AddComponent(gameObjectAinsley, spriteRendererAinsley);
-    GameObject_AddComponent(gameObjectAinsley, eventAinsley);
-    Scene_AddGameObject(s, gameObjectAinsley);
+    Entity_AddComponent(entityAinsley, rigidbodyAinsley);
+    Entity_AddComponent(entityAinsley, colliderAinsley);
+    Entity_AddComponent(entityAinsley, spriteRendererAinsley);
+    Entity_AddComponent(entityAinsley, eventAinsley);
+    Scene_AddEntity(s, entityAinsley);
 
 }

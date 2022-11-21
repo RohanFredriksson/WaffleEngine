@@ -154,10 +154,10 @@ void Window_Loop() {
                 int y = MouseListener_GetY();
                 int id = Window_ReadPixel(x, y);
                 
-                GameObject* go = Scene_GetGameObjectByID(&scene, id);
-                if (go != NULL) {
+                Entity* entity = Scene_GetEntityByID(&scene, id);
+                if (entity != NULL) {
                     
-                    Component* c = GameObject_GetComponent(go, "CameraController");
+                    Component* c = Entity_GetComponent(entity, "CameraController");
                     if (c != NULL) {
                         CameraController* cc = (CameraController*) c->data;
                         CameraController_MoveTo(cc, 1.0f, -1.5f, 1.0f);

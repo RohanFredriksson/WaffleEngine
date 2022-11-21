@@ -58,10 +58,10 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
 
         if (strcmp(collider->type, "Circle") == 0) {
             Circle* circle = (Circle*) collider->data;
-            DebugDraw_AddCircle(rigidbody->component->go->position, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddCircle(rigidbody->component->entity->position, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
         } else if (strcmp(collider->type, "Box") == 0) {
             Box* box = (Box*) collider->data;
-            DebugDraw_AddBox(rigidbody->component->go->position, box->size, rigidbody->component->go->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddBox(rigidbody->component->entity->position, box->size, rigidbody->component->entity->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
         }
 
     }
@@ -111,7 +111,7 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
             // For static objects, move them outside of the obstacles, so they dont eventually sink through.
             glm_vec2_scale(m->normal, 2.0f * m->depth, btmp);
-            glm_vec2_add(b->component->go->position, btmp, b->component->go->position);
+            glm_vec2_add(b->component->entity->position, btmp, b->component->entity->position);
 
         }
 
@@ -123,7 +123,7 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
             // For static objects, move them outside of the obstacles, so they dont eventually sink through.
             glm_vec2_scale(m->normal, -2.0f * m->depth, atmp);
-            glm_vec2_add(a->component->go->position, atmp, a->component->go->position);
+            glm_vec2_add(a->component->entity->position, atmp, a->component->entity->position);
 
         }
 
@@ -196,8 +196,8 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
             if (result != NULL && result->isColliding) {
 
                 // Execute on collision
-                GameObject_OnCollision(c1->component->go, c2->component->go, result->contactPoint, result->normal);
-                GameObject_OnCollision(c2->component->go, c1->component->go, result->contactPoint, result->normal);
+                Entity_OnCollision(c1->component->entity, c2->component->entity, result->contactPoint, result->normal);
+                Entity_OnCollision(c2->component->entity, c1->component->entity, result->contactPoint, result->normal);
 
                 // If neither object is a trigger, do the collision.
                 if (!r1->sensor && !r2->sensor) {
@@ -262,12 +262,12 @@ void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 }
 
-void PhysicsSystem_AddGameObject(PhysicsSystem* p, GameObject* go) {
+void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity) {
 
     Component* component;
-    int n = List_Length(&go->components);
+    int n = List_Length(&entity->components);
     for (int i = 0; i < n; i++) {
-        List_Get(&go->components, i, &component);
+        List_Get(&entity->components, i, &component);
         if (strcmp(component->type, "Rigidbody") == 0) {
             PhysicsSystem_AddRigidbody(p, (Rigidbody*) component->data);
         }

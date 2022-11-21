@@ -25,7 +25,7 @@ bool Trigger_Check(Event* e, float dt) {
     return 0;
 }
 
-void Trigger_OnCollision(Event* e, GameObject* with, vec2 contact, vec2 normal) {
+void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal) {
     Trigger* t = (Trigger*) e->data;
     t->flag = 1;
 }

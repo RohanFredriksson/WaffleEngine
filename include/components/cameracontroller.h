@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "external.h"
-#include "gameobject.h"
+#include "entity.h"
 
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H

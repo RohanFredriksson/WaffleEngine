@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "external.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "spriterenderer.h"
 #include "sprite.h"
 
@@ -82,13 +82,13 @@ void SpriteRenderer_Update(Component* c, float dt) {
 }
 
 void SpriteRenderer_GetPosition(SpriteRenderer* s, vec2 dest) {
-    glm_vec2_copy(s->component->go->position, dest);
+    glm_vec2_copy(s->component->entity->position, dest);
 }
 
 void SpriteRenderer_GetSize(SpriteRenderer* s, vec2 dest) {
-    glm_vec2_copy(s->component->go->size, dest);
+    glm_vec2_copy(s->component->entity->size, dest);
 }
 
 float SpriteRenderer_GetRotation(SpriteRenderer* s) {
-    return s->component->go->rotation;
+    return s->component->entity->rotation;
 }

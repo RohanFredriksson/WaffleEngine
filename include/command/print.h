@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gameobject.h"
+#include "entity.h"
 #include "command.h"
 
 #ifndef PRINT_H

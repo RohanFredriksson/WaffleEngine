@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "listener.h"
-#include "gameobject.h"
+#include "entity.h"
 #include "window.h"
 #include "event.h"
 #include "wmath.h"

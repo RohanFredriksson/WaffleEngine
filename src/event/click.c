@@ -26,7 +26,7 @@ bool Click_Check(Event* e, float dt) {
             int y = MouseListener_GetY();
             int id = Window_ReadPixel(x, y);
 
-            if (id == e->component->go->id) {return 1;}
+            if (id == e->component->entity->id) {return 1;}
 
         }
 
@@ -34,9 +34,9 @@ bool Click_Check(Event* e, float dt) {
 
             vec2 position;
             vec2 size;
-            glm_vec2_copy(e->component->go->position, position);
-            glm_vec2_copy(e->component->go->size, size);
-            float rotation = e->component->go->rotation;
+            glm_vec2_copy(e->component->entity->position, position);
+            glm_vec2_copy(e->component->entity->size, size);
+            float rotation = e->component->entity->rotation;
 
             float left = position[0] - size[0] / 2.0f;
             float right = position[0] + size[0] / 2.0f;
