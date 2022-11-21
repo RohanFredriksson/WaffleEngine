@@ -3,15 +3,14 @@
 #include "renderer.h"
 #include "physicssystem.h"
 #include "camera.h"
+#include "list.h"
 
 #ifndef SCENE_H
 #define SCENE_H
 
 struct Scene {
     bool isRunning;
-    int numEntities;
-    int sizeEntities;
-    Entity** entities;
+    List entities;
     Camera camera;
     Renderer renderer;
     PhysicsSystem physics;
