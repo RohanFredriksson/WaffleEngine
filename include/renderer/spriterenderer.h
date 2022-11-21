@@ -3,7 +3,6 @@
 #include "external.h"
 #include "gameobject.h"
 #include "sprite.h"
-#include "transform.h"
 
 #ifndef SPRITERENDERER_H
 #define SPRITERENDERER_H
@@ -14,21 +13,28 @@ struct SpriteRenderer {
     
     Sprite* sprite;
     vec4 colour;
-    Transform* transform;
     int zIndex;
 
     Sprite lastSprite;
     Texture* lastTexture;
     vec4 lastColour;
-    Transform lastTransform;
+    vec2 lastPosition;
+    vec2 lastSize;
+    float lastRotation;
     int lastZIndex;
 
     bool isDirty;
 };
 typedef struct SpriteRenderer SpriteRenderer;
 
-Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform, int zIndex);
+Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex);
 
 void SpriteRenderer_Update(Component* c, float dt);
+
+void SpriteRenderer_GetPosition(SpriteRenderer* s, vec2 dest);
+
+void SpriteRenderer_GetSize(SpriteRenderer* s, vec2 dest);
+
+float SpriteRenderer_GetRotation(SpriteRenderer* s);
 
 #endif

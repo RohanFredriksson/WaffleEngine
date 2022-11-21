@@ -3,9 +3,8 @@
 #include "gameobject.h"
 #include "spriterenderer.h"
 #include "sprite.h"
-#include "transform.h"
 
-Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform, int zIndex) {
+Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex) {
     
     Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, NULL, NULL);
 
@@ -17,13 +16,14 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, Transform* transform
 
     s->sprite = sprite;
     glm_vec4_copy(colour, s->colour);
-    s->transform = transform;
     s->zIndex = zIndex;
 
     s->lastSprite = *sprite;
     s->lastTexture = NULL;
     glm_vec4_copy(colour, s->lastColour);
-    s->lastTransform = *transform;
+    glm_vec2_zero(s->lastPosition);
+    glm_vec2_zero(s->lastSize);
+    s->lastRotation = 0.0f;
     s->lastZIndex = zIndex;
 
     s->isDirty = 1;
@@ -54,8 +54,23 @@ void SpriteRenderer_Update(Component* c, float dt) {
         s->isDirty = 1;
     }
 
-    if (!Transform_Equals(*s->transform, s->lastTransform)) {
-        s->lastTransform = *s->transform;
+    vec2 position;
+    SpriteRenderer_GetPosition(s, position);
+    if (!glm_vec2_eqv(position, s->lastPosition)) {
+        glm_vec2_copy(position, s->lastPosition);
+        s->isDirty = 1;
+    }
+
+    vec2 size;
+    SpriteRenderer_GetSize(s, size);
+    if (!glm_vec2_eqv(size, s->lastSize)) {
+        glm_vec2_copy(size, s->lastSize);
+        s->isDirty = 1;
+    }
+
+    float rotation = SpriteRenderer_GetRotation(s);
+    if (rotation != s->lastRotation) {
+        s->lastRotation = rotation;
         s->isDirty = 1;
     }
 
@@ -64,4 +79,16 @@ void SpriteRenderer_Update(Component* c, float dt) {
         s->isDirty = 1;
     }
 
+}
+
+void SpriteRenderer_GetPosition(SpriteRenderer* s, vec2 dest) {
+    glm_vec2_copy(s->component->go->position, dest);
+}
+
+void SpriteRenderer_GetSize(SpriteRenderer* s, vec2 dest) {
+    glm_vec2_copy(s->component->go->size, dest);
+}
+
+float SpriteRenderer_GetRotation(SpriteRenderer* s) {
+    return s->component->go->rotation;
 }

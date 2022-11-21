@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include "external.h"
-#include "transform.h"
 #include "gameobject.h"
 #include "collider.h"
 
@@ -11,17 +10,16 @@ struct Rigidbody {
     
     Component* component;
     Collider* collider;
-    Transform* transform;
-    float mass;
     vec2 forceAccum;
     vec2 velocity;
-    bool sensor;
     float cor;
+    float mass;
+    bool sensor;
     
 };
 typedef struct Rigidbody Rigidbody;
 
-Component* Rigidbody_Init(Transform* transform);
+Component* Rigidbody_Init();
 
 void Rigidbody_SetCollider(Component* c, Component* collider);
 

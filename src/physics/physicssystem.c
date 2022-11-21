@@ -58,10 +58,10 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
 
         if (strcmp(collider->type, "Circle") == 0) {
             Circle* circle = (Circle*) collider->data;
-            DebugDraw_AddCircle(rigidbody->transform->pos, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddCircle(rigidbody->component->go->position, circle->radius, (vec3) { 0.0f, 1.0f, 0.0f }, 1);
         } else if (strcmp(collider->type, "Box") == 0) {
             Box* box = (Box*) collider->data;
-            DebugDraw_AddBox(rigidbody->transform->pos, box->size, rigidbody->transform->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
+            DebugDraw_AddBox(rigidbody->component->go->position, box->size, rigidbody->component->go->rotation, (vec3) {0.0f, 1.0f, 0.0f }, 1);
         }
 
     }
@@ -111,7 +111,7 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
             // For static objects, move them outside of the obstacles, so they dont eventually sink through.
             glm_vec2_scale(m->normal, 2.0f * m->depth, btmp);
-            glm_vec2_add(b->transform->pos, btmp, b->transform->pos);
+            glm_vec2_add(b->component->go->position, btmp, b->component->go->position);
 
         }
 
@@ -123,7 +123,7 @@ void PhysicsSystem_ApplyImpulse(Rigidbody* a, Rigidbody* b, CollisionManifold* m
 
             // For static objects, move them outside of the obstacles, so they dont eventually sink through.
             glm_vec2_scale(m->normal, -2.0f * m->depth, atmp);
-            glm_vec2_add(a->transform->pos, atmp, a->transform->pos);
+            glm_vec2_add(a->component->go->position, atmp, a->component->go->position);
 
         }
 

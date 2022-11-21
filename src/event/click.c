@@ -32,14 +32,19 @@ bool Click_Check(Event* e, float dt) {
 
         else {
 
-            Transform* transform = e->component->go->transform;
-            float left = transform->pos[0] - transform->size[0] / 2.0f;
-            float right = transform->pos[0] + transform->size[0] / 2.0f;
-            float bottom = transform->pos[1] - transform->size[1] / 2.0f;
-            float top = transform->pos[1] + transform->size[1] / 2.0f;
+            vec2 position;
+            vec2 size;
+            glm_vec2_copy(e->component->go->position, position);
+            glm_vec2_copy(e->component->go->size, size);
+            float rotation = e->component->go->rotation;
+
+            float left = position[0] - size[0] / 2.0f;
+            float right = position[0] + size[0] / 2.0f;
+            float bottom = position[1] - size[1] / 2.0f;
+            float top = position[1] + size[1] / 2.0f;
             
             vec2 m = { (float) MouseListener_GetWorldX(), (float) MouseListener_GetWorldY() };
-            WMath_Rotate(m, transform->rotation, transform->pos);
+            WMath_Rotate(m, rotation, position);
 
             if (m[0] >= left && m[0] <= right && m[1] >= bottom && m[1] <= top) {return 1;}
 

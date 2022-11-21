@@ -1,5 +1,4 @@
 #include "external.h"
-#include "transform.h"
 #include "list.h"
 
 #ifndef GAMEOBJECT_H
@@ -8,7 +7,9 @@
 struct GameObject {
     int id;
     List components;
-    Transform* transform;
+    vec2 position;
+    vec2 size;
+    float rotation;
 };
 typedef struct GameObject GameObject;
 
@@ -22,7 +23,7 @@ struct Component {
 };
 typedef struct Component Component;
 
-GameObject* GameObject_Init(Transform* t);
+GameObject* GameObject_Init(vec2 position, vec2 size, float rotation);
 
 void GameObject_Update(GameObject* g, float dt);
 

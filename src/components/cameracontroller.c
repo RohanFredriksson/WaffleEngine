@@ -7,7 +7,7 @@
 #include "gameobject.h"
 #include "camera.h"
 
-Component* CameraController_Init(Transform* follow) {
+Component* CameraController_Init(vec2* follow) {
 
     Component* c = Component_Init("CameraController", &CameraController_Update, NULL, NULL);
 

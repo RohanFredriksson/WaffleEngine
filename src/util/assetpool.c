@@ -3,14 +3,12 @@
 void AssetPool_Init() {
     ShaderPool_Init();
     TexturePool_Init();
-    TransformPool_Init();
     SpritePool_Init();
 }
 
 void AssetPool_Free() {
     ShaderPool_Free();
     TexturePool_Free();
-    TransformPool_Free();
     SpritePool_Free();
 }
 
@@ -201,65 +199,5 @@ Texture* TexturePool_Get(const char* filename) {
 
     // Return the new texture.
     return texture;
-
-}
-
-static List TransformPool;
-
-void TransformPool_Init() {
-    List_Init(&TransformPool, sizeof(Transform*));
-}
-
-void TransformPool_Clear() {
-
-    // Free all transform data.
-    Transform* transform;
-    int n = List_Length(&TransformPool);
-    for (int i = 0; i < n; i++) {
-        List_Get(&TransformPool, i, &transform);
-        free(transform);
-    }
-    List_Clear(&TransformPool);
-
-}
-
-void TransformPool_Free() {
-
-    // Free all transform data.
-    Transform* transform;
-    int n = List_Length(&TransformPool);
-    for (int i = 0; i < n; i++) {
-        List_Get(&TransformPool, i, &transform);
-        free(transform);
-    }
-    List_Free(&TransformPool);
-
-}
-
-Transform* TransformPool_Add(vec2 pos, vec2 size, float rotation) {
-
-    // Initialise the transform.
-    Transform* transform = (Transform*) malloc(sizeof(Transform));
-    Transform_Init(transform, pos, size, rotation);
-
-    // Push it on the list.
-    List_Push(&TransformPool, &transform);
-
-    // Return the new transform.
-    return transform;
-
-}
-
-void TransformPool_Remove(Transform* t) {
-
-    Transform* transform;
-    int n = List_Length(&TransformPool);
-    for (int i = 0; i < n; i++) {
-        List_Get(&TransformPool, i, &transform);
-        if (t == transform) {
-            List_Remove(&TransformPool, i);
-            break;
-        }
-    }
 
 }

@@ -5,12 +5,14 @@
 
 static int next = 0;
 
-GameObject* GameObject_Init(Transform* t) {
+GameObject* GameObject_Init(vec2 position, vec2 size, float rotation) {
     
     GameObject* g = (GameObject*) malloc(sizeof(GameObject));
     g->id = next;
     List_Init(&g->components, sizeof(Component*));
-    g->transform = t;
+    glm_vec2_copy(position, g->position);
+    glm_vec2_copy(size, g->size);
+    g->rotation = rotation;
 
     next++;
     return g;

@@ -30,7 +30,7 @@ CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Cir
 
     float sumRadii = a->radius + b->radius;
     vec2 distance;
-    glm_vec2_sub(b->rigidbody->transform->pos, a->rigidbody->transform->pos, distance);
+    glm_vec2_sub(b->rigidbody->component->go->position, a->rigidbody->component->go->position, distance);
     if (glm_vec2_norm2(distance) - (sumRadii * sumRadii) > 0) {return NULL;}
 
     CollisionManifold* result = malloc(sizeof(CollisionManifold));
@@ -46,7 +46,7 @@ CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Cir
 
     vec2 contactPoint;
     glm_vec2_scale(normal, distanceToPoint, contactPoint);
-    glm_vec2_add(contactPoint, a->rigidbody->transform->pos, contactPoint);
+    glm_vec2_add(contactPoint, a->rigidbody->component->go->position, contactPoint);
 
     CollisionManifold_Set(result, normal, contactPoint, depth);
     return result;
@@ -90,7 +90,7 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
     if (minXDepth < minYDepth) {
 
         // Determine the normal of collision
-        normal[0] = (b->rigidbody->transform->pos[0] > a->rigidbody->transform->pos[0]) ? 1.0f : -1.0f;
+        normal[0] = (b->rigidbody->component->go->position[0] > a->rigidbody->component->go->position[0]) ? 1.0f : -1.0f;
         normal[1] = 0.0f;
 
         // Find the middle of the contact point
@@ -143,7 +143,7 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
 
         // Determine the normal of collision
         normal[0] = 0.0f;
-        normal[1] = (b->rigidbody->transform->pos[1] > a->rigidbody->transform->pos[1]) ? 1.0f : -1.0f;
+        normal[1] = (b->rigidbody->component->go->position[1] > a->rigidbody->component->go->position[1]) ? 1.0f : -1.0f;
 
         // Find the middle of the contact point
         float xValues[4];
@@ -205,8 +205,8 @@ CollisionManifold* _Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* 
     vec2 bPos;
     vec2 bMin;
     vec2 bMax;
-    glm_vec2_copy(c->rigidbody->transform->pos, cPos);
-    glm_vec2_copy(b->rigidbody->transform->pos, bPos);
+    glm_vec2_copy(c->rigidbody->component->go->position, cPos);
+    glm_vec2_copy(b->rigidbody->component->go->position, bPos);
     Box_GetMin(b, bMin);
     Box_GetMax(b, bMax);
 

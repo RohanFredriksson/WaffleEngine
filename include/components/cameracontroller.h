@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include "external.h"
 #include "gameobject.h"
-#include "transform.h"
 
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H
@@ -10,7 +9,7 @@ struct CameraController {
 
     Component* component;
 
-    Transform* follow;
+    vec2* follow;
     vec2 followOffset;
 
     bool isMoving;
@@ -25,7 +24,7 @@ struct CameraController {
 };
 typedef struct CameraController CameraController;
 
-Component* CameraController_Init(Transform* follow);
+Component* CameraController_Init(vec2* follow);
 
 void CameraController_Update(Component* c, float dt);
 

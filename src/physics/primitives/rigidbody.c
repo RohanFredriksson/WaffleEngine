@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "rigidbody.h"
 
-Component* Rigidbody_Init(Transform* transform) {
+Component* Rigidbody_Init() {
 
     Component* c = Component_Init("Rigidbody", NULL, NULL, NULL);
 
@@ -12,7 +12,6 @@ Component* Rigidbody_Init(Transform* transform) {
     // Initialise the rigidbody.
     rb->component = c;
     rb->collider = NULL;
-    rb->transform = transform;
     rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
     glm_vec2_zero(rb->velocity);
@@ -100,7 +99,7 @@ void Rigidbody_PhysicsUpdate(Rigidbody* rb, float dt) {
     // Calculate linear position
     vec2 ds;
     glm_vec2_scale(rb->velocity, dt, ds);
-    glm_vec2_add(rb->transform->pos, ds, rb->transform->pos);
+    glm_vec2_add(rb->component->go->position, ds, rb->component->go->position);
     Rigidbody_ClearAccumulators(rb);
 
 }

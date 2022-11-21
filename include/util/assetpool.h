@@ -4,7 +4,6 @@
 #include "shader.h"
 #include "sprite.h"
 #include "texture.h"
-#include "transform.h"
 #include "hashmap.h"
 #include "hash.h"
 #include "list.h"
@@ -33,12 +32,5 @@ void TexturePool_Clear();
 void TexturePool_Free();
 
 Texture* TexturePool_Get(const char* filename);
-
-void TransformPool_Init();
-void TransformPool_Clear();
-void TransformPool_Free();
-
-Transform* TransformPool_Add(vec2 pos, vec2 size, float rotation);
-void TransformPool_Remove(Transform* t);
 
 #endif

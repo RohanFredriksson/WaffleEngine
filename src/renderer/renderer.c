@@ -372,16 +372,23 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         }
     }
 
-    bool isRotated = sprite->transform->rotation != 0.0f;
+    // Get the transform for the sprite renderer.
+    vec2 position;
+    vec2 size;
+    SpriteRenderer_GetPosition(sprite, position);
+    SpriteRenderer_GetSize(sprite, size);
+    float rotation = SpriteRenderer_GetRotation(sprite);
+
+    bool isRotated = rotation != 0.0f;
     mat4 transformMatrix;
     glm_mat4_identity(transformMatrix);
 
     if (isRotated) {
-        vec3 translateVector = {sprite->transform->pos[0], sprite->transform->pos[1], 0.0f};
+        vec3 translateVector = {position[0], position[1], 0.0f};
         glm_translate(transformMatrix, translateVector);
         vec3 rotateVector = {0.0f, 0.0f, 1.0f};
-        glm_rotate(transformMatrix, sprite->transform->rotation / (float)(180.0 / GLM_PI), rotateVector);
-        vec3 scaleVector = {sprite->transform->size[0], sprite->transform->size[1], 1.0f};
+        glm_rotate(transformMatrix, rotation / (float)(180.0 / GLM_PI), rotateVector);
+        vec3 scaleVector = {size[0], size[1], 1.0f};
         glm_scale(transformMatrix, scaleVector);
     }
 
@@ -396,8 +403,8 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
         else if (i == 3) {yAdd = 0.5f;}
 
         vec4 currentPos = {
-            sprite->transform->pos[0] + (xAdd * sprite->transform->size[0]),
-            sprite->transform->pos[1] + (yAdd * sprite->transform->size[1]),
+            position[0] + (xAdd * size[0]),
+            position[1] + (yAdd * size[1]),
             0.0f, 1.0f
         };
 
