@@ -18,25 +18,25 @@ void StringPool_Init();
 void StringPool_Clear();
 void StringPool_Free();
 
-char* StringPool_Get(const char* string);
+char* StringPool_Get(char* string);
 
 void ShaderPool_Init();
 void ShaderPool_Clear();
 void ShaderPool_Free();
 
-Shader* ShaderPool_Get(const char* vertexFilepath, const char* fragmentFilepath);
+Shader* ShaderPool_Get(char* vertexFilepath, char* fragmentFilepath);
 
 void SpritePool_Init();
 void SpritePool_Clear();
 void SpritePool_Free();
 
-Sprite* SpritePool_Get(const char* filename);
-void SpritePool_Put(const char* name, Sprite* sprite);
+Sprite* SpritePool_Get(char* filename);
+void SpritePool_Put(char* name, Sprite* sprite);
 
 void TexturePool_Init();
 void TexturePool_Clear();
 void TexturePool_Free();
 
-Texture* TexturePool_Get(const char* filename);
+Texture* TexturePool_Get(char* filename);
 
 #endif

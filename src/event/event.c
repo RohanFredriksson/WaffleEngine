@@ -8,8 +8,7 @@ Component* Event_Init(char* type,
     Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Free);
     Event* e = malloc(sizeof(Event));
 
-    e->type = malloc(strlen(type)+1);
-    memcpy(e->type, type, strlen(type)+1);
+    e->type = type;
     e->check = check;
     e->collision = collision;
     e->free = free;

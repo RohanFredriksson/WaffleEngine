@@ -46,7 +46,7 @@ void StringPool_Free() {
 
 }
 
-char* StringPool_Get(const char* string) {
+char* StringPool_Get(char* string) {
 
     // Compute a string hash.
     uint64_t hash = OAAT(string);
@@ -77,7 +77,7 @@ struct ShaderHash {
 };
 typedef struct ShaderHash ShaderHash;
 
-ShaderHash ShaderPool_Hash(const char* vertex, const char* fragment) {
+ShaderHash ShaderPool_Hash(char* vertex, char* fragment) {
 
     ShaderHash result;
     result.vertex = OAAT(vertex);
@@ -118,7 +118,7 @@ void ShaderPool_Free() {
 
 }
 
-Shader* ShaderPool_Get(const char* vertexFilepath, const char* fragmentFilepath) {
+Shader* ShaderPool_Get(char* vertexFilepath, char* fragmentFilepath) {
 
     // Create the ShaderHash object.
     ShaderHash hash = ShaderPool_Hash(vertexFilepath, fragmentFilepath);
@@ -174,7 +174,7 @@ void SpritePool_Free() {
     
 }
 
-Sprite* SpritePool_Get(const char* filename) {
+Sprite* SpritePool_Get(char* filename) {
 
     // Compute a string hash.
     uint64_t hash = OAAT(filename);
@@ -197,7 +197,7 @@ Sprite* SpritePool_Get(const char* filename) {
 
 }
 
-void SpritePool_Put(const char* name, Sprite* sprite) {
+void SpritePool_Put(char* name, Sprite* sprite) {
     uint64_t hash = OAAT(name);
     HashMap_Put(&SpritePool, &hash, &sprite);
 }
@@ -236,7 +236,7 @@ void TexturePool_Free() {
 
 }
 
-Texture* TexturePool_Get(const char* filename) {
+Texture* TexturePool_Get(char* filename) {
 
     // Compute a string hash.
     uint64_t hash = OAAT(filename);

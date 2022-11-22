@@ -7,6 +7,6 @@
 #ifndef SPRITESHEET_H
 #define SPRITESHEET_H
 
-void Spritesheet_Load(const char* filename);
+void Spritesheet_Load(char* filename);
 
 #endif

@@ -11,8 +11,7 @@ Component* Collider_Init(char* type,
     Component* c = Component_Init("Collider", &Collider_Update, &Collider_OnCollision, &Collider_Free);
     Collider* co = malloc(sizeof(Collider));
 
-    co->type = malloc(strlen(type)+1);
-    memcpy(co->type, type, strlen(type)+1);
+    co->type = type;
     co->update = update;
     co->collision = collision;
     co->free = free;

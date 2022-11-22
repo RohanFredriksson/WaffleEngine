@@ -11,7 +11,7 @@ struct SpritesheetMetadata {
 };
 typedef struct SpritesheetMetadata SpritesheetMetadata;
 
-static char* Spritesheet_GetMeta(const char* filename) {
+static char* Spritesheet_GetMeta(char* filename) {
 
     int i = 0;
     int lastDot = -1;
@@ -20,14 +20,14 @@ static char* Spritesheet_GetMeta(const char* filename) {
         i++;
     }
 
-    char* metaname = malloc((lastDot+strlen(jsonext) + 1) * sizeof(char));
-    memcpy(metaname, filename, lastDot * sizeof(char));
+    char* metaname = malloc((lastDot+strlen(jsonext) + 1));
+    memcpy(metaname, filename, lastDot);
     memcpy(metaname + lastDot, jsonext, strlen(jsonext) + 1);
     return metaname;
 
 }
 
-static char* Spritesheet_LoadSource(const char* filepath) {
+static char* Spritesheet_LoadSource(char* filepath) {
     
     size_t size = 16;
     size_t length = 0;
@@ -59,7 +59,7 @@ static char* Spritesheet_LoadSource(const char* filepath) {
     return source;   
 }
 
-static SpritesheetMetadata Spritesheet_ParseMeta(const char* metaname) {
+static SpritesheetMetadata Spritesheet_ParseMeta(char* metaname) {
 
     SpritesheetMetadata result = { 0, 0, 0, 0, NULL };
     char* contents = Spritesheet_LoadSource(metaname);
@@ -156,7 +156,7 @@ static SpritesheetMetadata Spritesheet_ParseMeta(const char* metaname) {
 
 }
 
-void Spritesheet_Load(const char* filename) {
+void Spritesheet_Load(char* filename) {
     
     char* metaname = Spritesheet_GetMeta(filename);
     SpritesheetMetadata metadata = Spritesheet_ParseMeta(metaname);

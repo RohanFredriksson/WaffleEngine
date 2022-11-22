@@ -7,10 +7,7 @@ Component* Component_Init(char* type,
 
     Component* c = (Component*) malloc(sizeof(Component));
 
-    // Store the type
-    c->type = malloc(strlen(type)+1);
-    memcpy(c->type, type, strlen(type)+1);
-
+    c->type = type;
     glm_vec2_zero(c->positionOffset);
     glm_vec2_zero(c->sizeOffset);
     glm_vec2_one(c->sizeScale);

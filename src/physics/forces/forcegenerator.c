@@ -8,10 +8,7 @@ ForceGenerator* ForceGenerator_Init(char* type,
 
     ForceGenerator* fg = (ForceGenerator*) malloc(sizeof(ForceGenerator));
 
-    // Store the type
-    fg->type = malloc(strlen(type)+1);
-    memcpy(fg->type, type, strlen(type)+1);
-
+    fg->type = type;
     fg->updateForce = updateForce;
     fg->free = free;
 

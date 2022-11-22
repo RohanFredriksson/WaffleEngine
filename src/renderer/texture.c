@@ -10,11 +10,10 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-void Texture_Init(Texture* t, const char* filename) {
+void Texture_Init(Texture* t, char* filename) {
     
     // Allocate space to store the string.
-    t->filename = (char*) malloc(strlen(filename)+1);
-    memcpy(t->filename, filename, strlen(filename)+1);
+    t->filename = filename;
 
     // Generate texture on GPU
     glGenTextures(1, &t->id);
@@ -67,9 +66,7 @@ void Texture_New(Texture* t, int width, int height) {
     t->height = height;
 
     // Allocate space to store the string.
-    char filename[] = "Generated";
-    t->filename = (char*) malloc(strlen(filename)+1);
-    memcpy(t->filename, filename, strlen(filename)+1);
+    t->filename = "Generated";
 
     // Generate texture on GPU
     glGenTextures(1, &t->id);
@@ -91,9 +88,7 @@ void Texture_New_RGB32F(Texture* t, int width, int height) {
     t->height = height;
 
     // Allocate space to store the string.
-    char filename[] = "Generated";
-    t->filename = (char*) malloc(strlen(filename)+1);
-    memcpy(t->filename, filename, strlen(filename)+1);
+    t->filename = "Generated";
 
     // Generate texture on GPU
     glGenTextures(1, &t->id);
@@ -108,7 +103,7 @@ void Texture_New_RGB32F(Texture* t, int width, int height) {
 
 }
 
-void Texture_Save(Texture* t, const char* filename) {
+void Texture_Save(Texture* t, char* filename) {
     stbi_flip_vertically_on_write(1);
     unsigned char* image = malloc(t->width * t->height * 4 * sizeof(unsigned char));
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
