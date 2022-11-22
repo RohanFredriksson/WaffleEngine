@@ -1,17 +1,32 @@
 #include "trigger.h"
 
-Component* Trigger_Init() {
+static Component* _Trigger_Init(int withType, int entityId, char* componentType) {
 
     Component* component = Event_Init("Trigger", &Trigger_Check, &Trigger_OnCollision, NULL);
     Event* event = (Event*) component->data;
     Trigger* trigger = malloc(sizeof(Trigger));
 
     trigger->event = event;
+    trigger->withType = withType;
+    trigger->entityId = entityId;
+    trigger->componentType = componentType;
     trigger->flag = 0;
 
     event->data = trigger;
     return component;
 
+}
+
+Component* Trigger_Init() {
+    return _Trigger_Init(TRIGGER_WITH_ANY, -1, NULL);
+}
+
+Component* TriggerOnEntity_Init(Entity* entity) {
+    return _Trigger_Init(TRIGGER_WITH_ENTITY, entity->id, NULL);
+}
+
+Component* TriggerOnComponentType_Init(char* type) {
+    return _Trigger_Init(TRIGGER_WITH_COMPONENT_TYPE, -1, type);
 }
 
 bool Trigger_Check(Event* e, float dt) {
@@ -26,6 +41,22 @@ bool Trigger_Check(Event* e, float dt) {
 }
 
 void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal) {
+    
     Trigger* t = (Trigger*) e->data;
-    t->flag = 1;
+
+    // Trigger on entity
+    if (t->withType == TRIGGER_WITH_ENTITY) {
+        if (t->entityId == with->id) {t->flag = 1;}
+    }
+
+    // Trigger on component type
+    else if (t->withType == TRIGGER_WITH_COMPONENT_TYPE) {
+        if (Entity_GetComponent(with, t->componentType) != NULL) {t->flag = 1;}
+    }
+
+    // Trigger on anything
+    else {
+        t->flag = 1;
+    }
+
 }

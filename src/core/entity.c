@@ -76,7 +76,7 @@ void Entity_RemoveComponent(Entity* e, Component* c) {
 
 }
 
-Component* Entity_GetComponent(Entity* e, const char* type) {
+Component* Entity_GetComponent(Entity* e, char* type) {
 
     Component* component;
     int n = List_Length(&e->components);

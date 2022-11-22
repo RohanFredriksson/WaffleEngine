@@ -48,7 +48,7 @@ void Entity_AddComponent(Entity* e, Component* c);
 
 void Entity_RemoveComponent(Entity* e, Component* c);
 
-Component* Entity_GetComponent(Entity* e, const char* type);
+Component* Entity_GetComponent(Entity* e, char* type);
 
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt),
