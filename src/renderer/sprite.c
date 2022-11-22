@@ -4,13 +4,17 @@
 #include "texture.h"
 #include "assetpool.h"
 
-void Sprite_Init(Sprite* s, Texture* t) {
+void Sprite_Init(Sprite* s, Texture* t, char* name) {
     
     s->texture = t;
     if (s->texture != NULL) {    
         s->size[0] = s->texture->width;
         s->size[1] = s->texture->height;
     }
+
+    if (name != NULL) {s->name = StringPool_Get(name);} 
+    else if (t != NULL) {s->name = StringPool_Get(t->filename);} 
+    else {s->name = "empty";}
 
     s->texCoords[0][0] = 1;
     s->texCoords[0][1] = 1;
@@ -40,6 +44,10 @@ void Sprite_SetSize(Sprite* s, vec2 size) {
     glm_vec2_copy(size, s->size);
 }
 
+void Sprite_SetName(Sprite* s, char* name) {
+    s->name = StringPool_Get(name);
+}
+
 bool Sprite_Equals(Sprite* s1, Sprite* s2) {
 
     // If the textures are not the same, return 0.
@@ -63,7 +71,7 @@ bool Sprite_Equals(Sprite* s1, Sprite* s2) {
 
 }
 
-char* Sprite_Serialise(Sprite* s) {
+cJSON* Sprite_Serialise(Sprite* s) {
 
     cJSON* json = cJSON_CreateObject();
 
@@ -83,8 +91,6 @@ char* Sprite_Serialise(Sprite* s) {
     }
     cJSON_AddItemToObject(json, "texCoords", texCoords);
 
-    char* string = cJSON_Print(json);
-    cJSON_Delete(json);
-    return string;
+    return json;
 
 }

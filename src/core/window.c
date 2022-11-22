@@ -85,8 +85,10 @@ int Window_Init() {
     entityShader = ShaderPool_Get("./assets/shaders/default.vert", "./assets/shaders/entity.frag");
 
     // Set up the current scene.
-    Scene_Init(&scene, Title_Init);
+    Scene_Init(&scene, "title", Title_Init);
     Scene_Start(&scene);
+
+    Scene_Save(&scene);
 
     DebugDraw_Init();
     DebugDraw_Start();

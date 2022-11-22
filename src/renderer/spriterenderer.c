@@ -80,3 +80,28 @@ void SpriteRenderer_Update(Component* c, float dt) {
     }
 
 }
+
+cJSON* SpriteRenderer_Serialise(SpriteRenderer* s) {
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* sprite = cJSON_CreateString(s->sprite->name);
+    cJSON_AddItemToObject(json, "sprite", sprite);
+
+    cJSON* colour = cJSON_CreateArray();
+    cJSON* r = cJSON_CreateNumber(s->colour[0]);
+    cJSON* g = cJSON_CreateNumber(s->colour[1]);
+    cJSON* b = cJSON_CreateNumber(s->colour[2]);
+    cJSON* a = cJSON_CreateNumber(s->colour[3]);
+    cJSON_AddItemToArray(colour, r);
+    cJSON_AddItemToArray(colour, g);
+    cJSON_AddItemToArray(colour, b);
+    cJSON_AddItemToArray(colour, a);
+    cJSON_AddItemToObject(json, "colour", colour);
+
+    cJSON* zIndex = cJSON_CreateNumber((double) s->zIndex);
+    cJSON_AddItemToObject(json, "zIndex", zIndex);
+
+    return json;
+
+}

@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "external.h"
 #include "entity.h"
 #include "renderer.h"
 #include "physicssystem.h"
@@ -9,6 +10,7 @@
 #define SCENE_H
 
 struct Scene {
+    char* name;
     bool isRunning;
     List entities;
     Camera camera;
@@ -17,7 +19,7 @@ struct Scene {
 };
 typedef struct Scene Scene;
 
-void Scene_Init(Scene* s, void (*init)(Scene* scene));
+void Scene_Init(Scene* s, char* name, void (*init)(Scene* scene));
 
 void Scene_Start(Scene* s);
 
@@ -26,6 +28,10 @@ void Scene_Update(Scene* s, float dt);
 void Scene_Render(Scene* s);
 
 void Scene_Free(Scene* s);
+
+cJSON* Scene_Serialise(Scene* s);
+
+void Scene_Save(Scene* s);
 
 void Scene_AddEntity(Scene* s, Entity* entity);
 

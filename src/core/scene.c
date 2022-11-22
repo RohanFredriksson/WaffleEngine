@@ -6,8 +6,12 @@
 #include "renderer.h"
 #include "assetpool.h"
 
-void Scene_Init(Scene* s, void (*init)(Scene* scene)) {
+static char path[] = "saves/";
+static char extension[] = ".scene";
 
+void Scene_Init(Scene* s, char* name, void (*init)(Scene* scene)) {
+
+    s->name = name;
     s->isRunning = 0;
     List_Init(&s->entities, sizeof(Entity*));
     Camera_Init(&s->camera);
@@ -70,6 +74,48 @@ void Scene_Free(Scene* s) {
     // Free all renderer data.
     Renderer_Free(&s->renderer);
     PhysicsSystem_Free(&s->physics);
+
+}
+
+cJSON* Scene_Serialise(Scene* s) {
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* sprites = SpritePool_Serialise();
+    cJSON_AddItemToObject(json, "sprites", sprites);
+
+    cJSON* entities = cJSON_CreateArray();
+    Entity* e;
+    int n = List_Length(&s->entities);
+    for (int i = 0; i < n; i++) {
+        List_Get(&s->entities, i, &e);
+        cJSON* entity = Entity_Serialise(e);
+        cJSON_AddItemToArray(entities, entity);
+    }
+    cJSON_AddItemToObject(json, "entities", entities);
+
+    return json;
+
+}
+
+void Scene_Save(Scene* s) {
+
+    char* filename = malloc(strlen(path) + strlen(s->name) + strlen(extension) + 1);
+    memcpy(filename, path, strlen(path));
+    memcpy(filename + strlen(path), s->name, strlen(s->name));
+    memcpy(filename + strlen(path) + strlen(s->name), extension, strlen(extension) + 1);
+    printf("%s\n", filename);
+
+    cJSON* json = Scene_Serialise(s);
+    char* contents = cJSON_Print(json);
+    cJSON_Delete(json);
+
+    printf("%s\n", contents);
+
+    FILE* file = fopen(filename, "w");
+    fprintf(file, contents);
+    free(contents);
+    fclose(file);
 
 }
 

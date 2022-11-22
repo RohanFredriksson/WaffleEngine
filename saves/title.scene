@@ -1,0 +1,94 @@
+{
+	"sprites":	[{
+			"texture":	"NULL",
+			"texCoords":	[[1, 1], [1, 0], [0, 0], [0, 1]]
+		}, {
+			"texture":	"assets/textures/faces.png",
+			"texCoords":	[[0.5, 1], [0.5, 0], [0, 0], [0, 1]]
+		}, {
+			"texture":	"assets/textures/faces.png",
+			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
+		}],
+	"entities":	[{
+			"id":	0,
+			"components":	[{
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"armaan",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"Rigidbody",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"Collider",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"CameraController",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"Event",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"position":	[0, 0],
+			"size":	[1, 1],
+			"rotation":	0
+		}, {
+			"id":	1,
+			"components":	[{
+					"type":	"Rigidbody",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"Collider",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"ainsley",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"type":	"Event",
+					"child":	{
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"position":	[-4, 0],
+			"size":	[1, 1],
+			"rotation":	0
+		}]
+}

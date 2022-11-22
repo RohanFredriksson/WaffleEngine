@@ -1,5 +1,4 @@
 #include <stdbool.h>
-
 #include "external.h"
 #include "entity.h"
 #include "sprite.h"
@@ -30,5 +29,7 @@ typedef struct SpriteRenderer SpriteRenderer;
 Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex);
 
 void SpriteRenderer_Update(Component* c, float dt);
+
+cJSON* SpriteRenderer_Serialise(SpriteRenderer* s);
 
 #endif

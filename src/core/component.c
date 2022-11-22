@@ -1,4 +1,5 @@
 #include "entity.h"
+#include "components.h"
 
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt), 
@@ -9,10 +10,8 @@ Component* Component_Init(char* type,
 
     c->type = type;
     glm_vec2_zero(c->positionOffset);
-    glm_vec2_zero(c->sizeOffset);
     glm_vec2_one(c->sizeScale);
     c->rotationOffset = 0;
-    c->rotationScale = 1; 
 
     c->update = update;
     c->collision = collision;
@@ -41,9 +40,41 @@ void Component_GetPosition(Component* c, vec2 dest) {
 
 void Component_GetSize(Component* c, vec2 dest) {
     glm_vec2_mul(c->entity->size, c->sizeScale, dest);
-    glm_vec2_add(dest, c->sizeOffset, dest);
 }
 
 float Component_GetRotation(Component* c) {
-    return c->entity->rotation * c->rotationScale + c->rotationOffset;
+    return c->entity->rotation + c->rotationOffset;
+}
+
+cJSON* Component_Serialise(Component* c) {
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* type = cJSON_CreateString(c->type);
+    cJSON_AddItemToObject(json, "type", type);
+
+    cJSON* child;
+    if (strcmp(c->type, "SpriteRenderer") == 0) {child = SpriteRenderer_Serialise((SpriteRenderer*) c->data);}
+    else {child = cJSON_CreateObject();}
+    cJSON_AddItemToObject(json, "child", child);
+
+    cJSON* positionOffset = cJSON_CreateArray();
+    cJSON* xPositionOffset = cJSON_CreateNumber((double) c->positionOffset[0]);
+    cJSON* yPositionOffset = cJSON_CreateNumber((double) c->positionOffset[1]);
+    cJSON_AddItemToArray(positionOffset, xPositionOffset);
+    cJSON_AddItemToArray(positionOffset, yPositionOffset);
+    cJSON_AddItemToObject(json, "positionOffset", positionOffset);
+
+    cJSON* sizeScale = cJSON_CreateArray();
+    cJSON* xSizeScale = cJSON_CreateNumber((double) c->sizeScale[0]);
+    cJSON* ySizeScale = cJSON_CreateNumber((double) c->sizeScale[1]);
+    cJSON_AddItemToArray(sizeScale, xSizeScale);
+    cJSON_AddItemToArray(sizeScale, ySizeScale);
+    cJSON_AddItemToObject(json, "sizeScale", sizeScale);
+
+    cJSON* rotationOffset = cJSON_CreateNumber((double) c->rotationOffset);
+    cJSON_AddItemToObject(json, "rotationOffset", rotationOffset);
+
+    return json;
+
 }

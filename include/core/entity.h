@@ -26,11 +26,9 @@ struct Component {
     void (*free)(struct Component* c);
 
     vec2 positionOffset;
-    vec2 sizeOffset;
     vec2 sizeScale;
     float rotationOffset;
-    float rotationScale;
-    
+
     void* data;
 
 };
@@ -47,6 +45,8 @@ void Entity_Free(Entity* e);
 void Entity_AddComponent(Entity* e, Component* c);
 
 void Entity_RemoveComponent(Entity* e, Component* c);
+
+cJSON* Entity_Serialise(Entity* e);
 
 Component* Entity_GetComponent(Entity* e, char* type);
 
@@ -66,5 +66,7 @@ void Component_GetPosition(Component* c, vec2 dest);
 void Component_GetSize(Component* c, vec2 dest);
 
 float Component_GetRotation(Component* c);
+
+cJSON* Component_Serialise(Component* c);
 
 #endif

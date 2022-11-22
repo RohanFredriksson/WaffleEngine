@@ -145,7 +145,14 @@ Shader* ShaderPool_Get(char* vertexFilepath, char* fragmentFilepath) {
 static HashMap SpritePool;
 
 void SpritePool_Init() {
+    
     HashMap_Init(&SpritePool, sizeof(uint64_t), sizeof(Sprite*));
+
+    // Put the empty sprite in the pool.
+    Sprite* empty = malloc(sizeof(Sprite));
+    Sprite_Init(empty, NULL, NULL);
+    SpritePool_Put(empty);
+
 }
 
 void SpritePool_Clear() {
@@ -174,6 +181,19 @@ void SpritePool_Free() {
     
 }
 
+cJSON* SpritePool_Serialise() {
+
+    cJSON* json = cJSON_CreateArray();
+    KeyValue* current = HashMap_Elements(&SpritePool);
+    while (current != NULL) {
+        cJSON* sprite = Sprite_Serialise(*((Sprite**) current->value));
+        cJSON_AddItemToArray(json, sprite);
+        current = current->next;
+    }
+    return json;
+
+}
+
 Sprite* SpritePool_Get(char* filename) {
 
     // Compute a string hash.
@@ -187,7 +207,7 @@ Sprite* SpritePool_Get(char* filename) {
 
     // Initialise the sprite.
     sprite = malloc(sizeof(Sprite));
-    Sprite_Init(sprite, TexturePool_Get(filename));
+    Sprite_Init(sprite, TexturePool_Get(filename), StringPool_Get(filename));
     
     // Add the sprite to the sprite pool.
     HashMap_Put(&SpritePool, &hash, &sprite);
@@ -197,8 +217,8 @@ Sprite* SpritePool_Get(char* filename) {
 
 }
 
-void SpritePool_Put(char* name, Sprite* sprite) {
-    uint64_t hash = OAAT(name);
+void SpritePool_Put(Sprite* sprite) {
+    uint64_t hash = OAAT(sprite->name);
     HashMap_Put(&SpritePool, &hash, &sprite);
 }
 

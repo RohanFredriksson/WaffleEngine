@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "external.h"
 #include "shader.h"
 #include "sprite.h"
 #include "texture.h"
@@ -29,9 +30,10 @@ Shader* ShaderPool_Get(char* vertexFilepath, char* fragmentFilepath);
 void SpritePool_Init();
 void SpritePool_Clear();
 void SpritePool_Free();
+cJSON* SpritePool_Serialise();
 
 Sprite* SpritePool_Get(char* filename);
-void SpritePool_Put(char* name, Sprite* sprite);
+void SpritePool_Put(Sprite* sprite);
 
 void TexturePool_Init();
 void TexturePool_Clear();
