@@ -9,17 +9,17 @@ bool Raycast_Rigidbody(Rigidbody* rigidbody, Ray ray, RaycastResult* result) {
     if (collider == NULL) {return 0;}
 
     if (strcmp(collider->type, "Box") == 0) {
-        return Raycast_Box(*((Box*) collider->data), ray, result);
+        return Raycast_Box((Box*) collider->data, ray, result);
     }
 
     if (strcmp(collider->type, "Circle") == 0) {
-        return Raycast_Circle(*((Circle*) collider->data), ray, result);
+        return Raycast_Circle((Circle*) collider->data, ray, result);
     }
 
     return 0;
 }
 
-bool Raycast_Box(Box box, Ray ray, RaycastResult* result) {
+bool Raycast_Box(Box* box, Ray ray, RaycastResult* result) {
 
     RaycastResult_Reset(result);
 
@@ -30,12 +30,12 @@ bool Raycast_Box(Box box, Ray ray, RaycastResult* result) {
     unitVector[1] = (unitVector != 0) ? 1.0f / unitVector[1] : 0.0f;
 
     vec2 min;
-    Box_GetMin(&box, min);
+    Box_GetMin(box, min);
     glm_vec2_sub(min, ray.origin, min);
     glm_vec2_mul(min, unitVector, min);
 
     vec2 max;
-    Box_GetMax(&box, max);
+    Box_GetMax(box, max);
     glm_vec2_sub(max, ray.origin, max);
     glm_vec2_mul(max, unitVector, max);
 
@@ -64,16 +64,16 @@ bool Raycast_Box(Box box, Ray ray, RaycastResult* result) {
     return 1;
 }
 
-bool Raycast_Circle(Circle circle, Ray ray, RaycastResult* result) {
+bool Raycast_Circle(Circle* circle, Ray ray, RaycastResult* result) {
     
     RaycastResult_Reset(result);
     
     vec2 position;
-    Component_GetPosition(Circle_GetRigidbody(&circle), position);
+    Component_GetPosition(Circle_GetRigidbody(circle), position);
 
     vec2 originToCircle;
     glm_vec2_sub(position, ray.origin, originToCircle);
-    float radiusSquared = circle.radius * circle.radius;
+    float radiusSquared = circle->radius * circle->radius;
     float originToCircleLengthSquared = glm_vec2_norm2(originToCircle);
 
     // Project the vector from the ray origin onto the direction of the ray
