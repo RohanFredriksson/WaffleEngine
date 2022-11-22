@@ -6,7 +6,7 @@
 
 Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex) {
     
-    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, NULL, NULL);
+    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, NULL, &SpriteRenderer_Serialise, NULL);
 
     // Allocate some memory for the sprite renderer.
     SpriteRenderer* s = malloc(sizeof(SpriteRenderer));
@@ -81,7 +81,9 @@ void SpriteRenderer_Update(Component* c, float dt) {
 
 }
 
-cJSON* SpriteRenderer_Serialise(SpriteRenderer* s) {
+cJSON* SpriteRenderer_Serialise(Component* c) {
+
+    SpriteRenderer* s = (SpriteRenderer*) c->data;
 
     cJSON* json = cJSON_CreateObject();
 

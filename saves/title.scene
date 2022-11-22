@@ -1,17 +1,21 @@
 {
 	"sprites":	[{
+			"name":	"empty",
 			"texture":	"NULL",
 			"texCoords":	[[1, 1], [1, 0], [0, 0], [0, 1]]
 		}, {
+			"name":	"armaan",
 			"texture":	"assets/textures/faces.png",
 			"texCoords":	[[0.5, 1], [0.5, 0], [0, 0], [0, 1]]
 		}, {
+			"name":	"ainsley",
 			"texture":	"assets/textures/faces.png",
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"entities":	[{
 			"id":	0,
 			"components":	[{
+					"id":	2,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"armaan",
@@ -22,20 +26,34 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	0,
 					"type":	"Rigidbody",
 					"child":	{
+						"collider":	1,
+						"mass":	0,
+						"forceAccum":	[0, 0],
+						"velocity":	[0, 0],
+						"sensor":	false,
+						"cor":	1
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	1,
 					"type":	"Collider",
 					"child":	{
+						"type":	"Box",
+						"child":	{
+							"rigidbody":	0,
+							"size":	[5, 1]
+						}
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	3,
 					"type":	"CameraController",
 					"child":	{
 					},
@@ -43,6 +61,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	4,
 					"type":	"Event",
 					"child":	{
 					},
@@ -56,20 +75,34 @@
 		}, {
 			"id":	1,
 			"components":	[{
+					"id":	5,
 					"type":	"Rigidbody",
 					"child":	{
+						"collider":	6,
+						"mass":	1,
+						"forceAccum":	[0, 0],
+						"velocity":	[1, 10],
+						"sensor":	false,
+						"cor":	0.75
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	6,
 					"type":	"Collider",
 					"child":	{
+						"type":	"Circle",
+						"child":	{
+							"rigidbody":	5,
+							"radius":	0.5
+						}
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	7,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"ainsley",
@@ -80,6 +113,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
+					"id":	8,
 					"type":	"Event",
 					"child":	{
 					},

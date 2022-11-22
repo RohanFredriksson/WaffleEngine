@@ -1,13 +1,17 @@
 #include "entity.h"
 #include "components.h"
 
+static int next = 0;
+
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt), 
                           void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal),
+                          cJSON* (*serialise) (struct Component* c),
                           void (*free)(Component* c)) {
 
     Component* c = (Component*) malloc(sizeof(Component));
 
+    c->id = next;
     c->type = type;
     glm_vec2_zero(c->positionOffset);
     glm_vec2_one(c->sizeScale);
@@ -15,8 +19,10 @@ Component* Component_Init(char* type,
 
     c->update = update;
     c->collision = collision;
+    c->serialise = serialise;
     c->free = free;
 
+    next++;
     return c;
 }
 
@@ -50,11 +56,14 @@ cJSON* Component_Serialise(Component* c) {
 
     cJSON* json = cJSON_CreateObject();
 
+    cJSON* id = cJSON_CreateNumber(c->id);
+    cJSON_AddItemToObject(json, "id", id);
+
     cJSON* type = cJSON_CreateString(c->type);
     cJSON_AddItemToObject(json, "type", type);
 
     cJSON* child;
-    if (strcmp(c->type, "SpriteRenderer") == 0) {child = SpriteRenderer_Serialise((SpriteRenderer*) c->data);}
+    if (c->serialise != NULL) {child = c->serialise(c);}
     else {child = cJSON_CreateObject();}
     cJSON_AddItemToObject(json, "child", child);
 

@@ -5,7 +5,7 @@ Component* Event_Init(char* type,
                       void (*collision) (struct Event* e, Entity* with, vec2 contact, vec2 normal), 
                       void (*free)(Event* e)) {
 
-    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Free);
+    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, NULL, &Event_Free);
     Event* e = malloc(sizeof(Event));
 
     e->type = type;

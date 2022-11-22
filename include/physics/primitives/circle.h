@@ -13,6 +13,7 @@ struct Circle {
 typedef struct Circle Circle;
 
 Component* Circle_Init(float radius, Component* rigidbody);
+cJSON* Circle_Serialise(Collider* co);
 
 void Circle_SetRadius(Circle* c, float radius);
 void Circle_SetRigidbody(Circle* c, Rigidbody* rb);

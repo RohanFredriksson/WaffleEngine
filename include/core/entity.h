@@ -19,10 +19,13 @@ typedef struct Entity Entity;
 
 struct Component {
 
-    Entity* entity;
+    int id;
     char* type;
+    Entity* entity;
+
     void (*update)(struct Component* c, float dt);
     void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal);
+    cJSON* (*serialise) (struct Component* c);
     void (*free)(struct Component* c);
 
     vec2 positionOffset;
@@ -52,7 +55,8 @@ Component* Entity_GetComponent(Entity* e, char* type);
 
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt),
-                          void (*collision)(struct Component* c, Entity* with, vec2 contact, vec2 normal), 
+                          void (*collision)(struct Component* c, Entity* with, vec2 contact, vec2 normal),
+                          cJSON* (*serialise) (struct Component* c),
                           void (*free)(Component* c));
 
 void Component_Update(Component* c, float dt);

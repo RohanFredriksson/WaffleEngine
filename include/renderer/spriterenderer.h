@@ -30,6 +30,6 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex);
 
 void SpriteRenderer_Update(Component* c, float dt);
 
-cJSON* SpriteRenderer_Serialise(SpriteRenderer* s);
+cJSON* SpriteRenderer_Serialise(Component* c);
 
 #endif

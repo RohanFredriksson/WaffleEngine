@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <string.h>
+#include <stdio.h>
 #include "external.h"
 #include "entity.h"
 #include "collider.h"
@@ -20,6 +22,8 @@ struct Rigidbody {
 typedef struct Rigidbody Rigidbody;
 
 Component* Rigidbody_Init();
+
+cJSON* Rigidbody_Serialise(Component* c);
 
 void Rigidbody_SetCollider(Component* c, Component* collider);
 

@@ -9,7 +9,7 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
         printf("ERROR::BOX::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Box", NULL, NULL, NULL);
+    Component* component = Collider_Init("Box", NULL, NULL, &Box_Serialise, NULL);
     Collider* collider = (Collider*) component->data;
     Box* box = malloc(sizeof(Box));
 
@@ -20,6 +20,26 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
 
     collider->data = box;
     return component;
+
+}
+
+cJSON* Box_Serialise(Collider* co) {
+
+    Box* b = (Box*) co->data;
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* rigidbody = cJSON_CreateNumber((double) b->rigidbody->component->id);
+    cJSON_AddItemToObject(json, "rigidbody", rigidbody);
+
+    cJSON* size = cJSON_CreateArray();
+    cJSON* xSize = cJSON_CreateNumber((double) b->size[0]);
+    cJSON* ySize = cJSON_CreateNumber((double) b->size[1]);
+    cJSON_AddItemToArray(size, xSize);
+    cJSON_AddItemToArray(size, ySize);
+    cJSON_AddItemToObject(json, "size", size);
+
+    return json;
 
 }
 

@@ -75,6 +75,9 @@ cJSON* Sprite_Serialise(Sprite* s) {
 
     cJSON* json = cJSON_CreateObject();
 
+    cJSON* name = cJSON_CreateString(s->name);
+    cJSON_AddItemToObject(json, "name", name);
+
     cJSON* texture;
     if (s->texture != NULL) {texture = cJSON_CreateString(s->texture->filename);}
     else {texture = cJSON_CreateString("NULL");}

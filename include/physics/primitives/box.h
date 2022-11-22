@@ -13,6 +13,7 @@ struct Box {
 typedef struct Box Box;
 
 Component* Box_Init(vec2 size, Component* rigidbody);
+cJSON* Box_Serialise(Collider* co);
 
 void Box_GetMin(Box* box, vec2 dest);
 void Box_GetMax(Box* box, vec2 dest);

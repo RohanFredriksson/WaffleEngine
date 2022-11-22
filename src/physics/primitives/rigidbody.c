@@ -1,10 +1,8 @@
-#include <string.h>
-#include <stdio.h>
 #include "rigidbody.h"
 
 Component* Rigidbody_Init() {
 
-    Component* c = Component_Init("Rigidbody", NULL, NULL, NULL);
+    Component* c = Component_Init("Rigidbody", NULL, NULL, &Rigidbody_Serialise, NULL);
 
     // Allocate some memory for the rigidbody.
     Rigidbody* rb = malloc(sizeof(Rigidbody));
@@ -21,6 +19,42 @@ Component* Rigidbody_Init() {
     // Attach the rigidbody to the component
     c->data = rb;
     return c;
+
+}
+
+cJSON* Rigidbody_Serialise(Component* c) {
+
+    Rigidbody* rb = (Rigidbody*) c->data;
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* collider = cJSON_CreateNumber((double) rb->collider->component->id);
+    cJSON_AddItemToObject(json, "collider", collider);
+
+    cJSON* mass = cJSON_CreateNumber((double) rb->mass);
+    cJSON_AddItemToObject(json, "mass", mass);
+
+    cJSON* forceAccum = cJSON_CreateArray();
+    cJSON* xForceAccum = cJSON_CreateNumber((double) rb->forceAccum[0]);
+    cJSON* yForceAccum = cJSON_CreateNumber((double) rb->forceAccum[1]);
+    cJSON_AddItemToArray(forceAccum, xForceAccum);
+    cJSON_AddItemToArray(forceAccum, yForceAccum);
+    cJSON_AddItemToObject(json, "forceAccum", forceAccum);
+
+    cJSON* velocity = cJSON_CreateArray();
+    cJSON* xVelocity = cJSON_CreateNumber((double) rb->velocity[0]);
+    cJSON* yVelocity = cJSON_CreateNumber((double) rb->velocity[1]);
+    cJSON_AddItemToArray(velocity, xVelocity);
+    cJSON_AddItemToArray(velocity, yVelocity);
+    cJSON_AddItemToObject(json, "velocity", velocity);
+
+    cJSON* sensor = cJSON_CreateBool(rb->sensor);
+    cJSON_AddItemToObject(json, "sensor", sensor);
+
+    cJSON* cor = cJSON_CreateNumber((double) rb->cor);
+    cJSON_AddItemToObject(json, "cor", cor);
+
+    return json;
 
 }
 

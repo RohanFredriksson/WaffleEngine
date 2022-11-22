@@ -9,7 +9,7 @@
 
 Component* CameraController_Init(vec2* follow) {
 
-    Component* c = Component_Init("CameraController", &CameraController_Update, NULL, NULL);
+    Component* c = Component_Init("CameraController", &CameraController_Update, NULL, NULL, NULL);
 
     // Allocate some memory for the camera controller.
     CameraController* cc = malloc(sizeof(CameraController));

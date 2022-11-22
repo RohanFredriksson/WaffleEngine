@@ -10,7 +10,7 @@ Component* Circle_Init(float radius, Component* rigidbody) {
         printf("ERROR::CIRCLE::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Circle", NULL, NULL, NULL);
+    Component* component = Collider_Init("Circle", NULL, NULL, &Circle_Serialise, NULL);
     Collider* collider = (Collider*) component->data;
     Circle* circle = malloc(sizeof(Circle));
 
@@ -20,6 +20,22 @@ Component* Circle_Init(float radius, Component* rigidbody) {
 
     collider->data = circle;
     return component;
+
+}
+
+cJSON* Circle_Serialise(Collider* co) {
+
+    Circle* c = (Circle*) co->data;
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* rigidbody = cJSON_CreateNumber((double) c->rigidbody->component->id);
+    cJSON_AddItemToObject(json, "rigidbody", rigidbody);
+
+    cJSON* radius = cJSON_CreateNumber((double) c->radius);
+    cJSON_AddItemToObject(json, "radius", radius);
+
+    return json;
 
 }
 
