@@ -52,7 +52,7 @@ void PhysicsSystem_Render(PhysicsSystem* p) {
     for (int i = 0 ; i < p->numRigidbodies; i++) {
 
         Rigidbody* rigidbody = p->rigidbodies[i];
-        Collider* collider = rigidbody->collider;
+        Collider* collider = (Collider*) Rigidbody_GetCollider(rigidbody)->data;
 
         if (collider == NULL) {continue;}
 
@@ -187,8 +187,8 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
             Rigidbody* r1 = p->rigidbodies[i];
             Rigidbody* r2 = p->rigidbodies[j];
 
-            Collider* c1 = r1->collider;
-            Collider* c2 = r2->collider;
+            Collider* c1 = (Collider*) Rigidbody_GetCollider(r1)->data;
+            Collider* c2 = (Collider*) Rigidbody_GetCollider(r2)->data;
 
             CollisionManifold* result = NULL;
             if (c1 != NULL && c2 != NULL && !(Rigidbody_HasInfiniteMass(r1) && Rigidbody_HasInfiniteMass(r2))) {

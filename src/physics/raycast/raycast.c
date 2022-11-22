@@ -5,7 +5,7 @@
 
 bool Raycast_Rigidbody(Rigidbody* rigidbody, Ray ray, RaycastResult* result) {
 
-    Collider* collider = rigidbody->collider;
+    Collider* collider = (Collider*) Rigidbody_GetCollider(rigidbody)->data;
     if (collider == NULL) {return 0;}
 
     if (strcmp(collider->type, "Box") == 0) {

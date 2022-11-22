@@ -11,7 +11,7 @@
 struct Rigidbody {
     
     Component* component;
-    Collider* collider;
+    int collider;
     vec2 forceAccum;
     vec2 velocity;
     float cor;
@@ -34,6 +34,8 @@ void Rigidbody_SetVelocity(Component* c, vec2 velocity);
 void Rigidbody_SetSensor(Component* c, bool sensor);
 
 void Rigidbody_SetCor(Component* c, float cor);
+
+Component* Rigidbody_GetCollider(Rigidbody* rb);
 
 void Rigidbody_ClearAccumulators(Rigidbody* rb);
 

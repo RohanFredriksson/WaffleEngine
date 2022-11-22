@@ -9,7 +9,7 @@ Component* Rigidbody_Init() {
 
     // Initialise the rigidbody.
     rb->component = c;
-    rb->collider = NULL;
+    rb->collider = -1;
     rb->mass = 1.0f;
     glm_vec2_zero(rb->forceAccum);
     glm_vec2_zero(rb->velocity);
@@ -28,7 +28,7 @@ cJSON* Rigidbody_Serialise(Component* c) {
 
     cJSON* json = cJSON_CreateObject();
 
-    cJSON* collider = cJSON_CreateNumber((double) rb->collider->component->id);
+    cJSON* collider = cJSON_CreateNumber((double) rb->collider);
     cJSON_AddItemToObject(json, "collider", collider);
 
     cJSON* mass = cJSON_CreateNumber((double) rb->mass);
@@ -70,7 +70,7 @@ void Rigidbody_SetCollider(Component* c, Component* collider) {
         return;
     }
 
-    ((Rigidbody*) c->data)->collider = (Collider*) collider->data;
+    ((Rigidbody*) c->data)->collider = collider->id;
 }
 
 void Rigidbody_SetMass(Component* c, float mass) {
@@ -115,6 +115,10 @@ void Rigidbody_SetCor(Component* c, float cor) {
 
     ((Rigidbody*) c->data)->cor = cor;
 
+}
+
+Component* Rigidbody_GetCollider(Rigidbody* rb) {
+    return Entity_GetComponentByID(rb->component->entity, rb->collider);
 }
 
 void Rigidbody_ClearAccumulators(Rigidbody* rb) {
