@@ -148,12 +148,12 @@ void DebugDraw_AddLine(vec2 from, vec2 to, vec3 colour, int lifetime) {
     vec2 pMin;
     glm_vec2_copy(camera->projectionSize, pMin);
     glm_vec2_scale(pMin, 0.5f / camera->zoom, pMin);
-    glm_vec2_sub(camera->pos, pMin, pMin);
+    glm_vec2_sub(camera->position, pMin, pMin);
 
     vec2 pMax;
     glm_vec2_copy(camera->projectionSize, pMax);
     glm_vec2_scale(pMax, 0.5f / camera->zoom, pMax);
-    glm_vec2_add(camera->pos, pMax, pMax);
+    glm_vec2_add(camera->position, pMax, pMax);
 
     vec2 lMin = { WMath_MinFloat(from[0], to[0]), WMath_MinFloat(from[1], to[1]) };
     vec2 lMax = { WMath_MaxFloat(from[0], to[0]), WMath_MaxFloat(from[1], to[1]) };

@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "external.h"
 #include "listener.h"
 #include "entity.h"
 #include "window.h"
@@ -24,5 +25,7 @@ typedef struct MouseButtonEvent MouseButtonEvent;
 Component* MouseButton_Init(int button, int eventType, int checkType);
 
 bool MouseButton_Check(Event* e, float dt);
+
+cJSON* MouseButton_Serialise(Event* e);
 
 #endif

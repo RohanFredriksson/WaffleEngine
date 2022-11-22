@@ -1,6 +1,12 @@
+#include <math.h>
 #include <stdbool.h>
 #include "external.h"
+#include "wmath.h"
+#include "window.h"
+#include "scene.h"
+#include "external.h"
 #include "entity.h"
+#include "camera.h"
 
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H
@@ -9,12 +15,9 @@ struct CameraController {
 
     Component* component;
 
-    vec2* follow;
-    vec2 followOffset;
-
     bool isMoving;
-    vec2 initialPos;
-    vec2 finalPos;
+    vec2 initialPosition;
+    vec2 finalPosition;
     float timeCurrent;
     float timeTotal;
     float timeHalf;
@@ -24,9 +27,11 @@ struct CameraController {
 };
 typedef struct CameraController CameraController;
 
-Component* CameraController_Init(vec2* follow);
+Component* CameraController_Init();
 
 void CameraController_Update(Component* c, float dt);
+
+cJSON* CameraController_Serialise(Component* c);
 
 void CameraController_MoveTo(CameraController* cc, vec2 to, float t);
 

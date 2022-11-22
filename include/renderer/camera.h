@@ -9,7 +9,7 @@ struct Camera {
     mat4 inverseProjection;
     mat4 inverseView;
     vec2 projectionSize;
-    vec2 pos;
+    vec2 position;
     float zoom;
 };
 typedef struct Camera Camera;
@@ -21,7 +21,7 @@ void Camera_GetProjection(Camera* c, mat4 matrix);
 void Camera_GetInverseView(Camera* c, mat4 matrix);
 void Camera_GetInverseProjection(Camera* c, mat4 matrix);
 
-float Camera_Left(Camera* c, float x, float pos);
-float Camera_Bottom(Camera* c, float y, float pos);
+float Camera_Left(Camera* c, float x, float position);
+float Camera_Bottom(Camera* c, float y, float position);
 
 #endif

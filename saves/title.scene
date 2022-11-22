@@ -56,6 +56,14 @@
 					"id":	3,
 					"type":	"CameraController",
 					"child":	{
+						"isMoving":	false,
+						"initialPosition":	[0, 0],
+						"finalPosition":	[0, 0],
+						"timeCurrent":	0,
+						"timeTotal":	0,
+						"timeHalf":	0,
+						"distance":	0,
+						"maxVelocity":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -64,6 +72,22 @@
 					"id":	4,
 					"type":	"Event",
 					"child":	{
+						"type":	"MouseButtonDown",
+						"child":	{
+							"button":	0,
+							"checkType":	1,
+							"eventType":	1
+						},
+						"commands":	[{
+								"type":	"MoveCamera",
+								"child":	{
+									"to":	[1, -1.5],
+									"time":	1
+								}
+							}],
+						"multi":	true,
+						"cooldown":	0,
+						"cooldownTimeLeft":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -116,6 +140,22 @@
 					"id":	8,
 					"type":	"Event",
 					"child":	{
+						"type":	"Trigger",
+						"child":	{
+							"withType":	0,
+							"entityId":	-1,
+							"componentType":	null,
+							"flag":	false
+						},
+						"commands":	[{
+								"type":	"Console",
+								"child":	{
+									"message":	"COLLISION\n"
+								}
+							}],
+						"multi":	true,
+						"cooldown":	0,
+						"cooldownTimeLeft":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],

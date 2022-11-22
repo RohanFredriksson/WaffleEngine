@@ -2,21 +2,22 @@
 
 Component* Event_Init(char* type, 
                       bool (*check)(Event* e, float dt), 
-                      void (*collision) (struct Event* e, Entity* with, vec2 contact, vec2 normal), 
+                      void (*collision) (Event* e, Entity* with, vec2 contact, vec2 normal),
+                      cJSON* (*serialise) (Event* e), 
                       void (*free)(Event* e)) {
 
-    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, NULL, &Event_Free);
+    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Serialise, &Event_Free);
     Event* e = malloc(sizeof(Event));
 
     e->type = type;
     e->check = check;
     e->collision = collision;
+    e->serialise = serialise;
     e->free = free;
 
     e->component = c;
 
     List_Init(&e->commands, sizeof(Command*));
-    e->active = 1;
     e->multi = 1;
     e->cooldown = 0.0f;
     e->cooldownTimeLeft = 0.0f;
@@ -29,7 +30,6 @@ Component* Event_Init(char* type,
 void Event_Update(Component* c, float dt) {
 
     Event* e = (Event*) c->data;
-    if (!e->active) {return;}
 
     // If the command can be run multiple times.
     if (e->multi) {
@@ -83,6 +83,41 @@ void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
     if (e->collision != NULL) {e->collision(e, with, contact, normal);}
 }
 
+cJSON* Event_Serialise(Component* c) {
+
+    Event* e = (Event*) c->data;
+
+    cJSON* json = cJSON_CreateObject();
+    cJSON_AddStringToObject(json, "type", e->type);
+
+    cJSON* child;
+    if (e->serialise != NULL) {child = e->serialise(e);}
+    else {child = cJSON_CreateObject();}
+    cJSON_AddItemToObject(json, "child", child);
+
+    cJSON* commands = cJSON_CreateArray();
+    Command* com;
+    int n = List_Length(&e->commands);
+    for (int i = 0; i < n; i++) {
+        List_Get(&e->commands, i, &com);
+        cJSON* command = Command_Serialise(com);
+        cJSON_AddItemToArray(commands, command);
+    }
+    cJSON_AddItemToObject(json, "commands", commands);
+
+    cJSON* multi = cJSON_CreateBool(e->multi);
+    cJSON_AddItemToObject(json, "multi", multi);
+
+    cJSON* cooldown = cJSON_CreateNumber((double) e->cooldown);
+    cJSON_AddItemToObject(json, "cooldown", cooldown);
+
+    cJSON* cooldownTimeLeft = cJSON_CreateNumber((double) e->cooldownTimeLeft);
+    cJSON_AddItemToObject(json, "cooldownTimeLeft", cooldownTimeLeft);
+
+    return json;
+
+}
+
 void Event_Free(Component* c) {
 
     Event* e = (Event*) c->data;
@@ -113,11 +148,6 @@ void Event_SetCommand(Component* c, Command* a) {
     Event* e = (Event*) c->data;
     List_Clear(&e->commands);
     List_Push(&e->commands, &a);
-}
-
-void Event_SetActive(Component* c, bool active) {
-    Event* e = (Event*) c->data;
-    e->active = active;
 }
 
 void Event_SetMulti(Component* c, bool multi) {

@@ -29,4 +29,6 @@ bool Trigger_Check(Event* e, float dt);
 
 void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal);
 
+cJSON* Trigger_Serialise(Event* e);
+
 #endif

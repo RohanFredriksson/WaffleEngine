@@ -18,6 +18,8 @@ typedef struct MoveCamera MoveCamera;
 
 Command* MoveCamera_Init(vec2 to, float time);
 
+cJSON* MoveCamera_Serialise(Command* a);
+
 void MoveCamera_Execute(Command* a, Component* c);
 
 #endif

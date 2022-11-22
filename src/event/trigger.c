@@ -2,7 +2,7 @@
 
 static Component* _Trigger_Init(int withType, int entityId, char* componentType) {
 
-    Component* component = Event_Init("Trigger", &Trigger_Check, &Trigger_OnCollision, NULL);
+    Component* component = Event_Init("Trigger", &Trigger_Check, &Trigger_OnCollision, &Trigger_Serialise, NULL);
     Event* event = (Event*) component->data;
     Trigger* trigger = malloc(sizeof(Trigger));
 
@@ -58,5 +58,29 @@ void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal) {
     else {
         t->flag = 1;
     }
+
+}
+
+cJSON* Trigger_Serialise(Event* e) {
+
+    Trigger* t = (Trigger*) e->data;
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* withType = cJSON_CreateNumber((double) t->withType);
+    cJSON_AddItemToObject(json, "withType", withType);
+
+    cJSON* entityId = cJSON_CreateNumber((double) t->entityId);
+    cJSON_AddItemToObject(json, "entityId", entityId);
+
+    cJSON* componentType;
+    if (t->componentType != NULL) {componentType = cJSON_CreateString(t->componentType);}
+    else {componentType = cJSON_CreateNull();}
+    cJSON_AddItemToObject(json, "componentType", componentType);
+
+    cJSON* flag = cJSON_CreateBool(t->flag);
+    cJSON_AddItemToObject(json, "flag", flag);
+
+    return json;
 
 }
