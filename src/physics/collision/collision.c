@@ -1,9 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include "wmath.h"
 #include "collision.h"
-#include "collider.h"
 
 CollisionManifold* Collision_FindCollisionFeatures(Collider* c1, Collider* c2) {
 
@@ -30,8 +25,8 @@ CollisionManifold* Collision_FindCollisionFeaturesCircleAndCircle(Circle* a, Cir
 
     vec2 aPosition;
     vec2 bPosition;
-    Component_GetPosition(a->rigidbody->component, aPosition);
-    Component_GetPosition(b->rigidbody->component, bPosition);
+    Component_GetPosition(Circle_GetRigidbody(a), aPosition);
+    Component_GetPosition(Circle_GetRigidbody(b), bPosition);
 
     float sumRadii = a->radius + b->radius;
     vec2 distance;
@@ -94,8 +89,8 @@ CollisionManifold* Collision_FindCollisionFeaturesBoxAndBox(Box* a, Box* b) {
 
     vec2 aPosition;
     vec2 bPosition;
-    Component_GetPosition(a->rigidbody->component, aPosition);
-    Component_GetPosition(b->rigidbody->component, bPosition);
+    Component_GetPosition(Box_GetRigidbody(a), aPosition);
+    Component_GetPosition(Box_GetRigidbody(b), bPosition);
 
     if (minXDepth < minYDepth) {
 
@@ -215,8 +210,8 @@ CollisionManifold* _Collision_FindCollisionFeaturesCircleAndBox(Circle* c, Box* 
     vec2 bPos;
     vec2 bMin;
     vec2 bMax;
-    Component_GetPosition(c->rigidbody->component, cPos);
-    Component_GetPosition(b->rigidbody->component, bPos);
+    Component_GetPosition(Circle_GetRigidbody(c), cPos);
+    Component_GetPosition(Box_GetRigidbody(b), bPos);
     Box_GetMin(b, bMin);
     Box_GetMax(b, bMax);
 

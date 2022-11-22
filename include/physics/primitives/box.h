@@ -6,7 +6,7 @@
 
 struct Box {
     Collider* collider;
-    Rigidbody* rigidbody;
+    int rigidbody;
     vec2 size;
     vec2 halfSize;
 };
@@ -15,6 +15,7 @@ typedef struct Box Box;
 Component* Box_Init(vec2 size, Component* rigidbody);
 cJSON* Box_Serialise(Collider* co);
 
+Component* Box_GetRigidbody(Box* box);
 void Box_GetMin(Box* box, vec2 dest);
 void Box_GetMax(Box* box, vec2 dest);
 void Box_GetVertices(Box* box, vec2* buffer);

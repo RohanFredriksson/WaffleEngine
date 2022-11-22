@@ -53,6 +53,8 @@ cJSON* Entity_Serialise(Entity* e);
 
 Component* Entity_GetComponent(Entity* e, char* type);
 
+Component* Entity_GetComponentByID(Entity* e, int id);
+
 Component* Component_Init(char* type, 
                           void (*update)(Component* c, float dt),
                           void (*collision)(struct Component* c, Entity* with, vec2 contact, vec2 normal),

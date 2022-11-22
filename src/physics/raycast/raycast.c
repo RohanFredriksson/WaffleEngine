@@ -69,7 +69,7 @@ bool Raycast_Circle(Circle circle, Ray ray, RaycastResult* result) {
     RaycastResult_Reset(result);
     
     vec2 position;
-    Component_GetPosition(circle.rigidbody->component, position);
+    Component_GetPosition(Circle_GetRigidbody(&circle), position);
 
     vec2 originToCircle;
     glm_vec2_sub(position, ray.origin, originToCircle);

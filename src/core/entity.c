@@ -90,6 +90,21 @@ Component* Entity_GetComponent(Entity* e, char* type) {
     return NULL;
 }
 
+Component* Entity_GetComponentByID(Entity* e, int id) {
+
+    Component* component;
+    int n = List_Length(&e->components);
+    for (int i = 0; i < n; i++) {
+        List_Get(&e->components, i, &component);
+        if (component->id == id) {
+            return component;
+        }
+    }
+
+    return NULL;
+
+}
+
 cJSON* Entity_Serialise(Entity* e) {
 
     cJSON* json = cJSON_CreateObject();

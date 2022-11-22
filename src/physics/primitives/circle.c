@@ -16,7 +16,7 @@ Component* Circle_Init(float radius, Component* rigidbody) {
 
     circle->collider = collider;
     circle->radius = radius;
-    circle->rigidbody = rigidbody->data;
+    circle->rigidbody = rigidbody->id;
 
     collider->data = circle;
     return component;
@@ -29,7 +29,7 @@ cJSON* Circle_Serialise(Collider* co) {
 
     cJSON* json = cJSON_CreateObject();
 
-    cJSON* rigidbody = cJSON_CreateNumber((double) c->rigidbody->component->id);
+    cJSON* rigidbody = cJSON_CreateNumber((double) c->rigidbody);
     cJSON_AddItemToObject(json, "rigidbody", rigidbody);
 
     cJSON* radius = cJSON_CreateNumber((double) c->radius);
@@ -39,10 +39,14 @@ cJSON* Circle_Serialise(Collider* co) {
 
 }
 
+Component* Circle_GetRigidbody(Circle* c) {
+    return Entity_GetComponentByID(c->collider->component->entity, c->rigidbody);
+}
+
 void Circle_SetRadius(Circle* c, float radius) {
     c->radius = radius;
 }
 
 void Circle_SetRigidbody(Circle* c, Rigidbody* rb) {
-    c->rigidbody = rb;
+    c->rigidbody = rb->component->id;
 }

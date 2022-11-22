@@ -16,7 +16,7 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
     box->collider = collider;
     glm_vec2_copy(size, box->size);
     glm_vec2_scale(size, 0.5f, box->halfSize);
-    box->rigidbody = rigidbody->data;
+    box->rigidbody = rigidbody->id;
 
     collider->data = box;
     return component;
@@ -29,7 +29,7 @@ cJSON* Box_Serialise(Collider* co) {
 
     cJSON* json = cJSON_CreateObject();
 
-    cJSON* rigidbody = cJSON_CreateNumber((double) b->rigidbody->component->id);
+    cJSON* rigidbody = cJSON_CreateNumber((double) b->rigidbody);
     cJSON_AddItemToObject(json, "rigidbody", rigidbody);
 
     cJSON* size = cJSON_CreateArray();
@@ -43,15 +43,19 @@ cJSON* Box_Serialise(Collider* co) {
 
 }
 
+Component* Box_GetRigidbody(Box* box) {
+    return Entity_GetComponentByID(box->collider->component->entity, box->rigidbody);
+}
+
 void Box_GetMin(Box* box, vec2 dest) {
     vec2 position;
-    Component_GetPosition(box->rigidbody->component, position);
+    Component_GetPosition(Box_GetRigidbody(box), position);
     glm_vec2_sub(position, box->halfSize, dest);
 }
 
 void Box_GetMax(Box* box, vec2 dest) {
     vec2 position;
-    Component_GetPosition(box->rigidbody->component, position);
+    Component_GetPosition(Box_GetRigidbody(box), position);
     glm_vec2_add(position, box->halfSize, dest);
 }
 
@@ -81,5 +85,5 @@ void Box_SetSize(Box* box, vec2 size) {
 }
 
 void Box_SetRigidbody(Box* box, Rigidbody* rb) {
-    box->rigidbody = rb;
+    box->rigidbody = rb->component->id;
 }

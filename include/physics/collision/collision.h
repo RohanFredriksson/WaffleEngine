@@ -1,6 +1,11 @@
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "primitives.h"
 #include "collider.h"
 #include "collisionmanifold.h"
+#include "entity.h"
+#include "wmath.h"
 
 #ifndef COLLISION_H
 #define COLLISION_H
