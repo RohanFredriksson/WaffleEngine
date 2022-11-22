@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "entity.h"
 #include "command.h"
 
 #ifndef CONSOLE_H

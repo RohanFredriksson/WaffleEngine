@@ -14,6 +14,12 @@
 void AssetPool_Init();
 void AssetPool_Free();
 
+void StringPool_Init();
+void StringPool_Clear();
+void StringPool_Free();
+
+char* StringPool_Get(const char* string);
+
 void ShaderPool_Init();
 void ShaderPool_Clear();
 void ShaderPool_Free();

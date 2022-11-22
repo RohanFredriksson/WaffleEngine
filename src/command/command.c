@@ -5,14 +5,9 @@ Command* Command_Init(char* type,
                       void (*free)(struct Command* a)) {
 
     Command* a = (Command*) malloc(sizeof(Command));
-
-    // Store the type
-    a->type = malloc(strlen(type)+1);
-    memcpy(a->type, type, strlen(type)+1);
-
+    a->type = StringPool_Get(type);
     a->execute = execute;
     a->free = free;
-
     return a;
 
 }

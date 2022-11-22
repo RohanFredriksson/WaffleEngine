@@ -1,12 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "external.h"
+#include "command.h"
 #include "window.h"
 #include "scene.h"
-#include "entity.h"
 #include "cameracontroller.h"
-#include "command.h"
-#include "list.h"
 
 #ifndef MOVECAMERA_H
 #define MOVECAMERA_H

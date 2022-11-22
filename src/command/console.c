@@ -4,10 +4,7 @@ Command* Console_Init(char* message) {
 
     Command* command = Command_Init("Console", &Console_Execute, &Console_Free);
     Console* console = malloc(sizeof(Console));
-
-    console->message = malloc(strlen(message) + 1);
-    memcpy(console->message, message, strlen(message) + 1);
-
+    console->message = StringPool_Get(message);
     command->data = console;
     return command;
 

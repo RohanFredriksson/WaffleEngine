@@ -1,15 +1,72 @@
 #include "assetpool.h"
 
 void AssetPool_Init() {
+    StringPool_Init();
     ShaderPool_Init();
     TexturePool_Init();
     SpritePool_Init();
 }
 
 void AssetPool_Free() {
+    StringPool_Free();
     ShaderPool_Free();
     TexturePool_Free();
     SpritePool_Free();
+}
+
+static HashMap StringPool;
+
+void StringPool_Init() {
+    HashMap_Init(&StringPool, sizeof(uint64_t), sizeof(Texture*));
+}
+
+void StringPool_Clear() {
+
+    // Free all string data.
+    KeyValue* current = HashMap_Elements(&StringPool);
+    while (current != NULL) {
+        char* string = *((char**) current->value);
+        free(string);
+        current = current->next;
+    }
+    HashMap_Clear(&StringPool);
+
+}
+
+void StringPool_Free() {
+
+    // Free all string data.
+    KeyValue* current = HashMap_Elements(&StringPool);
+    while (current != NULL) {
+        char* string = *((char**) current->value);
+        free(string);
+        current = current->next;
+    }
+    HashMap_Free(&StringPool);
+
+}
+
+char* StringPool_Get(const char* string) {
+
+    // Compute a string hash.
+    uint64_t hash = OAAT(string);
+    char* result;
+
+    // If the string already exists, return the string.
+    if (HashMap_Get(&StringPool, &hash, &result)) {
+        return result;
+    }
+
+    // Initialise the string.
+    result = malloc(strlen(string) + 1);
+    memcpy(result, string, strlen(string) + 1);
+    
+    // Add the string to the string pool.
+    HashMap_Put(&StringPool, &hash, &result);
+
+    // Return the new string.
+    return result;
+
 }
 
 static HashMap ShaderPool;

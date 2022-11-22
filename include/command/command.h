@@ -1,4 +1,5 @@
 #include <string.h>
+#include "assetpool.h"
 #include "entity.h"
 
 #ifndef COMMAND_H
