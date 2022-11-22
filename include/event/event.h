@@ -9,6 +9,11 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#define EVENT_SINGLE_USE 0
+#define EVENT_MULTIPLE_USE 1
+#define EVENT_INACTIVE 0
+#define EVENT_ACTIVE 1
+
 struct Event {
     Component* component;
     List commands;

@@ -24,7 +24,7 @@ void Title_Init(Scene* s) {
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
     Command* commandArmaan = MoveCamera_Init((vec2) { 1.0f, -1.5f }, 1.0f);
-    Component* eventArmaan = MouseButtonBeginDown_Init(GLFW_MOUSE_BUTTON_LEFT, 1);
+    Component* eventArmaan = MouseButton_Init(GLFW_MOUSE_BUTTON_LEFT, MOUSEBUTTON_EVENT_BEGINDOWN, MOUSEBUTTON_CHECK_PICKINGTEXTURE);
     Event_AddCommand(eventArmaan, commandArmaan);
     
     Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
@@ -47,7 +47,7 @@ void Title_Init(Scene* s) {
     Command* commandAinsley = Console_Init("COLLISION\n");
     Component* eventAinsley = Trigger_Init();
     Event_AddCommand(eventAinsley, commandAinsley);
-    Event_SetMulti(eventAinsley, 1);
+    Event_SetMulti(eventAinsley, EVENT_MULTIPLE_USE);
 
     Entity* entityAinsley = Entity_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 

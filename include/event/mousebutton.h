@@ -8,19 +8,20 @@
 #ifndef MOUSEBUTTON_H
 #define MOUSEBUTTON_H
 
+#define MOUSEBUTTON_CHECK_TRANSFORM 0
+#define MOUSEBUTTON_CHECK_PICKINGTEXTURE 1
+#define MOUSEBUTTON_EVENT_DOWN 0
+#define MOUSEBUTTON_EVENT_BEGINDOWN 1
+
 struct MouseButtonEvent {
     Event* event;
     int button;
-    bool beginDown;
-    bool usePickingTexture;
+    int checkType;
+    int eventType;
 };
 typedef struct MouseButtonEvent MouseButtonEvent;
 
-Component* MouseButton_Init(int button, bool beginDown, bool usePickingTexture);
-
-Component* MouseButtonDown_Init(int button, bool usePickingTexture);
-
-Component* MouseButtonBeginDown_Init(int button, bool usePickingTexture);
+Component* MouseButton_Init(int button, int eventType, int checkType);
 
 bool MouseButton_Check(Event* e, float dt);
 
