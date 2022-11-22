@@ -57,3 +57,39 @@ float Camera_Left(Camera* c, float x, float position) {
 float Camera_Bottom(Camera* c, float y, float position) {
     return y - position * c->projectionSize[1] * c->zoom;
 }
+
+cJSON* Camera_Serialise(Camera* c) {
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* projection = cJSON_CreateArray();
+    cJSON* view = cJSON_CreateArray();
+    for (int i = 0; i < 4; i++) {
+        cJSON* projectionRow = cJSON_CreateArray();
+        cJSON* viewRow = cJSON_CreateArray();
+        for (int j = 0; j < 4; j++) {
+            cJSON* projectionValue = cJSON_CreateNumber(c->projection[i][j]);
+            cJSON* viewValue = cJSON_CreateNumber(c->view[i][j]);
+            cJSON_AddItemToArray(projectionRow, projectionValue);
+            cJSON_AddItemToArray(viewRow, viewValue);
+        }
+        cJSON_AddItemToArray(projection, projectionRow);
+        cJSON_AddItemToArray(view, viewRow);
+    }
+    cJSON_AddItemToObject(json, "projection", projection);
+    cJSON_AddItemToObject(json, "view", view);
+
+    cJSON* position = cJSON_CreateArray();
+    cJSON* projectionSize = cJSON_CreateArray();
+    for (int i = 0; i < 2; i++) {
+        cJSON* positionValue = cJSON_CreateNumber(c->position[i]);
+        cJSON* projectionSizeValue = cJSON_CreateNumber(c->projectionSize[i]);
+        cJSON_AddItemToArray(position, positionValue);
+        cJSON_AddItemToArray(projectionSize, projectionSizeValue);
+    }
+    cJSON_AddItemToObject(json, "position", position);
+    cJSON_AddItemToObject(json, "projectionSize", projectionSize);
+
+    return json;
+
+}

@@ -24,4 +24,6 @@ void Camera_GetInverseProjection(Camera* c, mat4 matrix);
 float Camera_Left(Camera* c, float x, float position);
 float Camera_Bottom(Camera* c, float y, float position);
 
+cJSON* Camera_Serialise(Camera* c);
+
 #endif

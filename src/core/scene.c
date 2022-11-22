@@ -84,6 +84,9 @@ cJSON* Scene_Serialise(Scene* s) {
     cJSON* sprites = SpritePool_Serialise();
     cJSON_AddItemToObject(json, "sprites", sprites);
 
+    cJSON* camera = Camera_Serialise(&s->camera);
+    cJSON_AddItemToObject(json, "camera", camera);    
+
     cJSON* entities = cJSON_CreateArray();
     Entity* e;
     int n = List_Length(&s->entities);
