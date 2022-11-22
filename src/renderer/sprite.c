@@ -40,25 +40,51 @@ void Sprite_SetSize(Sprite* s, vec2 size) {
     glm_vec2_copy(size, s->size);
 }
 
-bool Sprite_Equals(Sprite s1, Sprite s2) {
+bool Sprite_Equals(Sprite* s1, Sprite* s2) {
 
     // If the textures are not the same, return 0.
-    if (s1.texture != s2.texture) {
+    if (s1->texture != s2->texture) {
         return 0;
     }
     
     // If the size is not the same, return 0.
     for (int i = 0; i < 2; i++) {
-        if (s1.size[i] != s2.size[i]) {return 0;}
+        if (s1->size[i] != s2->size[i]) {return 0;}
     }
 
     // If the texture coords are not the same, return 0.
     for (int i = 0; i < 4; i++) {
-        if (s1.texCoords[i][0] != s2.texCoords[i][0]) {return 0;}
-        if (s1.texCoords[i][1] != s2.texCoords[i][1]) {return 0;}
+        if (s1->texCoords[i][0] != s2->texCoords[i][0]) {return 0;}
+        if (s1->texCoords[i][1] != s2->texCoords[i][1]) {return 0;}
     }
 
     // If reached here, then the sprites are the same, return 1.
     return 1;
+
+}
+
+char* Sprite_Serialise(Sprite* s) {
+
+    cJSON* json = cJSON_CreateObject();
+
+    cJSON* texture;
+    if (s->texture != NULL) {texture = cJSON_CreateString(s->texture->filename);}
+    else {texture = cJSON_CreateString("NULL");}
+    cJSON_AddItemToObject(json, "texture", texture);
+
+    cJSON* texCoords = cJSON_CreateArray();
+    for (int i = 0; i < 4; i++) {
+        cJSON* texCoord = cJSON_CreateArray();
+        cJSON* x = cJSON_CreateNumber((double) s->texCoords[i][0]);
+        cJSON* y = cJSON_CreateNumber((double) s->texCoords[i][1]);
+        cJSON_AddItemToArray(texCoord, x);
+        cJSON_AddItemToArray(texCoord, y);
+        cJSON_AddItemToArray(texCoords, texCoord);
+    }
+    cJSON_AddItemToObject(json, "texCoords", texCoords);
+
+    char* string = cJSON_Print(json);
+    cJSON_Delete(json);
+    return string;
 
 }

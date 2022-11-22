@@ -18,6 +18,8 @@ void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]);
 
 void Sprite_SetSize(Sprite* s, vec2 size);
 
-bool Sprite_Equals(Sprite s1, Sprite s2);
+bool Sprite_Equals(Sprite* s1, Sprite* s2);
+
+char* Sprite_Serialise(Sprite* s);
 
 #endif
