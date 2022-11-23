@@ -1,17 +1,13 @@
-#include <stdio.h>
-#include <string.h>
-
-#include "external.h"
 #include "shader.h"
 
-void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFilepath) {
+void Shader_Init(Shader* s, char* vertexFilepath, char* fragmentFilepath) {
 
     s->vertexFilepath = malloc(strlen(vertexFilepath)+1);
     s->fragmentFilepath = malloc(strlen(fragmentFilepath)+1);
     memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath)+1);
     memcpy(s->fragmentFilepath, fragmentFilepath, strlen(fragmentFilepath)+1);
-    s->vertexCode = Shader_LoadSource(vertexFilepath);
-    s->fragmentCode = Shader_LoadSource(fragmentFilepath);
+    s->vertexCode = WIO_LoadSource(vertexFilepath);
+    s->fragmentCode = WIO_LoadSource(fragmentFilepath);
     s->beingUsed = 0;
 
 }
@@ -82,38 +78,6 @@ void Shader_Free(Shader* s) {
     free(s->fragmentFilepath);
     free(s->vertexCode);
     free(s->fragmentCode);
-}
-
-char* Shader_LoadSource(const char* filepath) {
-    
-    size_t size = 1;
-    size_t length = 0;
-    char* source = malloc(size);
-    FILE* f = fopen(filepath, "r");
-    
-    char next;
-    while (1) {
-        
-        next = fgetc(f);
-        if (next == EOF) {
-            break;
-        }
-
-        if (length >= size) {
-            source = realloc(source, size * 2);
-            size = size * 2;
-        }
-
-        source[length] = next;
-        length++;
-
-    }
-
-    fclose(f);
-    source = realloc(source, length + 1);
-    source[length] = '\0';
-
-    return source;   
 }
 
 void Shader_UploadFloat(Shader* s, const char* name, float value) {

@@ -1,5 +1,8 @@
 #include <stdbool.h>
+#include <string.h>
+#include <stdio.h>
 #include "external.h"
+#include "wio.h"
 
 #ifndef SHADER_H
 #define SHADER_H
@@ -14,7 +17,7 @@ struct Shader {
 };
 typedef struct Shader Shader;
 
-void Shader_Init(Shader* s, const char* vertexFilepath, const char* fragmentFilepath);
+void Shader_Init(Shader* s, char* vertexFilepath, char* fragmentFilepath);
 void Shader_Compile(Shader* s);
 void Shader_Use(Shader* s);
 void Shader_Detach(Shader* s);

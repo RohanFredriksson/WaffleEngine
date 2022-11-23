@@ -27,42 +27,10 @@ static char* Spritesheet_GetMeta(char* filename) {
 
 }
 
-static char* Spritesheet_LoadSource(char* filepath) {
-    
-    size_t size = 16;
-    size_t length = 0;
-    char* source = malloc(size);
-    FILE* f = fopen(filepath, "r");
-    
-    char next;
-    while (1) {
-        
-        next = fgetc(f);
-        if (next == EOF) {
-            break;
-        }
-
-        if (length >= size) {
-            source = realloc(source, size * 2);
-            size = size * 2;
-        }
-
-        source[length] = next;
-        length++;
-
-    }
-
-    fclose(f);
-    source = realloc(source, length + 1);
-    source[length] = '\0';
-
-    return source;   
-}
-
 static SpritesheetMetadata Spritesheet_ParseMeta(char* metaname) {
 
     SpritesheetMetadata result = { 0, 0, 0, 0, NULL };
-    char* contents = Spritesheet_LoadSource(metaname);
+    char* contents = WIO_LoadSource(metaname);
     
     cJSON* metadata = cJSON_Parse(contents);
     if (metadata == NULL) {

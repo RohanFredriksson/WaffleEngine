@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "external.h"
 #include "assetpool.h"
+#include "wio.h"
 
 #ifndef SPRITESHEET_H
 #define SPRITESHEET_H
