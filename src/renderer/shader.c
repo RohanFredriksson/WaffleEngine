@@ -1,20 +1,17 @@
 #include "shader.h"
 
 void Shader_Init(Shader* s, char* vertexFilepath, char* fragmentFilepath) {
-
-    s->vertexFilepath = malloc(strlen(vertexFilepath)+1);
-    s->fragmentFilepath = malloc(strlen(fragmentFilepath)+1);
-    memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath)+1);
-    memcpy(s->fragmentFilepath, fragmentFilepath, strlen(fragmentFilepath)+1);
-    s->vertexCode = WIO_LoadSource(vertexFilepath);
-    if (s->vertexCode == NULL) {printf("ERROR::SHADER::INIT::VERTEX_SOURCE_NOT_FOUND\n");}
-    s->fragmentCode = WIO_LoadSource(fragmentFilepath);
-    if (s->vertexCode == NULL) {printf("ERROR::SHADER::INIT::FRAGMENT_SOURCE_NOT_FOUND\n");}
+    s->vertexFilepath = vertexFilepath;
+    s->fragmentFilepath = fragmentFilepath;
     s->beingUsed = 0;
-
 }
 
 void Shader_Compile(Shader* s) {
+
+    char* vertexCode = WIO_LoadSource(s->vertexFilepath);
+    char* fragmentCode = WIO_LoadSource(s->fragmentFilepath);
+    if (vertexCode == NULL) {printf("ERROR::SHADER::INIT::VERTEX_SOURCE_NOT_FOUND\n");}
+    if (fragmentCode == NULL) {printf("ERROR::SHADER::INIT::FRAGMENT_SOURCE_NOT_FOUND\n");}
 
     GLuint vertex, fragment;
     GLint success;
@@ -22,7 +19,7 @@ void Shader_Compile(Shader* s) {
 
     // Vertex Shader Compilation.
     vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, (char const * const *)&(s->vertexCode), NULL);
+    glShaderSource(vertex, 1, (char const * const *)&(vertexCode), NULL);
     glCompileShader(vertex);
 
     // Check for compile errors.
@@ -34,7 +31,7 @@ void Shader_Compile(Shader* s) {
 
     // Fragment Shader Compilation.
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, (char const * const *)&(s->fragmentCode), NULL);
+    glShaderSource(fragment, 1, (char const * const *)&(fragmentCode), NULL);
     glCompileShader(fragment);
 
     // Check for compile errors.
@@ -57,6 +54,8 @@ void Shader_Compile(Shader* s) {
         printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s", infoLog);
     }
 
+    free(vertexCode);
+    free(fragmentCode);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
@@ -65,21 +64,17 @@ void Shader_Compile(Shader* s) {
 void Shader_Use(Shader* s) {
     if (!s->beingUsed) {
         glUseProgram(s->program);
-        s->beingUsed = true;
+        s->beingUsed = 1;
     }
 }
 
 void Shader_Detach(Shader* s) {
     glUseProgram(0);
-    s->beingUsed = false;
+    s->beingUsed = 0;
 }
 
 void Shader_Free(Shader* s) {
     glDeleteProgram(s->program);
-    free(s->vertexFilepath);
-    free(s->fragmentFilepath);
-    free(s->vertexCode);
-    free(s->fragmentCode);
 }
 
 void Shader_UploadFloat(Shader* s, const char* name, float value) {
