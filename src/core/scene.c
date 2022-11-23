@@ -156,7 +156,7 @@ bool Scene_Load(Scene* s, char* name) {
     }
     cJSON* sprite = NULL;
     cJSON_ArrayForEach(sprite, sprites) {
-        Sprite_Parse(sprite);
+        Sprite_Load(sprite);
     }
 
     cJSON_Delete(json);
