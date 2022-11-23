@@ -1,10 +1,15 @@
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "external.h"
+#include "assetpool.h"
 #include "entity.h"
 #include "renderer.h"
 #include "physicssystem.h"
 #include "camera.h"
 #include "list.h"
+#include "wio.h"
 
 #ifndef SCENE_H
 #define SCENE_H
@@ -31,7 +36,11 @@ void Scene_Free(Scene* s);
 
 cJSON* Scene_Serialise(Scene* s);
 
+bool Scene_Parse(Scene* s, cJSON* json);
+
 void Scene_Save(Scene* s);
+
+bool Scene_Load(Scene* s, char* name);
 
 void Scene_AddEntity(Scene* s, Entity* entity);
 

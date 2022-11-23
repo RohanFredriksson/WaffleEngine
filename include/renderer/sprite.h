@@ -25,4 +25,6 @@ bool Sprite_Equals(Sprite* s1, Sprite* s2);
 
 cJSON* Sprite_Serialise(Sprite* s);
 
+Sprite* Sprite_Parse(cJSON* json);
+
 #endif

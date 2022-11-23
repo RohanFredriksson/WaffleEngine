@@ -10,7 +10,7 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-void Texture_Init(Texture* t, char* filename) {
+bool Texture_Init(Texture* t, char* filename) {
     
     // Allocate space to store the string.
     t->filename = filename;
@@ -43,7 +43,7 @@ void Texture_Init(Texture* t, char* filename) {
 
         else {
             printf("ERROR::TEXTURE::INVALID_IMAGE_CHANNELS '%d'\n", t->channels);
-            exit(0);
+            return 0;
         }
 
     }
@@ -51,11 +51,12 @@ void Texture_Init(Texture* t, char* filename) {
     // Image did not load.
     else {
         printf("ERROR::TEXTURE::IMAGE_LOAD_FAILED '%s'\n", filename);
-        exit(0);
+        return 0;
     }
 
     // Free the image
     stbi_image_free(image);
+    return 1;
 
 }
 

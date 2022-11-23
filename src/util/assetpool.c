@@ -205,15 +205,8 @@ Sprite* SpritePool_Get(char* filename) {
         return sprite;
     }
 
-    // Initialise the sprite.
-    sprite = malloc(sizeof(Sprite));
-    Sprite_Init(sprite, TexturePool_Get(filename), StringPool_Get(filename));
-    
-    // Add the sprite to the sprite pool.
-    HashMap_Put(&SpritePool, &hash, &sprite);
-
-    // Return the new sprite.
-    return sprite;
+    // Sprite does not exist.
+    return NULL;
 
 }
 
@@ -267,9 +260,12 @@ Texture* TexturePool_Get(char* filename) {
         return texture;
     }
 
-    // Initialise the texture.
+    // Try to initialise the texture.
     texture = malloc(sizeof(Texture));
-    Texture_Init(texture, filename);
+    if (!Texture_Init(texture, filename)) {
+        free(texture);
+        return NULL;
+    }
     
     // Add the texture to the texture pool.
     HashMap_Put(&TexturePool, &hash, &texture);

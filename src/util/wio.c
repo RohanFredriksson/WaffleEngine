@@ -2,11 +2,13 @@
 
 char* WIO_LoadSource(char* file) {
     
+    FILE* f = fopen(file, "r");
+    if (f == NULL) {return NULL;}
+
     size_t size = 16;
     size_t length = 0;
     char* source = malloc(size);
-    FILE* f = fopen(file, "r");
-    
+
     char next;
     while (1) {
         

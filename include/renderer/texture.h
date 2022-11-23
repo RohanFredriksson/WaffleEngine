@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
@@ -8,7 +10,7 @@ struct Texture {
 };
 typedef struct Texture Texture;
 
-void Texture_Init(Texture* t, char* filename);
+bool Texture_Init(Texture* t, char* filename);
 void Texture_New(Texture* t, int width, int height);
 void Texture_New_RGB32F(Texture* t, int width, int height);
 void Texture_Save(Texture* t, char* filename);

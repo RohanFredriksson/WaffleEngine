@@ -1,7 +1,7 @@
 {
 	"sprites":	[{
 			"name":	"empty",
-			"texture":	"NULL",
+			"texture":	null,
 			"texCoords":	[[1, 1], [1, 0], [0, 0], [0, 1]]
 		}, {
 			"name":	"armaan",
@@ -63,13 +63,13 @@
 					"type":	"CameraController",
 					"child":	{
 						"isMoving":	false,
-						"initialPosition":	[4.5447432434340364e+030, 1.8464884140663036e+025],
-						"finalPosition":	[4.4248202199799044e+030, 7.2149111685955732e+022],
-						"timeCurrent":	1.8984803427217995e+028,
-						"timeTotal":	7.15426884853314e+022,
-						"timeHalf":	4.51567410972464e+027,
-						"distance":	7.2250700752997536e+028,
-						"maxVelocity":	1.5414283107572988e-043
+						"initialPosition":	[0, 0],
+						"finalPosition":	[0, 0],
+						"timeCurrent":	0,
+						"timeTotal":	0,
+						"timeHalf":	0,
+						"distance":	0,
+						"maxVelocity":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],

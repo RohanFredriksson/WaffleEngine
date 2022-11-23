@@ -7,7 +7,9 @@ void Shader_Init(Shader* s, char* vertexFilepath, char* fragmentFilepath) {
     memcpy(s->vertexFilepath, vertexFilepath, strlen(vertexFilepath)+1);
     memcpy(s->fragmentFilepath, fragmentFilepath, strlen(fragmentFilepath)+1);
     s->vertexCode = WIO_LoadSource(vertexFilepath);
+    if (s->vertexCode == NULL) {printf("ERROR::SHADER::INIT::VERTEX_SOURCE_NOT_FOUND\n");}
     s->fragmentCode = WIO_LoadSource(fragmentFilepath);
+    if (s->vertexCode == NULL) {printf("ERROR::SHADER::INIT::FRAGMENT_SOURCE_NOT_FOUND\n");}
     s->beingUsed = 0;
 
 }

@@ -80,7 +80,7 @@ cJSON* Sprite_Serialise(Sprite* s) {
 
     cJSON* texture;
     if (s->texture != NULL) {texture = cJSON_CreateString(s->texture->filename);}
-    else {texture = cJSON_CreateString("NULL");}
+    else {texture = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "texture", texture);
 
     cJSON* texCoords = cJSON_CreateArray();
@@ -95,5 +95,71 @@ cJSON* Sprite_Serialise(Sprite* s) {
     cJSON_AddItemToObject(json, "texCoords", texCoords);
 
     return json;
+
+}
+
+Sprite* Sprite_Parse(cJSON* json) {
+
+    // Temporary value storage.
+    char* spriteName;
+    char* textureName;
+    vec2 textureCoords[4];
+
+    // Get the name of the sprite from the json object.
+    cJSON* name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    if (name == NULL || !cJSON_IsString(name)) {return NULL;}
+    spriteName = StringPool_Get(name->valuestring);
+
+    // Get the texture name from the json object.
+    cJSON* texture = cJSON_GetObjectItemCaseSensitive(json, "texture");
+    if (texture == NULL || !cJSON_IsString(texture)) {return NULL;}
+    if (cJSON_IsNull(texture)) {textureName = NULL;}
+    else {textureName = StringPool_Get(texture->valuestring);}
+
+    // Get the texture coordinates from the json object.
+    cJSON* texCoords = cJSON_GetObjectItemCaseSensitive(json, "texCoords");
+    if (texCoords == NULL || !cJSON_IsArray(texCoords)) {return NULL;}
+    cJSON* texCoord = NULL;
+    int coordsCount = 0;
+    cJSON_ArrayForEach(texCoord, texCoords) {
+
+        if (!cJSON_IsArray(texCoord)) {return NULL;}        
+        cJSON* value = NULL;
+        int valueCount = 0;
+        cJSON_ArrayForEach(value, texCoord) {
+            if (!cJSON_IsNumber(value)) {return NULL;}
+            textureCoords[coordsCount][valueCount] = (float) value->valuedouble;
+            valueCount++;
+        }
+        if (valueCount != 2) {return NULL;}
+        coordsCount++;
+
+    }
+    if (coordsCount != 4) {return NULL;} 
+
+    // Check if the sprite already exists.
+    Sprite* s = SpritePool_Get(spriteName);
+    if (s != NULL) {return s;}
+    
+    // Verify the texture.
+    Texture* t;
+    if (textureName == NULL) {t = NULL;}
+    else {
+        t = TexturePool_Get(textureName);
+        if (t == NULL) {return NULL;}
+    }
+    
+    // Fill the information of the new sprite.
+    s = malloc(sizeof(Sprite));
+    s->name = spriteName;
+    s->texture = t;
+    for (int i = 0; i < 4; i++) {
+        s->texCoords[i][0] = textureCoords[i][0];
+        s->texCoords[i][1] = textureCoords[i][1];
+    }
+
+    // Add the sprite to the pool.
+    SpritePool_Put(s);
+    return s;
 
 }
