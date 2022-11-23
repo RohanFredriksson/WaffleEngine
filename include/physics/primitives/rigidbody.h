@@ -1,9 +1,10 @@
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "external.h"
 #include "entity.h"
-#include "collider.h"
+#include "wio.h"
 
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
@@ -44,5 +45,38 @@ void Rigidbody_PhysicsUpdate(Rigidbody* rb, float dt);
 void Rigidbody_AddForce(Rigidbody* rb, vec2 force);
 
 bool Rigidbody_HasInfiniteMass(Rigidbody* rb);
+
+struct Collider {
+    Component* component;
+    int rigidbody;
+    void (*update)(struct Collider* c, float dt);
+    void (*free)(struct Collider* c);
+    void (*collision)(struct Collider* c, Entity* with, vec2 contact, vec2 normal);
+    cJSON* (*serialise)(struct Collider* c);
+    char* type;
+    void* data;
+};
+typedef struct Collider Collider;
+
+Component* Collider_Init(Rigidbody* rigidbody, 
+                         char* type, 
+                         void (*update)(Collider* c, float dt), 
+                         void (*collision)(Collider* c, Entity* with, vec2 contact, vec2 normal),
+                         cJSON* (*serialise)(struct Collider* c),
+                         void (*free)(Collider* c));
+
+void Collider_Update(Component* c, float dt);
+
+void Collider_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal);
+
+void Collider_Free(Component* c);
+
+cJSON* Collider_Serialise(Component* c);
+
+Component* Collider_GetRigidbody(Collider* co);
+
+void Collider_SetRigidbody(Collider* co, Rigidbody* rb);
+
+//float Collider_GetInertiaTensor(float mass);
 
 #endif

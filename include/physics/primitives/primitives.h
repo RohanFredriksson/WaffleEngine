@@ -1,6 +1,6 @@
 #include "box.h"
 #include "circle.h"
-#include "collider.h"
+#include "rigidbody.h"
 #include "line.h"
 #include "ray.h"
 #include "raycastresult.h"

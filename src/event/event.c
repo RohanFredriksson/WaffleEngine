@@ -125,7 +125,6 @@ void Event_Free(Component* c) {
     // Free all event memory
     if (e->free != NULL) {e->free(e);}
     if (e->data != NULL) {free(e->data);}
-    free(e->type);
 
 }
 

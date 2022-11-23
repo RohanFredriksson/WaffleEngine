@@ -9,14 +9,13 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
         printf("ERROR::BOX::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Box", NULL, NULL, &Box_Serialise, NULL);
+    Component* component = Collider_Init((Rigidbody*) rigidbody->data, "Box", NULL, NULL, &Box_Serialise, NULL);
     Collider* collider = (Collider*) component->data;
     Box* box = malloc(sizeof(Box));
 
     box->collider = collider;
     glm_vec2_copy(size, box->size);
     glm_vec2_scale(size, 0.5f, box->halfSize);
-    box->rigidbody = rigidbody->id;
 
     collider->data = box;
     return component;
@@ -26,25 +25,14 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
 cJSON* Box_Serialise(Collider* co) {
 
     Box* b = (Box*) co->data;
-
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* rigidbody = cJSON_CreateNumber((double) b->rigidbody);
-    cJSON_AddItemToObject(json, "rigidbody", rigidbody);
-
-    cJSON* size = cJSON_CreateArray();
-    cJSON* xSize = cJSON_CreateNumber((double) b->size[0]);
-    cJSON* ySize = cJSON_CreateNumber((double) b->size[1]);
-    cJSON_AddItemToArray(size, xSize);
-    cJSON_AddItemToArray(size, ySize);
-    cJSON_AddItemToObject(json, "size", size);
-
+    WIO_AddVec2(json, "size", b->size);
     return json;
 
 }
 
 Component* Box_GetRigidbody(Box* box) {
-    return Entity_GetComponentByID(box->collider->component->entity, box->rigidbody);
+    return Collider_GetRigidbody(box->collider);
 }
 
 void Box_GetMin(Box* box, vec2 dest) {
@@ -85,5 +73,5 @@ void Box_SetSize(Box* box, vec2 size) {
 }
 
 void Box_SetRigidbody(Box* box, Rigidbody* rb) {
-    box->rigidbody = rb->component->id;
+    Collider_SetRigidbody(box->collider, rb);
 }

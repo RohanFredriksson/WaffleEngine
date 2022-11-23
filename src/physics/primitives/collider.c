@@ -1,6 +1,7 @@
-#include "collider.h"
+#include "rigidbody.h"
 
-Component* Collider_Init(char* type, 
+Component* Collider_Init(Rigidbody* rigidbody,
+                         char* type, 
                          void (*update)(Collider* c, float dt), 
                          void (*collision)(Collider* c, Entity* with, vec2 contact, vec2 normal),
                          cJSON* (*serialise)(struct Collider* c),
@@ -9,6 +10,7 @@ Component* Collider_Init(char* type,
     Component* c = Component_Init("Collider", &Collider_Update, &Collider_OnCollision, &Collider_Serialise, &Collider_Free);
     Collider* co = malloc(sizeof(Collider));
 
+    co->rigidbody = rigidbody->component->id;
     co->type = type;
     co->update = update;
     co->collision = collision;
@@ -35,23 +37,26 @@ void Collider_Free(Component* c) {
     Collider* co = (Collider*) c->data;
     if (co->free != NULL) {co->free(co);}
     if (co->data != NULL) {free(co->data);}
-    free(co->type);
+}
+
+Component* Collider_GetRigidbody(Collider* co) {
+    return Entity_GetComponentByID(co->component->entity, co->rigidbody);
+}
+
+void Collider_SetRigidbody(Collider* co, Rigidbody* rb) {
+    co->rigidbody = rb->component->id;
 }
 
 cJSON* Collider_Serialise(Component* c) {
 
     Collider* co = (Collider*) c->data;
-
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* type = cJSON_CreateString(co->type);
-    cJSON_AddItemToObject(json, "type", type);
-
+    WIO_AddString(json, "type", co->type);
     cJSON* child;
     if (co->serialise != NULL) {child = co->serialise(co);}
     else {child = cJSON_CreateNull();} 
     cJSON_AddItemToObject(json, "child", child);
-
+    WIO_AddInt(json, "rigidbody", co->rigidbody);
     return json;
 
 }

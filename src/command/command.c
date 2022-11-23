@@ -33,5 +33,4 @@ cJSON* Command_Serialise(Command* a) {
 void Command_Free(Command* a) {
     if (a->free != NULL) {a->free(a);}
     if (a->data != NULL) {free(a->data);}
-    free(a->type);
 }

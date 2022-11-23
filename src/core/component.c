@@ -37,7 +37,6 @@ void Component_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal
 void Component_Free(Component* c) {
     if (c->free != NULL) {c->free(c);}
     if (c->data != NULL) {free(c->data);}
-    free(c->type);
 }
 
 void Component_GetPosition(Component* c, vec2 dest) {

@@ -55,9 +55,9 @@
 					"child":	{
 						"type":	"Box",
 						"child":	{
-							"rigidbody":	0,
 							"size":	[5, 1]
-						}
+						},
+						"rigidbody":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -128,9 +128,9 @@
 					"child":	{
 						"type":	"Circle",
 						"child":	{
-							"rigidbody":	5,
 							"radius":	0.5
-						}
+						},
+						"rigidbody":	5
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],

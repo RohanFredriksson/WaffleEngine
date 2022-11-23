@@ -2,7 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include "primitives.h"
-#include "collider.h"
+#include "rigidbody.h"
 #include "collisionmanifold.h"
 #include "entity.h"
 #include "wmath.h"

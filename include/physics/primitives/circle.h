@@ -1,13 +1,13 @@
 #include "entity.h"
-#include "collider.h"
 #include "rigidbody.h"
+#include "rigidbody.h"
+#include "wio.h"
 
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
 struct Circle {
     Collider* collider;
-    int rigidbody;
     float radius;
 };
 typedef struct Circle Circle;

@@ -1,12 +1,12 @@
 #include "external.h"
 #include "rigidbody.h"
+#include "wio.h"
 
 #ifndef BOX_H
 #define BOX_H
 
 struct Box {
     Collider* collider;
-    int rigidbody;
     vec2 size;
     vec2 halfSize;
 };

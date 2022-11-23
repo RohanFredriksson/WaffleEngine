@@ -10,13 +10,12 @@ Component* Circle_Init(float radius, Component* rigidbody) {
         printf("ERROR::CIRCLE::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init("Circle", NULL, NULL, &Circle_Serialise, NULL);
+    Component* component = Collider_Init((Rigidbody*) rigidbody->data, "Circle", NULL, NULL, &Circle_Serialise, NULL);
     Collider* collider = (Collider*) component->data;
     Circle* circle = malloc(sizeof(Circle));
 
     circle->collider = collider;
     circle->radius = radius;
-    circle->rigidbody = rigidbody->id;
 
     collider->data = circle;
     return component;
@@ -26,21 +25,14 @@ Component* Circle_Init(float radius, Component* rigidbody) {
 cJSON* Circle_Serialise(Collider* co) {
 
     Circle* c = (Circle*) co->data;
-
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* rigidbody = cJSON_CreateNumber((double) c->rigidbody);
-    cJSON_AddItemToObject(json, "rigidbody", rigidbody);
-
-    cJSON* radius = cJSON_CreateNumber((double) c->radius);
-    cJSON_AddItemToObject(json, "radius", radius);
-
+    WIO_AddFloat(json, "radius", c->radius);
     return json;
 
 }
 
 Component* Circle_GetRigidbody(Circle* c) {
-    return Entity_GetComponentByID(c->collider->component->entity, c->rigidbody);
+    return Collider_GetRigidbody(c->collider);
 }
 
 void Circle_SetRadius(Circle* c, float radius) {
@@ -48,5 +40,5 @@ void Circle_SetRadius(Circle* c, float radius) {
 }
 
 void Circle_SetRigidbody(Circle* c, Rigidbody* rb) {
-    c->rigidbody = rb->component->id;
+    Collider_SetRigidbody(c->collider, rb);
 }
