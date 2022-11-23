@@ -95,10 +95,6 @@ cJSON* Scene_Serialise(Scene* s) {
 
 }
 
-bool Scene_Parse(Scene* s, cJSON* json) {
-    return 0;
-}
-
 void Scene_Save(Scene* s) {
 
     char* filename = malloc(strlen(path) + strlen(s->name) + strlen(extension) + 1);

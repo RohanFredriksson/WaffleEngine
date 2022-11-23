@@ -25,7 +25,7 @@ cJSON* Command_Serialise(Command* a) {
     
     cJSON* child;
     if (a->serialise != NULL) {child = a->serialise(a);}
-    else {child = cJSON_CreateObject();}
+    else {child = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "child", child);
 
     return json;

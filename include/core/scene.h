@@ -36,8 +36,6 @@ void Scene_Free(Scene* s);
 
 cJSON* Scene_Serialise(Scene* s);
 
-bool Scene_Parse(Scene* s, cJSON* json);
-
 void Scene_Save(Scene* s);
 
 bool Scene_Load(Scene* s, char* name);

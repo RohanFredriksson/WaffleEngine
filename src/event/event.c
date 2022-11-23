@@ -92,7 +92,7 @@ cJSON* Event_Serialise(Component* c) {
 
     cJSON* child;
     if (e->serialise != NULL) {child = e->serialise(e);}
-    else {child = cJSON_CreateObject();}
+    else {child = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "child", child);
 
     cJSON* commands = cJSON_CreateArray();

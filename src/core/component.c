@@ -64,7 +64,7 @@ cJSON* Component_Serialise(Component* c) {
 
     cJSON* child;
     if (c->serialise != NULL) {child = c->serialise(c);}
-    else {child = cJSON_CreateObject();}
+    else {child = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "child", child);
 
     cJSON* positionOffset = cJSON_CreateArray();

@@ -210,7 +210,7 @@ Sprite* SpritePool_Get(char* filename) {
         return sprite;
     }
 
-    printf("ERROR::SPRITEPOOL_GET: sprite \"%s\" does not exist.", filename);
+    printf("ERROR::SPRITEPOOL_GET: sprite \"%s\" does not exist.\n", filename);
 
     // Return missing sprite.
     hash = OAAT("missing");

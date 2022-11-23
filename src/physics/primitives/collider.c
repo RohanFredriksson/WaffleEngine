@@ -49,7 +49,7 @@ cJSON* Collider_Serialise(Component* c) {
 
     cJSON* child;
     if (co->serialise != NULL) {child = co->serialise(co);}
-    else {child = cJSON_CreateObject();} 
+    else {child = cJSON_CreateNull();} 
     cJSON_AddItemToObject(json, "child", child);
 
     return json;

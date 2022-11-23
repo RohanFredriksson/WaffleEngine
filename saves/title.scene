@@ -4,6 +4,10 @@
 			"texture":	null,
 			"texCoords":	[[1, 1], [1, 0], [0, 0], [0, 1]]
 		}, {
+			"name":	"missing",
+			"texture":	"missing",
+			"texCoords":	[[1, 1], [1, 0], [0, 0], [0, 1]]
+		}, {
 			"name":	"armaan",
 			"texture":	"assets/textures/faces.png",
 			"texCoords":	[[0.5, 1], [0.5, 0], [0, 0], [0, 1]]

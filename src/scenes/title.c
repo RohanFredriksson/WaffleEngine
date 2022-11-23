@@ -13,7 +13,7 @@
 
 void Title_Init(Scene* s) {
 
-    //Spritesheet_Load("assets/textures/faces.png");
+    Spritesheet_Load("assets/textures/faces.png");
 
     // Armaan
     Sprite* spriteArmaan = SpritePool_Get("armaan");
