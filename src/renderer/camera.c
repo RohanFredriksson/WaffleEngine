@@ -1,4 +1,3 @@
-#include "external.h"
 #include "camera.h"
 #include "window.h"
 
@@ -62,34 +61,45 @@ cJSON* Camera_Serialise(Camera* c) {
 
     cJSON* json = cJSON_CreateObject();
 
-    cJSON* projection = cJSON_CreateArray();
-    cJSON* view = cJSON_CreateArray();
-    for (int i = 0; i < 4; i++) {
-        cJSON* projectionRow = cJSON_CreateArray();
-        cJSON* viewRow = cJSON_CreateArray();
-        for (int j = 0; j < 4; j++) {
-            cJSON* projectionValue = cJSON_CreateNumber(c->projection[i][j]);
-            cJSON* viewValue = cJSON_CreateNumber(c->view[i][j]);
-            cJSON_AddItemToArray(projectionRow, projectionValue);
-            cJSON_AddItemToArray(viewRow, viewValue);
-        }
-        cJSON_AddItemToArray(projection, projectionRow);
-        cJSON_AddItemToArray(view, viewRow);
-    }
-    cJSON_AddItemToObject(json, "projection", projection);
-    cJSON_AddItemToObject(json, "view", view);
-
-    cJSON* position = cJSON_CreateArray();
-    cJSON* projectionSize = cJSON_CreateArray();
-    for (int i = 0; i < 2; i++) {
-        cJSON* positionValue = cJSON_CreateNumber(c->position[i]);
-        cJSON* projectionSizeValue = cJSON_CreateNumber(c->projectionSize[i]);
-        cJSON_AddItemToArray(position, positionValue);
-        cJSON_AddItemToArray(projectionSize, projectionSizeValue);
-    }
-    cJSON_AddItemToObject(json, "position", position);
-    cJSON_AddItemToObject(json, "projectionSize", projectionSize);
+    WIO_AddMat4(json, "projection", c->projection);
+    WIO_AddMat4(json, "view", c->view);
+    WIO_AddVec2(json, "position", c->position);
+    WIO_AddVec2(json, "projectionSize", c->projectionSize);
 
     return json;
+
+}
+
+bool Camera_Load(Camera* c, cJSON* json) {
+
+    // Load the projection
+    if (!WIO_ParseMat4(json, "projection", c->projection)) {
+        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"projection\" attribute could not be parsed.\n");
+        return 0;    
+    }
+
+    // Load the view
+    if (!WIO_ParseMat4(json, "view", c->view)) {
+        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"view\" attribute could not be parsed.\n");
+        return 0;    
+    }
+
+    // Load the position
+    if (!WIO_ParseVec2(json, "position", c->position)) {
+        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"position\" attribute could not be parsed.\n");
+        return 0;    
+    }
+
+    // Load the projection size
+    if (!WIO_ParseVec2(json, "projectionSize", c->projectionSize)) {
+        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"projectionSize\" attribute could not be parsed.\n");
+        return 0;    
+    }
+
+    // Compute the inverse matrices.
+    mat4 tmp;
+    Camera_GetInverseView(c, tmp);
+    Camera_AdjustProjection(c);
+    return 1;
 
 }

@@ -106,16 +106,21 @@ void Scene_Save(Scene* s) {
     char* contents = cJSON_Print(json);
     cJSON_Delete(json);
 
-    FILE* file = fopen(filename, "w");
-    fprintf(file, contents);
+    printf("%s\n", contents);
+
+    if (!WIO_WriteFile(filename, contents)) {printf("ERROR::SCENE::SAVE::FILE_WRITE_FAILED\n");}
     free(filename);
     free(contents);
-    fclose(file);
 
 }
 
 bool Scene_Load(Scene* s, char* name) {
-    
+
+    // Initial scene initialisation.
+    s->name = name;
+    s->isRunning = 0;
+    bool success = 0;
+
     // Get the filename.
     char* filename = malloc(strlen(path) + strlen(name) + strlen(extension) + 1);
     memcpy(filename, path, strlen(path));
@@ -125,7 +130,7 @@ bool Scene_Load(Scene* s, char* name) {
     // Get the contents of the save file.
     char* contents = WIO_LoadSource(filename);
     if (contents == NULL) {
-        printf("ERROR::SCENE::LOAD::FILE_NOT_FOUND: \"%s\" could not be found.", filename);
+        printf("ERROR::SCENE::LOAD::FILE_NOT_FOUND: \"%s\" could not be found.\n", filename);
         return 0;
     }
     
@@ -134,26 +139,37 @@ bool Scene_Load(Scene* s, char* name) {
     free(contents);
     free(filename);
     if (json == NULL) {
-        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"%s\" could not be parsed.", filename);
+        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"%s\" could not be parsed.\n", filename);
         return 0;
     }
     
     // Load the sprites required.
     cJSON* sprites = cJSON_GetObjectItemCaseSensitive(json, "sprites");
-    if (sprites == NULL) {
-        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"sprites\" attribute not found.", filename);
-        cJSON_Delete(json);
-        return 0;
+    if (sprites != NULL && cJSON_IsArray(sprites)) {
+        cJSON* sprite = NULL;
+        cJSON_ArrayForEach(sprite, sprites) {
+            Sprite_Load(sprite);
+        }
+    } else {
+        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"sprites\" could not be loaded.\n");
     }
-    if (!cJSON_IsArray(sprites)) {
-        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"sprites\" attribute not an array.", filename);
-        cJSON_Delete(json);
-        return 0;
+    
+    // Load the camera.
+    cJSON* camera = cJSON_GetObjectItemCaseSensitive(json, "camera");
+    if (camera != NULL) {success = Camera_Load(&s->camera, camera);}
+    if (!success) {Camera_Init(&s->camera);}
+
+    /*
+    // Load the entities.
+    cJSON* entities = cJSON_GetObjectItemCaseSensitive(json, "entities");
+    if (entities != NULL && cJSON_IsArray(entities)) {
+        cJSON* entity = NULL;
+        cJSON_ArrayForEach(entity, entities) {
+            Entity* e = Entity_Load(entity);
+            if (e != NULL) {Scene_AddEntity(e);}
+        }
     }
-    cJSON* sprite = NULL;
-    cJSON_ArrayForEach(sprite, sprites) {
-        Sprite_Load(sprite);
-    }
+    */
 
     cJSON_Delete(json);
     return 1;

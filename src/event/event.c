@@ -86,15 +86,12 @@ void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
 cJSON* Event_Serialise(Component* c) {
 
     Event* e = (Event*) c->data;
-
     cJSON* json = cJSON_CreateObject();
-    cJSON_AddStringToObject(json, "type", e->type);
-
+    WIO_AddString(json, "type", e->type);
     cJSON* child;
     if (e->serialise != NULL) {child = e->serialise(e);}
     else {child = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "child", child);
-
     cJSON* commands = cJSON_CreateArray();
     Command* com;
     int n = List_Length(&e->commands);
@@ -104,16 +101,9 @@ cJSON* Event_Serialise(Component* c) {
         cJSON_AddItemToArray(commands, command);
     }
     cJSON_AddItemToObject(json, "commands", commands);
-
-    cJSON* multi = cJSON_CreateBool(e->multi);
-    cJSON_AddItemToObject(json, "multi", multi);
-
-    cJSON* cooldown = cJSON_CreateNumber((double) e->cooldown);
-    cJSON_AddItemToObject(json, "cooldown", cooldown);
-
-    cJSON* cooldownTimeLeft = cJSON_CreateNumber((double) e->cooldownTimeLeft);
-    cJSON_AddItemToObject(json, "cooldownTimeLeft", cooldownTimeLeft);
-
+    WIO_AddBool(json, "multi", e->multi);
+    WIO_AddFloat(json, "cooldown", e->cooldown);
+    WIO_AddFloat(json, "cooldownTimeLeft", e->cooldownTimeLeft);
     return json;
 
 }

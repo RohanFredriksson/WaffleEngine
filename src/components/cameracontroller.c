@@ -60,41 +60,15 @@ void CameraController_Update(Component* c, float dt) {
 cJSON* CameraController_Serialise(Component* c) {
 
     CameraController* cc = (CameraController*) c->data;
-
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* isMoving = cJSON_CreateBool(cc->isMoving);
-    cJSON_AddItemToObject(json, "isMoving", isMoving);
-
-    cJSON* initialPosition = cJSON_CreateArray();
-    cJSON* xInitial = cJSON_CreateNumber((double) cc->initialPosition[0]);
-    cJSON* yInitial = cJSON_CreateNumber((double) cc->initialPosition[1]);
-    cJSON_AddItemToArray(initialPosition, xInitial);
-    cJSON_AddItemToArray(initialPosition, yInitial);
-    cJSON_AddItemToObject(json, "initialPosition", initialPosition);
-
-    cJSON* finalPosition = cJSON_CreateArray();
-    cJSON* xFinal = cJSON_CreateNumber((double) cc->finalPosition[0]);
-    cJSON* yFinal = cJSON_CreateNumber((double) cc->finalPosition[1]);
-    cJSON_AddItemToArray(finalPosition, xFinal);
-    cJSON_AddItemToArray(finalPosition, yFinal);
-    cJSON_AddItemToObject(json, "finalPosition", finalPosition);
-
-    cJSON* timeCurrent = cJSON_CreateNumber((double) cc->timeCurrent);
-    cJSON_AddItemToObject(json, "timeCurrent", timeCurrent);
-
-    cJSON* timeTotal = cJSON_CreateNumber((double) cc->timeTotal);
-    cJSON_AddItemToObject(json, "timeTotal", timeTotal);
-
-    cJSON* timeHalf = cJSON_CreateNumber((double) cc->timeHalf);
-    cJSON_AddItemToObject(json, "timeHalf", timeHalf);
-
-    cJSON* distance = cJSON_CreateNumber((double) cc->distance);
-    cJSON_AddItemToObject(json, "distance", distance);
-
-    cJSON* maxVelocity = cJSON_CreateNumber((double) cc->maxVelocity);
-    cJSON_AddItemToObject(json, "maxVelocity", maxVelocity);
-
+    WIO_AddBool(json, "isMoving", cc->isMoving);
+    WIO_AddVec2(json, "initialPosition", cc->initialPosition);
+    WIO_AddVec2(json, "finalPosition", cc->finalPosition);
+    WIO_AddFloat(json, "timeCurrent", cc->timeCurrent);
+    WIO_AddFloat(json, "timeTotal", cc->timeTotal);
+    WIO_AddFloat(json, "timeHalf", cc->timeHalf);
+    WIO_AddFloat(json, "distance", cc->distance);
+    WIO_AddFloat(json, "maxVelocity", cc->maxVelocity);
     return json;
 
 }

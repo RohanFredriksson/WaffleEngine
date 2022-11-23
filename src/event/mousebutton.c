@@ -66,16 +66,9 @@ cJSON* MouseButton_Serialise(Event* e) {
     MouseButtonEvent* mb = (MouseButtonEvent*) e->data;
 
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* button = cJSON_CreateNumber((double) mb->button);
-    cJSON_AddItemToObject(json, "button", button);
-
-    cJSON* checkType = cJSON_CreateNumber((double) mb->checkType);
-    cJSON_AddItemToObject(json, "checkType", checkType);
-
-    cJSON* eventType = cJSON_CreateNumber((double) mb->eventType);
-    cJSON_AddItemToObject(json, "eventType", eventType);
-
+    WIO_AddInt(json, "button", mb->button);
+    WIO_AddInt(json, "checkType", mb->checkType);
+    WIO_AddInt(json, "eventType", mb->eventType);
     return json;
 
 }

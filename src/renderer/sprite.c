@@ -74,15 +74,11 @@ bool Sprite_Equals(Sprite* s1, Sprite* s2) {
 cJSON* Sprite_Serialise(Sprite* s) {
 
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* name = cJSON_CreateString(s->name);
-    cJSON_AddItemToObject(json, "name", name);
-
+    WIO_AddString(json, "name", s->name);
     cJSON* texture;
     if (s->texture != NULL) {texture = cJSON_CreateString(s->texture->filename);}
     else {texture = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "texture", texture);
-
     cJSON* texCoords = cJSON_CreateArray();
     for (int i = 0; i < 4; i++) {
         cJSON* texCoord = cJSON_CreateArray();
@@ -93,7 +89,6 @@ cJSON* Sprite_Serialise(Sprite* s) {
         cJSON_AddItemToArray(texCoords, texCoord);
     }
     cJSON_AddItemToObject(json, "texCoords", texCoords);
-
     return json;
 
 }

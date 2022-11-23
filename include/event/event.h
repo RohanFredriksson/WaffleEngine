@@ -5,6 +5,7 @@
 #include "entity.h"
 #include "command.h"
 #include "list.h"
+#include "wio.h"
 
 #ifndef EVENT_H
 #define EVENT_H

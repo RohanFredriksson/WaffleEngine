@@ -21,13 +21,11 @@ void Command_Execute(Command* a, Component* c) {
 cJSON* Command_Serialise(Command* a) {
     
     cJSON* json = cJSON_CreateObject();
-    cJSON_AddStringToObject(json, "type", a->type);
-    
+    WIO_AddString(json, "type", a->type);
     cJSON* child;
     if (a->serialise != NULL) {child = a->serialise(a);}
     else {child = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "child", child);
-
     return json;
 
 }

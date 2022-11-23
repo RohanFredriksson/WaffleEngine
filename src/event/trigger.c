@@ -66,21 +66,13 @@ cJSON* Trigger_Serialise(Event* e) {
     Trigger* t = (Trigger*) e->data;
 
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* withType = cJSON_CreateNumber((double) t->withType);
-    cJSON_AddItemToObject(json, "withType", withType);
-
-    cJSON* entityId = cJSON_CreateNumber((double) t->entityId);
-    cJSON_AddItemToObject(json, "entityId", entityId);
-
+    WIO_AddFloat(json, "withType", t->withType);
+    WIO_AddFloat(json, "entityId", t->entityId);
     cJSON* componentType;
     if (t->componentType != NULL) {componentType = cJSON_CreateString(t->componentType);}
     else {componentType = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "componentType", componentType);
-
-    cJSON* flag = cJSON_CreateBool(t->flag);
-    cJSON_AddItemToObject(json, "flag", flag);
-
+    WIO_AddBool(json, "flag", t->flag);
     return json;
 
 }

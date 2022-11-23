@@ -2,6 +2,7 @@
 #include <string.h>
 #include "external.h"
 #include "entity.h"
+#include "wio.h"
 
 #ifndef COLLIDER_H
 #define COLLIDER_H

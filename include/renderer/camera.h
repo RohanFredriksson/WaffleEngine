@@ -1,4 +1,5 @@
 #include "external.h"
+#include "wio.h"
 
 #ifndef CAMERA_H
 #define CAMERA_H
@@ -25,5 +26,6 @@ float Camera_Left(Camera* c, float x, float position);
 float Camera_Bottom(Camera* c, float y, float position);
 
 cJSON* Camera_Serialise(Camera* c);
+bool Camera_Load(Camera* c, cJSON* json);
 
 #endif

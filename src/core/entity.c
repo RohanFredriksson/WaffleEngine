@@ -108,10 +108,7 @@ Component* Entity_GetComponentByID(Entity* e, int id) {
 cJSON* Entity_Serialise(Entity* e) {
 
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* id = cJSON_CreateNumber((double) e->id);
-    cJSON_AddItemToObject(json, "id", id);
-
+    WIO_AddInt(json, "id", e->id);
     cJSON* components = cJSON_CreateArray();
     Component* c; 
     int n = List_Length(&e->components);
@@ -121,24 +118,9 @@ cJSON* Entity_Serialise(Entity* e) {
         cJSON_AddItemToArray(components, component);
     }
     cJSON_AddItemToObject(json, "components", components);
-
-    cJSON* position = cJSON_CreateArray();
-    cJSON* xPosition = cJSON_CreateNumber((double) e->position[0]);
-    cJSON* yPosition = cJSON_CreateNumber((double) e->position[1]);
-    cJSON_AddItemToArray(position, xPosition);
-    cJSON_AddItemToArray(position, yPosition);
-    cJSON_AddItemToObject(json, "position", position);
-
-    cJSON* size = cJSON_CreateArray();
-    cJSON* xSize = cJSON_CreateNumber((double) e->size[0]);
-    cJSON* ySize = cJSON_CreateNumber((double) e->size[1]);
-    cJSON_AddItemToArray(size, xSize);
-    cJSON_AddItemToArray(size, ySize);
-    cJSON_AddItemToObject(json, "size", size);
-
-    cJSON* rotation = cJSON_CreateNumber((double) e->rotation);
-    cJSON_AddItemToObject(json, "rotation", rotation);
-
+    WIO_AddVec2(json, "position", e->position);
+    WIO_AddVec2(json, "size", e->size);
+    WIO_AddFloat(json, "rotation", e->rotation);
     return json;
 
 }

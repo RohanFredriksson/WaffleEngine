@@ -2,6 +2,7 @@
 #include <string.h>
 #include "external.h"
 #include "list.h"
+#include "wio.h"
 
 #ifndef ENTITY_H
 #define ENTITY_H

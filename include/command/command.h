@@ -2,6 +2,7 @@
 #include "external.h"
 #include "assetpool.h"
 #include "entity.h"
+#include "wio.h"
 
 #ifndef COMMAND_H
 #define COMMAND_H

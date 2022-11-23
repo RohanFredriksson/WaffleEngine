@@ -21,10 +21,8 @@ void Console_Execute(Command* a, Component* c) {
 cJSON* Console_Serialise(Command* a) {
 
     Console* console = (Console*) a->data;
-
     cJSON* json = cJSON_CreateObject();
-    cJSON_AddStringToObject(json, "message", console->message);
-
+    WIO_AddString(json, "message", console->message);
     return json;
 
 }
