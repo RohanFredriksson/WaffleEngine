@@ -153,6 +153,11 @@ void SpritePool_Init() {
     Sprite_Init(empty, NULL, NULL);
     SpritePool_Put(empty);
 
+    // Put the missing sprite in the pool.
+    Sprite* missing = malloc(sizeof(Sprite));
+    Sprite_Init(missing, TexturePool_Get("missing"), "missing");
+    SpritePool_Put(missing);
+
 }
 
 void SpritePool_Clear() {
@@ -205,8 +210,12 @@ Sprite* SpritePool_Get(char* filename) {
         return sprite;
     }
 
-    // Sprite does not exist.
-    return NULL;
+    printf("ERROR::SPRITEPOOL_GET: sprite \"%s\" does not exist.", filename);
+
+    // Return missing sprite.
+    hash = OAAT("missing");
+    HashMap_Get(&SpritePool, &hash, &sprite);
+    return sprite;
 
 }
 
@@ -215,10 +224,28 @@ void SpritePool_Put(Sprite* sprite) {
     HashMap_Put(&SpritePool, &hash, &sprite);
 }
 
+bool SpritePool_Has(char* filename) {
+
+    // Compute a string hash.
+    uint64_t hash = OAAT(filename);
+    Sprite* sprite;
+
+    // If the sprite already exists.
+    return HashMap_Get(&SpritePool, &hash, &sprite);
+
+}
+
 static HashMap TexturePool;
 
 void TexturePool_Init() {
+    
     HashMap_Init(&TexturePool, sizeof(uint64_t), sizeof(Texture*));
+
+    // Create the missing texture.
+    Texture* missing = malloc(sizeof(Texture));
+    Texture_Init_Missing(missing);
+    TexturePool_Put(missing);
+
 }
 
 void TexturePool_Clear() {
@@ -273,4 +300,9 @@ Texture* TexturePool_Get(char* filename) {
     // Return the new texture.
     return texture;
 
+}
+
+void TexturePool_Put(Texture* texture) {
+    uint64_t hash = OAAT(texture->filename);
+    HashMap_Put(&TexturePool, &hash, &texture);
 }

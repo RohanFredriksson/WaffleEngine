@@ -34,11 +34,13 @@ cJSON* SpritePool_Serialise();
 
 Sprite* SpritePool_Get(char* filename);
 void SpritePool_Put(Sprite* sprite);
+bool SpritePool_Has(char* filename);
 
 void TexturePool_Init();
 void TexturePool_Clear();
 void TexturePool_Free();
 
 Texture* TexturePool_Get(char* filename);
+void TexturePool_Put(Texture* texture);
 
 #endif

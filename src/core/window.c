@@ -63,6 +63,9 @@ int Window_Init() {
     // Load GLAD so it configures OpenGL
 	gladLoadGL();
 
+    // Load the asset pool
+    AssetPool_Init();
+
     // Initialise cimgui
     ctx = igCreateContext(NULL);
     io  = igGetIO();
@@ -194,15 +197,16 @@ void Window_Exit() {
 	// Terminate GLFW before ending the program
 	glfwTerminate();
 
+    // Free the asset pool.
+    AssetPool_Free();
+
 }
 
 void Window_Run() {
 
-    AssetPool_Init();
     if (Window_Init()) {return;}
     Window_Loop();
     Window_Exit();
-    AssetPool_Free();
 
 }
 

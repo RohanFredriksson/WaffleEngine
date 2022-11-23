@@ -104,6 +104,26 @@ void Texture_New_RGB32F(Texture* t, int width, int height) {
 
 }
 
+void Texture_Init_Missing(Texture* t) {
+
+    t->filename = "missing";
+
+    // Generate texture on GPU
+    glGenTextures(1, &t->id);
+    glBindTexture(GL_TEXTURE_2D, t->id);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Load the image
+    unsigned char image[] = {0,0,0,255,0,255,0,0,255,0,255,0,0};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+}
+
 void Texture_Save(Texture* t, char* filename) {
     stbi_flip_vertically_on_write(1);
     unsigned char* image = malloc(t->width * t->height * 4 * sizeof(unsigned char));

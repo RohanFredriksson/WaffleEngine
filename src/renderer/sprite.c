@@ -138,19 +138,17 @@ Sprite* Sprite_Parse(cJSON* json) {
     if (coordsCount != 4) {return NULL;} 
 
     // Check if the sprite already exists.
-    Sprite* s = SpritePool_Get(spriteName);
-    if (s != NULL) {return s;}
+    if (SpritePool_Has(spriteName)) {return NULL;}
     
     // Verify the texture.
-    Texture* t;
-    if (textureName == NULL) {t = NULL;}
-    else {
+    Texture* t = NULL;
+    if (textureName != NULL) {
         t = TexturePool_Get(textureName);
         if (t == NULL) {return NULL;}
-    }
+    } 
     
     // Fill the information of the new sprite.
-    s = malloc(sizeof(Sprite));
+    Sprite* s = malloc(sizeof(Sprite));
     s->name = spriteName;
     s->texture = t;
     for (int i = 0; i < 4; i++) {
