@@ -86,7 +86,7 @@ Component* Component_Parse(cJSON* json) {
 
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
     if (child == NULL) {free(c); return NULL;}
-    if (strcmp(type, "SpriteRenderer") == 0) {printf("SpriteRenderer\n"); if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
+    if (strcmp(type, "SpriteRenderer") == 0) {if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
     else {free(c); return NULL;}
 
     c->id = id;

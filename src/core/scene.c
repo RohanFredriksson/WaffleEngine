@@ -159,20 +159,20 @@ bool Scene_Load(Scene* s, char* name) {
     if (camera != NULL) {success = Camera_Load(&s->camera, camera);}
     if (!success) {Camera_Init(&s->camera);}
 
+    // Initialise the renderer and physics engine.
+    Renderer_Init(&s->renderer);
+    PhysicsSystem_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, -10.0f });
+
     // Load the entities.
+    List_Init(&s->entities, sizeof(Entity*));
     cJSON* entities = cJSON_GetObjectItemCaseSensitive(json, "entities");
     if (entities != NULL && cJSON_IsArray(entities)) {
         cJSON* entity = NULL;
         cJSON_ArrayForEach(entity, entities) {
             Entity* e = Entity_Parse(entity);
-            printf("ENTITY: %p\n", e);
             if (e != NULL) {Scene_AddEntity(s, e);}
         }
     }
-
-    // Initialise the renderer and physics engine.
-    Renderer_Init(&s->renderer);
-    PhysicsSystem_Init(&s->physics, 1.0f / 60.0f, (vec2) { 0.0f, -10.0f });
 
     cJSON_Delete(json);
     return 1;

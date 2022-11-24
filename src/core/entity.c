@@ -129,7 +129,6 @@ Entity* Entity_Parse(cJSON* json) {
         cJSON* component = NULL;
         cJSON_ArrayForEach(component, components) {
             Component* c = Component_Parse(component);
-            printf("COMPONENT: %p\n", c);
             if (c != NULL) {Entity_AddComponent(e, c);}
         }
     }
