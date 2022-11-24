@@ -91,7 +91,6 @@ int Window_Init() {
     //Scene_Init(&scene, "title", Title_Init);
     Scene_Load(&scene, "title");
     Scene_Start(&scene);
-    //Scene_Save(&scene);
 
     DebugDraw_Init();
     DebugDraw_Start();
@@ -178,6 +177,8 @@ void Window_Loop() {
 }
 
 void Window_Exit() {
+
+    Scene_Save(&scene);
 
     DebugDraw_Free();
 

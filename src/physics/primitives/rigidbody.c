@@ -26,7 +26,7 @@ cJSON* Rigidbody_Serialise(Component* c) {
     WIO_AddInt(json, "collider", rb->collider);
     WIO_AddFloat(json, "mass", rb->mass);
     WIO_AddVec2(json, "forceAccum", rb->forceAccum);
-    WIO_AddVec2(json, "forceAccum", rb->velocity);
+    WIO_AddVec2(json, "velocity", rb->velocity);
     WIO_AddBool(json, "sensor", rb->sensor);
     WIO_AddFloat(json, "cor", rb->cor);
     return json;
