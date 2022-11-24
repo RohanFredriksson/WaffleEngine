@@ -2,18 +2,21 @@
 
 Component* MouseButton_Init(int button, int eventType, int checkType) {
 
-    Component* component = Event_Init("MouseButtonDown", &MouseButton_Check, NULL, &MouseButton_Serialise, NULL);
+    Component* component = Event_Init("MouseButtonDown");
+    
     Event* event = (Event*) component->data;
-    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
 
+    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
     mb->event = event;
     mb->button = button;
     mb->checkType = checkType;
     mb->eventType = eventType;
 
+    event->check = &MouseButton_Check;
+    event->serialise = &MouseButton_Serialise;
     event->data = mb;
-    return component;
 
+    return component;
 }
 
 bool MouseButton_Check(Event* e, float dt) {
@@ -64,7 +67,6 @@ bool MouseButton_Check(Event* e, float dt) {
 cJSON* MouseButton_Serialise(Event* e) {
 
     MouseButtonEvent* mb = (MouseButtonEvent*) e->data;
-
     cJSON* json = cJSON_CreateObject();
     WIO_AddInt(json, "button", mb->button);
     WIO_AddInt(json, "checkType", mb->checkType);

@@ -7,16 +7,16 @@ Component* Component_Init(char* type) {
 
     Component* c = (Component*) malloc(sizeof(Component));
 
+    c->update = NULL;
+    c->collision = NULL;
+    c->serialise = NULL;
+    c->free = NULL;
+
     c->id = next;
     c->type = type;
     glm_vec2_zero(c->positionOffset);
     glm_vec2_one(c->sizeScale);
     c->rotationOffset = 0;
-
-    c->update = NULL;
-    c->collision = NULL;
-    c->serialise = NULL;
-    c->free = NULL;
 
     next++;
     return c;
@@ -87,6 +87,7 @@ Component* Component_Parse(cJSON* json) {
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
     if (child == NULL) {free(c); return NULL;}
     if (strcmp(type, "SpriteRenderer") == 0) {if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
+    else if (strcmp(type, "CameraController") == 0) {if (!CameraController_Load(c, child)) {free(c); return NULL;}}
     else {free(c); return NULL;}
 
     c->id = id;

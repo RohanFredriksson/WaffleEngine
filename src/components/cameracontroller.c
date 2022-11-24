@@ -71,6 +71,44 @@ cJSON* CameraController_Serialise(Component* c) {
 
 }
 
+bool CameraController_Load(Component* c, cJSON* json) {
+
+    bool isMoving;
+    vec2 initialPosition;
+    vec2 finalPosition;
+    float timeCurrent;
+    float timeTotal;
+    float timeHalf;
+    float distance;
+    float maxVelocity;
+
+    if (!WIO_ParseBool(json, "isMoving", &isMoving)) {return 0;}
+    if (!WIO_ParseVec2(json, "initialPosition", initialPosition)) {return 0;}
+    if (!WIO_ParseVec2(json, "finalPosition", finalPosition)) {return 0;}
+    if (!WIO_ParseFloat(json, "timeCurrent", &timeCurrent)) {return 0;}
+    if (!WIO_ParseFloat(json, "timeTotal", &timeTotal)) {return 0;}
+    if (!WIO_ParseFloat(json, "timeHalf", &timeHalf)) {return 0;}
+    if (!WIO_ParseFloat(json, "distance", &distance)) {return 0;}
+    if (!WIO_ParseFloat(json, "maxVelocity", &maxVelocity)) {return 0;}
+
+    CameraController* cc = malloc(sizeof(CameraController));
+    cc->component = c;
+    cc->isMoving = isMoving;
+    glm_vec2_copy(initialPosition, cc->initialPosition);
+    glm_vec2_copy(finalPosition, cc->finalPosition);
+    cc->timeCurrent = timeCurrent;
+    cc->timeTotal = timeTotal;
+    cc->timeHalf = timeHalf;
+    cc->distance = distance;
+    cc->maxVelocity = maxVelocity;
+    
+    c->update = &CameraController_Update;
+    c->serialise = &CameraController_Serialise;
+    c->data = cc;
+
+    return 1;
+}
+
 void CameraController_MoveTo(CameraController* cc, vec2 to, float t) {
 
     Camera* camera = &Window_GetScene()->camera;

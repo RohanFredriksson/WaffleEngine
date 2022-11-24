@@ -30,11 +30,7 @@ struct Event {
 };
 typedef struct Event Event;
 
-Component* Event_Init(char* type, 
-                      bool (*check)(Event* e, float dt), 
-                      void (*collision) (Event* e, Entity* with, vec2 contact, vec2 normal), 
-                      cJSON* (*serialise) (Event* e),
-                      void (*free)(Event* e));
+Component* Event_Init(char* type);
 
 void Event_Update(Component* c, float dt);
 

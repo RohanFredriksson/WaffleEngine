@@ -33,6 +33,8 @@ void CameraController_Update(Component* c, float dt);
 
 cJSON* CameraController_Serialise(Component* c);
 
+bool CameraController_Load(Component* c, cJSON* json);
+
 void CameraController_MoveTo(CameraController* cc, vec2 to, float t);
 
 #endif

@@ -1,18 +1,16 @@
 #include "event.h"
 
-Component* Event_Init(char* type, 
-                      bool (*check)(Event* e, float dt), 
-                      void (*collision) (Event* e, Entity* with, vec2 contact, vec2 normal),
-                      cJSON* (*serialise) (Event* e), 
-                      void (*free)(Event* e)) {
+Component* Event_Init(char* type) {
 
     Component* c = Component_Init("Event");
+
     Event* e = malloc(sizeof(Event));
+    e->check = NULL;
+    e->collision = NULL;
+    e->serialise = NULL;
+    e->free = NULL;
+
     e->type = type;
-    e->check = check;
-    e->collision = collision;
-    e->serialise = serialise;
-    e->free = free;
     e->component = c;
     List_Init(&e->commands, sizeof(Command*));
     e->multi = 1;

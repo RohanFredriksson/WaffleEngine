@@ -2,8 +2,10 @@
 
 static Component* _Trigger_Init(int withType, int entityId, char* componentType) {
 
-    Component* component = Event_Init("Trigger", &Trigger_Check, &Trigger_OnCollision, &Trigger_Serialise, NULL);
+    Component* component = Event_Init("Trigger");
+    
     Event* event = (Event*) component->data;
+    
     Trigger* trigger = malloc(sizeof(Trigger));
 
     trigger->event = event;
@@ -12,6 +14,9 @@ static Component* _Trigger_Init(int withType, int entityId, char* componentType)
     trigger->componentType = componentType;
     trigger->flag = 0;
 
+    event->check = &Trigger_Check;
+    event->collision = &Trigger_OnCollision;
+    event->serialise = &Trigger_Serialise;
     event->data = trigger;
     return component;
 
@@ -64,7 +69,6 @@ void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal) {
 cJSON* Trigger_Serialise(Event* e) {
 
     Trigger* t = (Trigger*) e->data;
-
     cJSON* json = cJSON_CreateObject();
     WIO_AddFloat(json, "withType", t->withType);
     WIO_AddFloat(json, "entityId", t->entityId);
