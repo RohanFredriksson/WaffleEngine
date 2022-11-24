@@ -32,6 +32,22 @@ cJSON* Circle_Serialise(Collider* co) {
 
 }
 
+bool Circle_Load(Collider* co, cJSON* json) {
+
+    float radius;
+    if (!WIO_ParseFloat(json, "radius", &radius)) {return 0;}
+
+    Circle* circle = malloc(sizeof(Circle));
+
+    circle->collider = co;
+    circle->radius = radius;
+
+    co->serialise = &Circle_Serialise;
+    co->data = circle;
+    return 1;
+
+}
+
 Component* Circle_GetRigidbody(Circle* c) {
     return Collider_GetRigidbody(c->collider);
 }

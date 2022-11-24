@@ -87,6 +87,8 @@ Component* Component_Parse(cJSON* json) {
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
     if (child == NULL) {free(c); return NULL;}
     if (strcmp(type, "SpriteRenderer") == 0) {if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
+    else if (strcmp(type, "Collider") == 0) {if (!Collider_Load(c, child)) {free(c); return NULL;}}
+    else if (strcmp(type, "Rigidbody") == 0) {if (!Rigidbody_Load(c, child)) {free(c); return NULL;}}
     else if (strcmp(type, "CameraController") == 0) {if (!CameraController_Load(c, child)) {free(c); return NULL;}}
     else {free(c); return NULL;}
 

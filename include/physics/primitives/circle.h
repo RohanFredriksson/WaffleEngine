@@ -14,6 +14,7 @@ typedef struct Circle Circle;
 
 Component* Circle_Init(float radius, Component* rigidbody);
 cJSON* Circle_Serialise(Collider* co);
+bool Circle_Load(Collider* co, cJSON* json);
 
 Component* Circle_GetRigidbody(Circle* c);
 void Circle_SetRadius(Circle* c, float radius);

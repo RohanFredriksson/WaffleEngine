@@ -15,43 +15,52 @@ Component* Rigidbody_Init() {
 
     c->serialise = &Rigidbody_Serialise;
     c->data = rb;
-    return c;
 
+    return c;
 }
 
 cJSON* Rigidbody_Serialise(Component* c) {
 
     Rigidbody* rb = (Rigidbody*) c->data;
-
     cJSON* json = cJSON_CreateObject();
-
-    cJSON* collider = cJSON_CreateNumber((double) rb->collider);
-    cJSON_AddItemToObject(json, "collider", collider);
-
-    cJSON* mass = cJSON_CreateNumber((double) rb->mass);
-    cJSON_AddItemToObject(json, "mass", mass);
-
-    cJSON* forceAccum = cJSON_CreateArray();
-    cJSON* xForceAccum = cJSON_CreateNumber((double) rb->forceAccum[0]);
-    cJSON* yForceAccum = cJSON_CreateNumber((double) rb->forceAccum[1]);
-    cJSON_AddItemToArray(forceAccum, xForceAccum);
-    cJSON_AddItemToArray(forceAccum, yForceAccum);
-    cJSON_AddItemToObject(json, "forceAccum", forceAccum);
-
-    cJSON* velocity = cJSON_CreateArray();
-    cJSON* xVelocity = cJSON_CreateNumber((double) rb->velocity[0]);
-    cJSON* yVelocity = cJSON_CreateNumber((double) rb->velocity[1]);
-    cJSON_AddItemToArray(velocity, xVelocity);
-    cJSON_AddItemToArray(velocity, yVelocity);
-    cJSON_AddItemToObject(json, "velocity", velocity);
-
-    cJSON* sensor = cJSON_CreateBool(rb->sensor);
-    cJSON_AddItemToObject(json, "sensor", sensor);
-
-    cJSON* cor = cJSON_CreateNumber((double) rb->cor);
-    cJSON_AddItemToObject(json, "cor", cor);
-
+    WIO_AddInt(json, "collider", rb->collider);
+    WIO_AddFloat(json, "mass", rb->mass);
+    WIO_AddVec2(json, "forceAccum", rb->forceAccum);
+    WIO_AddVec2(json, "forceAccum", rb->velocity);
+    WIO_AddBool(json, "sensor", rb->sensor);
+    WIO_AddFloat(json, "cor", rb->cor);
     return json;
+
+}
+
+bool Rigidbody_Load(Component* c, cJSON* json) {
+
+    int collider;
+    float mass;
+    vec2 forceAccum;
+    vec2 velocity;
+    bool sensor;
+    float cor;
+
+    if (!WIO_ParseInt(json, "collider", &collider)) {return 0;}
+    if (!WIO_ParseFloat(json, "mass", &mass)) {return 0;}
+    if (!WIO_ParseVec2(json, "forceAccum", forceAccum)) {return 0;}
+    if (!WIO_ParseVec2(json, "velocity", velocity)) {return 0;}
+    if (!WIO_ParseBool(json, "sensor", &sensor)) {return 0;}
+    if (!WIO_ParseFloat(json, "cor", &cor)) {return 0;}
+
+    Rigidbody* rb = malloc(sizeof(Rigidbody));
+    rb->component = c;
+    rb->collider = collider;
+    rb->mass = mass;
+    glm_vec2_copy(forceAccum, rb->forceAccum);
+    glm_vec2_copy(velocity, rb->velocity);
+    rb->sensor = sensor;
+    rb->cor = cor;
+
+    c->serialise = &Rigidbody_Serialise;
+    c->data = rb;
+    return 1;
 
 }
 

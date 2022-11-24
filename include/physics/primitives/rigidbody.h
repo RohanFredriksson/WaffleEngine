@@ -26,6 +26,8 @@ Component* Rigidbody_Init();
 
 cJSON* Rigidbody_Serialise(Component* c);
 
+bool Rigidbody_Load(Component* c, cJSON* json);
+
 void Rigidbody_SetCollider(Component* c, Component* collider);
 
 void Rigidbody_SetMass(Component* c, float mass);
@@ -67,6 +69,8 @@ void Collider_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal)
 void Collider_Free(Component* c);
 
 cJSON* Collider_Serialise(Component* c);
+
+bool Collider_Load(Component* c, cJSON* json);
 
 Component* Collider_GetRigidbody(Collider* co);
 

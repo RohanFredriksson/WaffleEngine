@@ -32,6 +32,23 @@ cJSON* Box_Serialise(Collider* co) {
 
 }
 
+bool Box_Load(Collider* co, cJSON* json) {
+
+    vec2 size;
+    if (!WIO_ParseVec2(json, "size", size)) {return 0;}
+
+    Box* box = malloc(sizeof(Box));
+
+    box->collider = co;
+    glm_vec2_copy(size, box->size);
+    glm_vec2_scale(size, 0.5f, box->halfSize);
+
+    co->serialise = &Box_Serialise;
+    co->data = box;
+    return 1;
+
+}
+
 Component* Box_GetRigidbody(Box* box) {
     return Collider_GetRigidbody(box->collider);
 }

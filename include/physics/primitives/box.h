@@ -14,6 +14,7 @@ typedef struct Box Box;
 
 Component* Box_Init(vec2 size, Component* rigidbody);
 cJSON* Box_Serialise(Collider* co);
+bool Box_Load(Collider* co, cJSON* json);
 
 Component* Box_GetRigidbody(Box* box);
 void Box_GetMin(Box* box, vec2 dest);
