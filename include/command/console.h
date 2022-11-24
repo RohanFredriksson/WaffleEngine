@@ -19,6 +19,6 @@ void Console_Execute(Command* a, Component* c);
 
 cJSON* Console_Serialise(Command* a);
 
-void Console_Free(Command* a);
+bool Console_Load(Command* a, cJSON* json);
 
 #endif

@@ -38,6 +38,8 @@ void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal);
 
 cJSON* Event_Serialise(Component* c);
 
+bool Event_Load(Component* c, cJSON* json);
+
 void Event_Free(Component* c);
 
 void Event_AddCommand(Component* c, Command* a);

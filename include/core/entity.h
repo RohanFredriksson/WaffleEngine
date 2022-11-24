@@ -75,6 +75,6 @@ float Component_GetRotation(Component* c);
 
 cJSON* Component_Serialise(Component* c);
 
-Component* Component_Parse(cJSON* json);
+Component* Component_Load(cJSON* json);
 
 #endif

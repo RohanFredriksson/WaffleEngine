@@ -44,3 +44,23 @@ cJSON* MoveCamera_Serialise(Command* a) {
     return json;
 
 }
+
+bool MoveCamera_Load(Command* a, cJSON* json) {
+
+    vec2 to;
+    float time;
+
+    if (!WIO_ParseVec2(json, "to", to)) {return 0;}
+    if (!WIO_ParseFloat(json, "time", &time)) {return 0;}
+
+    MoveCamera* m = malloc(sizeof(MoveCamera));
+
+    glm_vec2_copy(to, m->to);
+    m->time = time;
+
+    a->execute = &MoveCamera_Execute;
+    a->serialise = &MoveCamera_Serialise;
+    a->data = m;
+    return 1;
+
+}

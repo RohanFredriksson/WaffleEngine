@@ -3,14 +3,12 @@
 Command* Console_Init(char* message) {
 
     Command* command = Command_Init("Console");
+
     Console* console = malloc(sizeof(Console));
-    
-    console->message = malloc(strlen(message) + 1);
-    memcpy(console->message, message, strlen(message) + 1);
+    console->message = StringPool_Get(message);
 
     command->execute = &Console_Execute;
     command->serialise = &Console_Serialise;
-    command->free = &Console_Free;
     command->data = console;
     return command;
 
@@ -30,7 +28,17 @@ cJSON* Console_Serialise(Command* a) {
 
 }
 
-void Console_Free(Command* a) {
-    Console* l = (Console*) a->data;
-    free(l->message);
+bool Console_Load(Command* a, cJSON* json) {
+
+    char* message;
+    if (!WIO_ParseString(json, "message", &message)) {return 0;}
+
+    Console* console = malloc(sizeof(Console));
+    console->message = StringPool_Get(message);
+
+    a->execute = &Console_Execute;
+    a->serialise = &Console_Serialise;
+    a->data = console;
+    return 1;
+
 }

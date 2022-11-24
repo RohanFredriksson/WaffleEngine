@@ -77,10 +77,10 @@ bool Collider_Load(Component* c, cJSON* json) {
     co->free = NULL;
 
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
-    if (child == NULL) {free(co); return NULL;}
-    if (strcmp(type, "Box") == 0) {if (!Box_Load(co, child)) {free(co); return NULL;}}
-    else if (strcmp(type, "Circle") == 0) {if (!Circle_Load(co, child)) {free(co); return NULL;}}
-    else {free(co); return NULL;}
+    if (child == NULL) {free(co); return 0;}
+    if (strcmp(type, "Box") == 0) {if (!Box_Load(co, child)) {free(co); return 0;}}
+    else if (strcmp(type, "Circle") == 0) {if (!Circle_Load(co, child)) {free(co); return 0;}}
+    else {free(co); return 0;}
 
     co->component = c;
     co->type = type;

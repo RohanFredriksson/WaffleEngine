@@ -128,7 +128,7 @@ Entity* Entity_Parse(cJSON* json) {
     if (components != NULL && cJSON_IsArray(components)) {
         cJSON* component = NULL;
         cJSON_ArrayForEach(component, components) {
-            Component* c = Component_Parse(component);
+            Component* c = Component_Load(component);
             if (c != NULL) {Entity_AddComponent(e, c);}
         }
     }

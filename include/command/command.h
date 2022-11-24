@@ -22,6 +22,8 @@ void Command_Execute(Command* a, Component* c);
 
 cJSON* Command_Serialise(Command* a);
 
+Command* Command_Load(cJSON* json);
+
 void Command_Free(Command* a);
 
 #endif

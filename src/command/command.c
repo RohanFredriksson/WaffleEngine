@@ -1,9 +1,10 @@
 #include "command.h"
+#include "commands.h"
 
 Command* Command_Init(char* type) {
 
     Command* a = (Command*) malloc(sizeof(Command));
-    a->type = StringPool_Get(type);
+    a->type = type;
     a->execute = NULL;
     a->serialise = NULL;
     a->free = NULL;
@@ -25,6 +26,26 @@ cJSON* Command_Serialise(Command* a) {
     cJSON_AddItemToObject(json, "child", child);
     return json;
 
+}
+
+Command* Command_Load(cJSON* json) {
+
+    char* type;
+    if (!WIO_ParseString(json, "type", &type)) {return NULL;}
+
+    Command* a = malloc(sizeof(Command));
+    a->type = type;
+    a->execute = NULL;
+    a->serialise = NULL;
+    a->free = NULL;
+
+    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
+    if (child == NULL) {free(a); return NULL;}
+    if (strcmp(type, "MoveCamera") == 0) {if (!MoveCamera_Load(a, child)) {free(a); return NULL;}}
+    else if (strcmp(type, "Console") == 0) {if (!Console_Load(a, child)) {free(a); return NULL;}}
+    else {free(a); return NULL;}
+
+    return a;
 }
 
 void Command_Free(Command* a) {

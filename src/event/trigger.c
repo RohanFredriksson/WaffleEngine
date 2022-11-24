@@ -3,11 +3,8 @@
 static Component* _Trigger_Init(int withType, int entityId, char* componentType) {
 
     Component* component = Event_Init("Trigger");
-    
     Event* event = (Event*) component->data;
-    
     Trigger* trigger = malloc(sizeof(Trigger));
-
     trigger->event = event;
     trigger->withType = withType;
     trigger->entityId = entityId;
@@ -70,13 +67,40 @@ cJSON* Trigger_Serialise(Event* e) {
 
     Trigger* t = (Trigger*) e->data;
     cJSON* json = cJSON_CreateObject();
-    WIO_AddFloat(json, "withType", t->withType);
-    WIO_AddFloat(json, "entityId", t->entityId);
+    WIO_AddInt(json, "withType", t->withType);
+    WIO_AddInt(json, "entityId", t->entityId);
     cJSON* componentType;
     if (t->componentType != NULL) {componentType = cJSON_CreateString(t->componentType);}
     else {componentType = cJSON_CreateNull();}
     cJSON_AddItemToObject(json, "componentType", componentType);
     WIO_AddBool(json, "flag", t->flag);
     return json;
+
+}
+
+bool Trigger_Load(Event* e, cJSON* json) {
+
+    int withType;
+    int entityId;
+    bool flag;
+    char* componentType;
+
+    if (!WIO_ParseInt(json, "withType", &withType)) {return 0;}
+    if (!WIO_ParseInt(json, "entityId", &entityId)) {return 0;}
+    if (!WIO_ParseBool(json, "flag", &flag)) {return 0;}
+    if (!WIO_ParseString(json, "componentType", &componentType)) {return 0;}
+
+    Trigger* trigger = malloc(sizeof(Trigger));
+    trigger->event = e;
+    trigger->withType = withType;
+    trigger->entityId = entityId;
+    trigger->componentType = componentType;
+    trigger->flag = flag;
+
+    e->check = &Trigger_Check;
+    e->collision = &Trigger_OnCollision;
+    e->serialise = &Trigger_Serialise;
+    e->data = trigger;
+    return 1;
 
 }

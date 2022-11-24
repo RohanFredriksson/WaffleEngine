@@ -74,3 +74,26 @@ cJSON* MouseButton_Serialise(Event* e) {
     return json;
 
 }
+
+bool MouseButton_Load(Event* e, cJSON* json) {
+
+    int button;
+    int checkType;
+    int eventType;
+
+    if (!WIO_ParseInt(json, "button", &button)) {return 0;}
+    if (!WIO_ParseInt(json, "checkType", &checkType)) {return 0;}
+    if (!WIO_ParseInt(json, "eventType", &eventType)) {return 0;}
+
+    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
+    mb->event = e;
+    mb->button = button;
+    mb->checkType = checkType;
+    mb->eventType = eventType;
+
+    e->check = &MouseButton_Check;
+    e->serialise = &MouseButton_Serialise;
+    e->data = mb;
+
+    return 1;
+}

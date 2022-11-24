@@ -20,6 +20,8 @@ Command* MoveCamera_Init(vec2 to, float time);
 
 cJSON* MoveCamera_Serialise(Command* a);
 
+bool MoveCamera_Load(Command* a, cJSON* json);
+
 void MoveCamera_Execute(Command* a, Component* c);
 
 #endif
