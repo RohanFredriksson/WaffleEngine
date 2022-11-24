@@ -9,7 +9,7 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
         printf("ERROR::BOX::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init((Rigidbody*) rigidbody->data, "Box", NULL, NULL, &Box_Serialise, NULL);
+    Component* component = Collider_Init("Box", (Rigidbody*) rigidbody->data);
     Collider* collider = (Collider*) component->data;
     Box* box = malloc(sizeof(Box));
 
@@ -17,6 +17,7 @@ Component* Box_Init(vec2 size, Component* rigidbody) {
     glm_vec2_copy(size, box->size);
     glm_vec2_scale(size, 0.5f, box->halfSize);
 
+    collider->serialise = &Box_Serialise;
     collider->data = box;
     return component;
 

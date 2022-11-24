@@ -10,13 +10,14 @@ Component* Circle_Init(float radius, Component* rigidbody) {
         printf("ERROR::CIRCLE::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
     }
 
-    Component* component = Collider_Init((Rigidbody*) rigidbody->data, "Circle", NULL, NULL, &Circle_Serialise, NULL);
+    Component* component = Collider_Init("Circle", (Rigidbody*) rigidbody->data);
     Collider* collider = (Collider*) component->data;
     Circle* circle = malloc(sizeof(Circle));
 
     circle->collider = collider;
     circle->radius = radius;
 
+    collider->serialise = &Circle_Serialise;
     collider->data = circle;
     return component;
 

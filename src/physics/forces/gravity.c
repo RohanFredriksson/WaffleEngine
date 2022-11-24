@@ -3,19 +3,16 @@
 
 ForceGenerator* Gravity_Init(vec2 gravity) {
 
-    ForceGenerator* fg = ForceGenerator_Init("Gravity", &Gravity_UpdateForce, &Gravity_Free);
-
-    // Allocate some memory for gravity.
+    ForceGenerator* fg = ForceGenerator_Init("Gravity");
     Gravity* g = malloc(sizeof(Gravity));
 
-    // Initialise the gravity struct.
     g->fg = fg;
     glm_vec2_copy(gravity, g->gravity);
-
-    // Attach the gravity struct to the forcegenerator
+    
+    fg->updateForce = &Gravity_UpdateForce;
+    fg->free = &Gravity_Free;
     fg->data = g;
     return fg;
-
 }
 
 void Gravity_UpdateForce(ForceGenerator* fg, Rigidbody* body, float dt) {

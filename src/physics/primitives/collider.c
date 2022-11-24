@@ -1,22 +1,18 @@
 #include "rigidbody.h"
 
-Component* Collider_Init(Rigidbody* rigidbody,
-                         char* type, 
-                         void (*update)(Collider* c, float dt), 
-                         void (*collision)(Collider* c, Entity* with, vec2 contact, vec2 normal),
-                         cJSON* (*serialise)(struct Collider* c),
-                         void (*free)(Collider* c)) {
+Component* Collider_Init(char* type, Rigidbody* rigidbody) {
 
     Component* c = Component_Init("Collider");
     
     Collider* co = malloc(sizeof(Collider));
+    co->update = NULL;
+    co->collision = NULL;
+    co->serialise = NULL;
+    co->free = NULL;
+
     co->component = c;
-    co->rigidbody = rigidbody->component->id;
     co->type = type;
-    co->update = update;
-    co->collision = collision;
-    co->serialise = serialise;
-    co->free = free;
+    co->rigidbody = rigidbody->component->id;
     
     c->update = &Collider_Update;
     c->collision = &Collider_OnCollision;

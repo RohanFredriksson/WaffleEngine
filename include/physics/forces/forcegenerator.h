@@ -11,9 +11,7 @@ struct ForceGenerator {
 };
 typedef struct ForceGenerator ForceGenerator;
 
-ForceGenerator* ForceGenerator_Init(char* type, 
-                                    void (*updateForce)(ForceGenerator* fg, Rigidbody* body, float dt),
-                                    void (*free)(ForceGenerator* fg));
+ForceGenerator* ForceGenerator_Init(char* type);
 
 void ForceGenerator_Free(ForceGenerator* fg);
 

@@ -58,12 +58,7 @@ struct Collider {
 };
 typedef struct Collider Collider;
 
-Component* Collider_Init(Rigidbody* rigidbody, 
-                         char* type, 
-                         void (*update)(Collider* c, float dt), 
-                         void (*collision)(Collider* c, Entity* with, vec2 contact, vec2 normal),
-                         cJSON* (*serialise)(struct Collider* c),
-                         void (*free)(Collider* c));
+Component* Collider_Init(char* type, Rigidbody* rigidbody);
 
 void Collider_Update(Component* c, float dt);
 
