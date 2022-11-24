@@ -131,14 +131,18 @@ bool WIO_ParseVec4(cJSON* json, char* name, vec4 dest) {
 
 bool WIO_ParseMat4(cJSON* json, char* name, mat4 dest) {
     
-    cJSON* matrix = cJSON_GetObjectItemCaseSensitive(json, name);
+    cJSON* matrix;
+    cJSON* vector;
+    cJSON* value;
+
+    matrix = cJSON_GetObjectItemCaseSensitive(json, name);
     if (matrix == NULL || !cJSON_IsArray(matrix)) {return 0;}
     int i = 0;
-    cJSON* vector = NULL;
+    vector = NULL;
     cJSON_ArrayForEach(vector, matrix) {
         if (!cJSON_IsArray(vector) || i > 4) {return 0;}
         int j = 0;
-        cJSON* value = NULL;
+        value = NULL;
         cJSON_ArrayForEach(value, vector) {
             if (!cJSON_IsNumber(value) || j > 4) {return 0;}
             dest[i][j] = (float) value->valuedouble;

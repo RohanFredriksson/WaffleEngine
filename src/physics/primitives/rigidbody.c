@@ -2,12 +2,9 @@
 
 Component* Rigidbody_Init() {
 
-    Component* c = Component_Init("Rigidbody", NULL, NULL, &Rigidbody_Serialise, NULL);
+    Component* c = Component_Init("Rigidbody");
 
-    // Allocate some memory for the rigidbody.
     Rigidbody* rb = malloc(sizeof(Rigidbody));
-
-    // Initialise the rigidbody.
     rb->component = c;
     rb->collider = -1;
     rb->mass = 1.0f;
@@ -16,7 +13,7 @@ Component* Rigidbody_Init() {
     rb->sensor = 0;
     rb->cor = 1.0f;
 
-    // Attach the rigidbody to the component
+    c->serialise = &Rigidbody_Serialise;
     c->data = rb;
     return c;
 

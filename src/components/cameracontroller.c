@@ -3,19 +3,17 @@
 
 Component* CameraController_Init() {
 
-    Component* c = Component_Init("CameraController", &CameraController_Update, NULL, &CameraController_Serialise, NULL);
+    Component* c = Component_Init("CameraController");
 
-    // Allocate some memory for the camera controller.
     CameraController* cc = malloc(sizeof(CameraController));
-
-    // Initialise the camera controller.
     cc->component = c;
     cc->isMoving = 0;
 
-    // Attach the camera controller to the component
+    c->update = &CameraController_Update;
+    c->serialise = &CameraController_Serialise;
     c->data = cc;
-    return c;
 
+    return c;
 }
 
 void CameraController_Update(Component* c, float dt) {

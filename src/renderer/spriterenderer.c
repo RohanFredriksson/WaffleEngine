@@ -6,18 +6,13 @@
 
 Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex) {
     
-    Component* c = Component_Init("SpriteRenderer", &SpriteRenderer_Update, NULL, &SpriteRenderer_Serialise, NULL);
+    Component* c = Component_Init("SpriteRenderer");
 
-    // Allocate some memory for the sprite renderer.
     SpriteRenderer* s = malloc(sizeof(SpriteRenderer));
-
-    // Initialise the sprite renderer.
     s->component = c;
-
     s->sprite = sprite;
     glm_vec4_copy(colour, s->colour);
     s->zIndex = zIndex;
-
     s->lastSprite = *sprite;
     s->lastTexture = NULL;
     glm_vec4_copy(colour, s->lastColour);
@@ -25,11 +20,12 @@ Component* SpriteRenderer_Init(Sprite* sprite, vec4 colour, int zIndex) {
     glm_vec2_zero(s->lastSize);
     s->lastRotation = 0.0f;
     s->lastZIndex = zIndex;
-
     s->isDirty = 1;
 
-    // Attach the sprite renderer to the component
     c->data = s;
+    c->update = &SpriteRenderer_Update;
+    c->serialise = &SpriteRenderer_Serialise;
+
     return c;
 
 }
@@ -90,4 +86,34 @@ cJSON* SpriteRenderer_Serialise(Component* c) {
     WIO_AddInt(json, "zIndex", s->zIndex);
     return json;
 
+}
+
+bool SpriteRenderer_Load(Component* c, cJSON* json) {
+
+    int zIndex;
+    vec4 colour;
+    char* spriteName;
+    if (!WIO_ParseInt(json, "zIndex", &zIndex)) {return 0;}
+    if (!WIO_ParseVec4(json, "colour", colour)) {return 0;}
+    if (!WIO_ParseString(json, "sprite", &spriteName)) {return 0;}
+
+    SpriteRenderer* s = malloc(sizeof(SpriteRenderer));
+    s->component = c;
+    s->sprite = SpritePool_Get(spriteName);
+    glm_vec4_copy(colour, s->colour);
+    s->zIndex = zIndex;
+    s->lastSprite = *s->sprite;
+    s->lastTexture = NULL;
+    glm_vec4_copy(colour, s->lastColour);
+    glm_vec2_zero(s->lastPosition);
+    glm_vec2_zero(s->lastSize);
+    s->lastRotation = 0.0f;
+    s->lastZIndex = zIndex;
+    s->isDirty = 1;
+
+    c->data = s;
+    c->update = &SpriteRenderer_Update;
+    c->serialise = &SpriteRenderer_Serialise;
+
+    return 1;
 }

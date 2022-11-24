@@ -7,20 +7,24 @@ Component* Collider_Init(Rigidbody* rigidbody,
                          cJSON* (*serialise)(struct Collider* c),
                          void (*free)(Collider* c)) {
 
-    Component* c = Component_Init("Collider", &Collider_Update, &Collider_OnCollision, &Collider_Serialise, &Collider_Free);
+    Component* c = Component_Init("Collider");
+    
     Collider* co = malloc(sizeof(Collider));
-
+    co->component = c;
     co->rigidbody = rigidbody->component->id;
     co->type = type;
     co->update = update;
     co->collision = collision;
     co->serialise = serialise;
     co->free = free;
-
-    co->component = c;
+    
+    c->update = &Collider_Update;
+    c->collision = &Collider_OnCollision;
+    c->serialise = &Collider_Serialise;
+    c->free = &Collider_Free;
     c->data = co;
-    return c;
 
+    return c;
 }
 
 void Collider_Update(Component* c, float dt) {

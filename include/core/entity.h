@@ -2,6 +2,7 @@
 #include <string.h>
 #include "external.h"
 #include "list.h"
+#include "wmath.h"
 #include "wio.h"
 
 #ifndef ENTITY_H
@@ -52,15 +53,13 @@ void Entity_RemoveComponent(Entity* e, Component* c);
 
 cJSON* Entity_Serialise(Entity* e);
 
+Entity* Entity_Parse(cJSON* json);
+
 Component* Entity_GetComponent(Entity* e, char* type);
 
 Component* Entity_GetComponentByID(Entity* e, int id);
 
-Component* Component_Init(char* type, 
-                          void (*update)(Component* c, float dt),
-                          void (*collision)(struct Component* c, Entity* with, vec2 contact, vec2 normal),
-                          cJSON* (*serialise) (struct Component* c),
-                          void (*free)(Component* c));
+Component* Component_Init(char* type);
 
 void Component_Update(Component* c, float dt);
 
@@ -75,5 +74,7 @@ void Component_GetSize(Component* c, vec2 dest);
 float Component_GetRotation(Component* c);
 
 cJSON* Component_Serialise(Component* c);
+
+Component* Component_Parse(cJSON* json);
 
 #endif

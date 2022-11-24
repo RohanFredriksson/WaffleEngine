@@ -105,6 +105,40 @@ Component* Entity_GetComponentByID(Entity* e, int id) {
 
 }
 
+Entity* Entity_Parse(cJSON* json) {
+
+    int id;
+    vec2 position;
+    vec2 size;
+    float rotation;
+
+    if (!WIO_ParseInt(json, "id", &id)) {return NULL;}
+    if (!WIO_ParseVec2(json, "position", position)) {return NULL;}
+    if (!WIO_ParseVec2(json, "size", size)) {return NULL;}
+    if (!WIO_ParseFloat(json, "rotation", &rotation)) {return NULL;}
+
+    Entity* e = malloc(sizeof(Entity));
+    e->id = id;
+    glm_vec2_copy(position, e->position);
+    glm_vec2_copy(size, e->size);
+    e->rotation = rotation;
+
+    List_Init(&e->components, sizeof(Component*));
+    cJSON* components = cJSON_GetObjectItemCaseSensitive(json, "components");
+    if (components != NULL && cJSON_IsArray(components)) {
+        cJSON* component = NULL;
+        cJSON_ArrayForEach(component, components) {
+            Component* c = Component_Parse(component);
+            printf("COMPONENT: %p\n", c);
+            if (c != NULL) {Entity_AddComponent(e, c);}
+        }
+    }
+
+    WMath_MaxFloat(id, next);
+    return e;
+
+}
+
 cJSON* Entity_Serialise(Entity* e) {
 
     cJSON* json = cJSON_CreateObject();

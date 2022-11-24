@@ -60,29 +60,14 @@ float Camera_Bottom(Camera* c, float y, float position) {
 cJSON* Camera_Serialise(Camera* c) {
 
     cJSON* json = cJSON_CreateObject();
-
-    WIO_AddMat4(json, "projection", c->projection);
-    WIO_AddMat4(json, "view", c->view);
     WIO_AddVec2(json, "position", c->position);
     WIO_AddVec2(json, "projectionSize", c->projectionSize);
-
+    WIO_AddFloat(json, "zoom", c->zoom);
     return json;
 
 }
 
 bool Camera_Load(Camera* c, cJSON* json) {
-
-    // Load the projection
-    if (!WIO_ParseMat4(json, "projection", c->projection)) {
-        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"projection\" attribute could not be parsed.\n");
-        return 0;    
-    }
-
-    // Load the view
-    if (!WIO_ParseMat4(json, "view", c->view)) {
-        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"view\" attribute could not be parsed.\n");
-        return 0;    
-    }
 
     // Load the position
     if (!WIO_ParseVec2(json, "position", c->position)) {
@@ -96,10 +81,23 @@ bool Camera_Load(Camera* c, cJSON* json) {
         return 0;    
     }
 
+    // Load the zoom
+    if (!WIO_ParseFloat(json, "zoom", &c->zoom)) {
+        printf("ERROR::CAMERA::LOAD::JSON_PARSE_ERROR: \"zoom\" attribute could not be parsed.\n");
+        return 0;    
+    }
+
+    // Initialise the matrices
+    glm_mat4_identity(c->projection);
+    glm_mat4_identity(c->view);
+    glm_mat4_identity(c->inverseProjection);
+    glm_mat4_identity(c->inverseView);
+    Camera_AdjustProjection(c);
+
     // Compute the inverse matrices.
     mat4 tmp;
     Camera_GetInverseView(c, tmp);
-    Camera_AdjustProjection(c);
+
     return 1;
 
 }

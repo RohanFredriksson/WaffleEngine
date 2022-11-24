@@ -6,25 +6,26 @@ Component* Event_Init(char* type,
                       cJSON* (*serialise) (Event* e), 
                       void (*free)(Event* e)) {
 
-    Component* c = Component_Init("Event", &Event_Update, &Event_OnCollision, &Event_Serialise, &Event_Free);
+    Component* c = Component_Init("Event");
     Event* e = malloc(sizeof(Event));
-
     e->type = type;
     e->check = check;
     e->collision = collision;
     e->serialise = serialise;
     e->free = free;
-
     e->component = c;
-
     List_Init(&e->commands, sizeof(Command*));
     e->multi = 1;
     e->cooldown = 0.0f;
     e->cooldownTimeLeft = 0.0f;
 
+    c->update = &Event_Update;
+    c->collision = &Event_OnCollision;
+    c->serialise = &Event_Serialise;
+    c->free = &Event_Free;
     c->data = e;
-    return c;
 
+    return c;
 }
 
 void Event_Update(Component* c, float dt) {

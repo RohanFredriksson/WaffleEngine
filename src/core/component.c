@@ -3,11 +3,7 @@
 
 static int next = 0;
 
-Component* Component_Init(char* type, 
-                          void (*update)(Component* c, float dt), 
-                          void (*collision)(struct Component* c, struct Entity* with, vec2 contact, vec2 normal),
-                          cJSON* (*serialise) (struct Component* c),
-                          void (*free)(Component* c)) {
+Component* Component_Init(char* type) {
 
     Component* c = (Component*) malloc(sizeof(Component));
 
@@ -17,10 +13,10 @@ Component* Component_Init(char* type,
     glm_vec2_one(c->sizeScale);
     c->rotationOffset = 0;
 
-    c->update = update;
-    c->collision = collision;
-    c->serialise = serialise;
-    c->free = free;
+    c->update = NULL;
+    c->collision = NULL;
+    c->serialise = NULL;
+    c->free = NULL;
 
     next++;
     return c;
@@ -65,4 +61,40 @@ cJSON* Component_Serialise(Component* c) {
     WIO_AddFloat(json, "rotationOffset", c->rotationOffset);
     return json;
 
+}
+
+Component* Component_Parse(cJSON* json) {
+
+    int id;
+    char* type;
+    vec2 positionOffset;
+    vec2 sizeScale;
+    float rotationOffset;
+
+    if (!WIO_ParseInt(json, "id", &id)) {return NULL;}
+    if (!WIO_ParseVec2(json, "positionOffset", positionOffset)) {return NULL;}
+    if (!WIO_ParseVec2(json, "sizeScale", sizeScale)) {return NULL;}
+    if (!WIO_ParseFloat(json, "rotationOffset", &rotationOffset)) {return NULL;}
+    if (!WIO_ParseString(json, "type", &type)) {return NULL;}
+    if (type == NULL) {return NULL;}
+
+    Component* c = malloc(sizeof(Component));
+    c->update = NULL;
+    c->collision = NULL;
+    c->serialise = NULL;
+    c->free = NULL;
+
+    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
+    if (child == NULL) {free(c); return NULL;}
+    if (strcmp(type, "SpriteRenderer") == 0) {printf("SpriteRenderer\n"); if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
+    else {free(c); return NULL;}
+
+    c->id = id;
+    c->type = type;
+    glm_vec2_copy(positionOffset, c->positionOffset);
+    glm_vec2_copy(sizeScale, c->sizeScale);
+    c->rotationOffset = rotationOffset;
+
+    next = WMath_MaxFloat(next, id);
+    return c;
 }

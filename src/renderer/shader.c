@@ -10,8 +10,8 @@ void Shader_Compile(Shader* s) {
 
     char* vertexCode = WIO_LoadSource(s->vertexFilepath);
     char* fragmentCode = WIO_LoadSource(s->fragmentFilepath);
-    if (vertexCode == NULL) {printf("ERROR::SHADER::INIT::VERTEX_SOURCE_NOT_FOUND\n");}
-    if (fragmentCode == NULL) {printf("ERROR::SHADER::INIT::FRAGMENT_SOURCE_NOT_FOUND\n");}
+    if (vertexCode == NULL) {printf("ERROR::SHADER::COMPILE::VERTEX_SOURCE_NOT_FOUND\n");}
+    if (fragmentCode == NULL) {printf("ERROR::SHADER::COMPILE::FRAGMENT_SOURCE_NOT_FOUND\n");}
 
     GLuint vertex, fragment;
     GLint success;
