@@ -2,12 +2,15 @@
 
 Command* Console_Init(char* message) {
 
-    Command* command = Command_Init("Console", &Console_Execute, &Console_Serialise, &Console_Free);
+    Command* command = Command_Init("Console");
     Console* console = malloc(sizeof(Console));
     
     console->message = malloc(strlen(message) + 1);
     memcpy(console->message, message, strlen(message) + 1);
 
+    command->execute = &Console_Execute;
+    command->serialise = &Console_Serialise;
+    command->free = &Console_Free;
     command->data = console;
     return command;
 

@@ -1,15 +1,12 @@
 #include "command.h"
 
-Command* Command_Init(char* type, 
-                      void (*execute) (struct Command* a, Component* c), 
-                      cJSON* (*serialise) (struct Command* a),
-                      void (*free)(struct Command* a)) {
+Command* Command_Init(char* type) {
 
     Command* a = (Command*) malloc(sizeof(Command));
     a->type = StringPool_Get(type);
-    a->execute = execute;
-    a->serialise = serialise;
-    a->free = free;
+    a->execute = NULL;
+    a->serialise = NULL;
+    a->free = NULL;
     return a;
 
 }

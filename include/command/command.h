@@ -16,10 +16,7 @@ struct Command {
 };
 typedef struct Command Command;
 
-Command* Command_Init(char* type, 
-                      void (*execute) (struct Command* a, Component* c), 
-                      cJSON* (*serialise) (struct Command* a),
-                      void (*free)(struct Command* a));
+Command* Command_Init(char* type);
 
 void Command_Execute(Command* a, Component* c);
 

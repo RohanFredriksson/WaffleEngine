@@ -4,12 +4,14 @@ void MoveCamera_Execute(Command* a, Component* c);
 
 Command* MoveCamera_Init(vec2 to, float time) {
 
-    Command* command = Command_Init("MoveCamera", &MoveCamera_Execute, &MoveCamera_Serialise, NULL);
+    Command* command = Command_Init("MoveCamera");
     MoveCamera* m = malloc(sizeof(MoveCamera));
 
     glm_vec2_copy(to, m->to);
     m->time = time;
 
+    command->execute = &MoveCamera_Execute;
+    command->serialise = &MoveCamera_Serialise;
     command->data = m;
     return command;
 
