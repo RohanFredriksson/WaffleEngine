@@ -1,25 +1,6 @@
 #include "rigidbody.h"
 
-Component* Rigidbody_Init() {
-
-    Component* c = Component_Init("Rigidbody");
-
-    Rigidbody* rb = malloc(sizeof(Rigidbody));
-    rb->component = c;
-    rb->collider = -1;
-    rb->mass = 1.0f;
-    glm_vec2_zero(rb->forceAccum);
-    glm_vec2_zero(rb->velocity);
-    rb->sensor = 0;
-    rb->cor = 1.0f;
-
-    c->serialise = &Rigidbody_Serialise;
-    c->data = rb;
-
-    return c;
-}
-
-cJSON* Rigidbody_Serialise(Component* c) {
+static cJSON* Rigidbody_Serialise(Component* c) {
 
     Rigidbody* rb = (Rigidbody*) c->data;
     cJSON* json = cJSON_CreateObject();
@@ -31,6 +12,35 @@ cJSON* Rigidbody_Serialise(Component* c) {
     WIO_AddFloat(json, "cor", rb->cor);
     return json;
 
+}
+
+static Rigidbody* _Rigidbody_Init(Component* c, 
+                                  int collider, 
+                                  float mass, 
+                                  vec2 forceAccum, 
+                                  vec2 velocity, 
+                                  bool sensor, 
+                                  float cor) {
+
+    Rigidbody* rb = malloc(sizeof(Rigidbody));
+    rb->component = c;
+    rb->collider = collider;
+    rb->mass = mass;
+    glm_vec2_copy(forceAccum, rb->forceAccum);
+    glm_vec2_copy(velocity, rb->velocity);
+    rb->sensor = sensor;
+    rb->cor = cor;
+
+    c->serialise = &Rigidbody_Serialise;
+    c->data = rb;
+
+    return rb;
+}
+
+Component* Rigidbody_Init() {
+    Component* c = Component_Init("Rigidbody");
+    _Rigidbody_Init(c, -1, 1.0f, (vec2) {0,0}, (vec2) {0,0}, 0, 1.0f);
+    return c;
 }
 
 bool Rigidbody_Load(Component* c, cJSON* json) {
@@ -49,19 +59,10 @@ bool Rigidbody_Load(Component* c, cJSON* json) {
     if (!WIO_ParseBool(json, "sensor", &sensor)) {return 0;}
     if (!WIO_ParseFloat(json, "cor", &cor)) {return 0;}
 
-    Rigidbody* rb = malloc(sizeof(Rigidbody));
-    rb->component = c;
-    rb->collider = collider;
-    rb->mass = mass;
-    glm_vec2_copy(forceAccum, rb->forceAccum);
-    glm_vec2_copy(velocity, rb->velocity);
-    rb->sensor = sensor;
-    rb->cor = cor;
+    // Initialise the rigidbody class.
+    _Rigidbody_Init(c, collider, mass, forceAccum, velocity, sensor, cor);
 
-    c->serialise = &Rigidbody_Serialise;
-    c->data = rb;
     return 1;
-
 }
 
 void Rigidbody_SetCollider(Component* c, Component* collider) {

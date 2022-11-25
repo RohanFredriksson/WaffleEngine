@@ -1,33 +1,7 @@
 #include "event.h"
 #include "events.h"
 
-Component* Event_Init(char* type) {
-
-    Component* c = Component_Init("Event");
-
-    Event* e = malloc(sizeof(Event));
-    e->check = NULL;
-    e->collision = NULL;
-    e->serialise = NULL;
-    e->free = NULL;
-
-    e->type = type;
-    e->component = c;
-    List_Init(&e->commands, sizeof(Command*));
-    e->multi = 1;
-    e->cooldown = 0.0f;
-    e->cooldownTimeLeft = 0.0f;
-
-    c->update = &Event_Update;
-    c->collision = &Event_OnCollision;
-    c->serialise = &Event_Serialise;
-    c->free = &Event_Free;
-    c->data = e;
-
-    return c;
-}
-
-void Event_Update(Component* c, float dt) {
+static void Event_Update(Component* c, float dt) {
 
     Event* e = (Event*) c->data;
 
@@ -78,12 +52,12 @@ void Event_Update(Component* c, float dt) {
     }
 }
 
-void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
+static void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
     Event* e = (Event*) c->data;
     if (e->collision != NULL) {e->collision(e, with, contact, normal);}
 }
 
-cJSON* Event_Serialise(Component* c) {
+static cJSON* Event_Serialise(Component* c) {
 
     Event* e = (Event*) c->data;
     cJSON* json = cJSON_CreateObject();
@@ -108,56 +82,7 @@ cJSON* Event_Serialise(Component* c) {
 
 }
 
-bool Event_Load(Component* c, cJSON* json) {
-
-    bool multi;
-    float cooldown;
-    float cooldownTimeLeft;
-    char* type;
-
-    if (!WIO_ParseBool(json, "multi", &multi)) {return 0;}
-    if (!WIO_ParseFloat(json, "cooldown", &cooldown)) {return 0;}
-    if (!WIO_ParseFloat(json, "cooldownTimeLeft", &cooldownTimeLeft)) {return 0;}
-    if (!WIO_ParseString(json, "type", &type)) {return 0;}
-
-    Event* e = malloc(sizeof(Event));
-    e->check = NULL;
-    e->collision = NULL;
-    e->serialise = NULL;
-    e->free = NULL;
-
-    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
-    if (child == NULL) {free(e); return 0;}
-    if (strcmp(type, "MouseButtonDown") == 0) {if (!MouseButton_Load(e, child)) {free(e); return 0;}}
-    else if (strcmp(type, "Trigger") == 0) {if (!Trigger_Load(e, child)) {free(e); return 0;}}
-    else {free(e); return 0;}
-
-    e->type = type;
-    e->component = c;
-    List_Init(&e->commands, sizeof(Command*));
-    e->multi = multi;
-    e->cooldown = cooldown;
-    e->cooldownTimeLeft = cooldownTimeLeft;
-
-    cJSON* commands = cJSON_GetObjectItemCaseSensitive(json, "commands");
-    if (commands != NULL && cJSON_IsArray(commands)) {
-        cJSON* command = NULL;
-        cJSON_ArrayForEach(command, commands) {
-            Command* com = Command_Load(command);
-            if (com != NULL) {List_Push(&e->commands, &com);}
-        }
-    }
-
-    c->update = &Event_Update;
-    c->collision = &Event_OnCollision;
-    c->serialise = &Event_Serialise;
-    c->free = &Event_Free;
-    c->data = e;
-
-    return 1;
-}
-
-void Event_Free(Component* c) {
+static void Event_Free(Component* c) {
 
     Event* e = (Event*) c->data;
 
@@ -175,6 +100,76 @@ void Event_Free(Component* c) {
     if (e->free != NULL) {e->free(e);}
     if (e->data != NULL) {free(e->data);}
 
+}
+
+
+static Event* _Event_Init(Component* c, 
+                          char* type, 
+                          bool multi, 
+                          float cooldown, 
+                          float cooldownTimeLeft) {
+
+    Event* e = malloc(sizeof(Event));
+    e->check = NULL;
+    e->collision = NULL;
+    e->serialise = NULL;
+    e->free = NULL;
+
+    e->type = type;
+    e->component = c;
+    List_Init(&e->commands, sizeof(Command*));
+    e->multi = 1;
+    e->cooldown = 0.0f;
+    e->cooldownTimeLeft = 0.0f;
+
+    c->update = &Event_Update;
+    c->collision = &Event_OnCollision;
+    c->serialise = &Event_Serialise;
+    c->free = &Event_Free;
+    c->data = e;
+
+    return e;
+}
+
+Component* Event_Init(char* type) {
+    Component* c = Component_Init("Event");
+    _Event_Init(c, type, 1, 0.0f, 0.0f);
+    return c;
+}
+
+bool Event_Load(Component* c, cJSON* json) {
+
+    bool multi;
+    float cooldown;
+    float cooldownTimeLeft;
+    char* type;
+
+    if (!WIO_ParseBool(json, "multi", &multi)) {return 0;}
+    if (!WIO_ParseFloat(json, "cooldown", &cooldown)) {return 0;}
+    if (!WIO_ParseFloat(json, "cooldownTimeLeft", &cooldownTimeLeft)) {return 0;}
+    if (!WIO_ParseString(json, "type", &type)) {return 0;}
+
+    // Initialise the event class.
+    Event* e = _Event_Init(c, type, multi, cooldown, cooldownTimeLeft);
+
+    // Attempt to parse the child class. If cannot, free the event entirely.
+    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
+    if (child == NULL) {free(e); return 0;}
+    if (strcmp(type, "MouseButtonDown") == 0) {if (!MouseButton_Load(e, child)) {free(e); return 0;}}
+    else if (strcmp(type, "Trigger") == 0) {if (!Trigger_Load(e, child)) {free(e); return 0;}}
+    else {free(e); return 0;}
+
+    // Attempt to parse each command and add it the the commands list in the event.
+    cJSON* commands = cJSON_GetObjectItemCaseSensitive(json, "commands");
+    if (commands != NULL && cJSON_IsArray(commands)) {
+        cJSON* command = NULL;
+        cJSON_ArrayForEach(command, commands) {
+            Command* com = Command_Load(command);
+            if (com != NULL) {List_Push(&e->commands, &com);}
+        }
+    }
+
+    return 1;
 }
 
 void Event_AddCommand(Component* c, Command* a) {

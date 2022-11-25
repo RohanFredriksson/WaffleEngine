@@ -1,54 +1,17 @@
 #include "rigidbody.h"
 #include "colliders.h"
 
-Component* Collider_Init(char* type, Rigidbody* rigidbody) {
-
-    Component* c = Component_Init("Collider");
-    
-    Collider* co = malloc(sizeof(Collider));
-    co->update = NULL;
-    co->collision = NULL;
-    co->serialise = NULL;
-    co->free = NULL;
-
-    co->component = c;
-    co->type = type;
-    co->rigidbody = rigidbody->component->id;
-    
-    c->update = &Collider_Update;
-    c->collision = &Collider_OnCollision;
-    c->serialise = &Collider_Serialise;
-    c->free = &Collider_Free;
-    c->data = co;
-
-    return c;
-}
-
-void Collider_Update(Component* c, float dt) {
+static void Collider_Update(Component* c, float dt) {
     Collider* co = (Collider*) c->data;
     if (co->update != NULL) {co->update(co, dt);}
 }
 
-void Collider_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
+static void Collider_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal) {
     Collider* co = (Collider*) c->data;
     if (co->collision != NULL) {co->collision(co, with, contact, normal);}
 }
 
-void Collider_Free(Component* c) {
-    Collider* co = (Collider*) c->data;
-    if (co->free != NULL) {co->free(co);}
-    if (co->data != NULL) {free(co->data);}
-}
-
-Component* Collider_GetRigidbody(Collider* co) {
-    return Entity_GetComponentByID(co->component->entity, co->rigidbody);
-}
-
-void Collider_SetRigidbody(Collider* co, Rigidbody* rb) {
-    co->rigidbody = rb->component->id;
-}
-
-cJSON* Collider_Serialise(Component* c) {
+static cJSON* Collider_Serialise(Component* c) {
 
     Collider* co = (Collider*) c->data;
     cJSON* json = cJSON_CreateObject();
@@ -62,25 +25,19 @@ cJSON* Collider_Serialise(Component* c) {
 
 }
 
-bool Collider_Load(Component* c, cJSON* json) {
+static void Collider_Free(Component* c) {
+    Collider* co = (Collider*) c->data;
+    if (co->free != NULL) {co->free(co);}
+    if (co->data != NULL) {free(co->data);}
+}
 
-    int rigidbody;
-    char* type;
-
-    if (!WIO_ParseInt(json, "rigidbody", &rigidbody)) {return 0;}
-    if (!WIO_ParseString(json, "type", &type)) {return 0;}
+static Collider* _Collider_Init(Component* c, char* type, int rigidbody) {
 
     Collider* co = malloc(sizeof(Collider));
     co->update = NULL;
     co->collision = NULL;
     co->serialise = NULL;
     co->free = NULL;
-
-    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
-    if (child == NULL) {free(co); return 0;}
-    if (strcmp(type, "Box") == 0) {if (!Box_Load(co, child)) {free(co); return 0;}}
-    else if (strcmp(type, "Circle") == 0) {if (!Circle_Load(co, child)) {free(co); return 0;}}
-    else {free(co); return 0;}
 
     co->component = c;
     co->type = type;
@@ -92,6 +49,41 @@ bool Collider_Load(Component* c, cJSON* json) {
     c->free = &Collider_Free;
     c->data = co;
 
+    return co;
+}
+
+Component* Collider_Init(char* type, Rigidbody* rigidbody) {
+    Component* c = Component_Init("Collider");
+    _Collider_Init(c, type, rigidbody->component->id);
+    return c;
+}
+
+bool Collider_Load(Component* c, cJSON* json) {
+
+    int rigidbody;
+    char* type;
+
+    if (!WIO_ParseInt(json, "rigidbody", &rigidbody)) {return 0;}
+    if (!WIO_ParseString(json, "type", &type)) {return 0;}
+
+    // Initialise the collider class.
+    Collider* co = _Collider_Init(c, type, rigidbody);
+
+    // Attempt to parse the child class. If cannot, free the event entirely.
+    cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
+    if (child == NULL) {free(co); return 0;}
+    if (strcmp(type, "Box") == 0) {if (!Box_Load(co, child)) {free(co); return 0;}}
+    else if (strcmp(type, "Circle") == 0) {if (!Circle_Load(co, child)) {free(co); return 0;}}
+    else {free(co); return 0;}
+
     return 1;
 
+}
+
+Component* Collider_GetRigidbody(Collider* co) {
+    return Entity_GetComponentByID(co->component->entity, co->rigidbody);
+}
+
+void Collider_SetRigidbody(Collider* co, Rigidbody* rb) {
+    co->rigidbody = rb->component->id;
 }

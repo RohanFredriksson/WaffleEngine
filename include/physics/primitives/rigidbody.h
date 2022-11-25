@@ -24,8 +24,6 @@ typedef struct Rigidbody Rigidbody;
 
 Component* Rigidbody_Init();
 
-cJSON* Rigidbody_Serialise(Component* c);
-
 bool Rigidbody_Load(Component* c, cJSON* json);
 
 void Rigidbody_SetCollider(Component* c, Component* collider);
@@ -52,23 +50,15 @@ struct Collider {
     Component* component;
     int rigidbody;
     void (*update)(struct Collider* c, float dt);
-    void (*free)(struct Collider* c);
     void (*collision)(struct Collider* c, Entity* with, vec2 contact, vec2 normal);
     cJSON* (*serialise)(struct Collider* c);
+    void (*free)(struct Collider* c);
     char* type;
     void* data;
 };
 typedef struct Collider Collider;
 
 Component* Collider_Init(char* type, Rigidbody* rigidbody);
-
-void Collider_Update(Component* c, float dt);
-
-void Collider_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal);
-
-void Collider_Free(Component* c);
-
-cJSON* Collider_Serialise(Component* c);
 
 bool Collider_Load(Component* c, cJSON* json);
 

@@ -1,22 +1,7 @@
 
 #include "cameracontroller.h"
 
-Component* CameraController_Init() {
-
-    Component* c = Component_Init("CameraController");
-
-    CameraController* cc = malloc(sizeof(CameraController));
-    cc->component = c;
-    cc->isMoving = 0;
-
-    c->update = &CameraController_Update;
-    c->serialise = &CameraController_Serialise;
-    c->data = cc;
-
-    return c;
-}
-
-void CameraController_Update(Component* c, float dt) {
+static void CameraController_Update(Component* c, float dt) {
 
     CameraController* cc = (CameraController*) c->data;
     Camera* camera = &Window_GetScene()->camera;
@@ -55,7 +40,7 @@ void CameraController_Update(Component* c, float dt) {
 
 }
 
-cJSON* CameraController_Serialise(Component* c) {
+static cJSON* CameraController_Serialise(Component* c) {
 
     CameraController* cc = (CameraController*) c->data;
     cJSON* json = cJSON_CreateObject();
@@ -69,6 +54,40 @@ cJSON* CameraController_Serialise(Component* c) {
     WIO_AddFloat(json, "maxVelocity", cc->maxVelocity);
     return json;
 
+}
+
+static CameraController* _CameraController_Init(Component* c,
+                                                bool isMoving, 
+                                                vec2 initialPosition, 
+                                                vec2 finalPosition, 
+                                                float timeCurrent, 
+                                                float timeTotal, 
+                                                float timeHalf,
+                                                float distance, 
+                                                float maxVelocity) {
+
+    CameraController* cc = malloc(sizeof(CameraController));
+    cc->component = c;
+    cc->isMoving = isMoving;
+    glm_vec2_copy(initialPosition, cc->initialPosition);
+    glm_vec2_copy(finalPosition, cc->finalPosition);
+    cc->timeCurrent = timeCurrent;
+    cc->timeTotal = timeTotal;
+    cc->timeHalf = timeHalf;
+    cc->distance = distance;
+    cc->maxVelocity = maxVelocity;
+
+    c->update = &CameraController_Update;
+    c->serialise = &CameraController_Serialise;
+    c->data = cc;     
+
+    return cc;                                 
+}
+
+Component* CameraController_Init() {
+    Component* c = Component_Init("CameraController");
+    _CameraController_Init(c, 0, (vec2) {0,0}, (vec2) {0,0}, 0, 0, 0, 0, 0);
+    return c;
 }
 
 bool CameraController_Load(Component* c, cJSON* json) {
@@ -91,20 +110,8 @@ bool CameraController_Load(Component* c, cJSON* json) {
     if (!WIO_ParseFloat(json, "distance", &distance)) {return 0;}
     if (!WIO_ParseFloat(json, "maxVelocity", &maxVelocity)) {return 0;}
 
-    CameraController* cc = malloc(sizeof(CameraController));
-    cc->component = c;
-    cc->isMoving = isMoving;
-    glm_vec2_copy(initialPosition, cc->initialPosition);
-    glm_vec2_copy(finalPosition, cc->finalPosition);
-    cc->timeCurrent = timeCurrent;
-    cc->timeTotal = timeTotal;
-    cc->timeHalf = timeHalf;
-    cc->distance = distance;
-    cc->maxVelocity = maxVelocity;
-    
-    c->update = &CameraController_Update;
-    c->serialise = &CameraController_Serialise;
-    c->data = cc;
+    // Initialise the camera controller class.
+    _CameraController_Init(c, isMoving, initialPosition, finalPosition, timeCurrent, timeTotal, timeHalf, distance, maxVelocity);
 
     return 1;
 }

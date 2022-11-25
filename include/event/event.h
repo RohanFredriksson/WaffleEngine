@@ -12,8 +12,6 @@
 
 #define EVENT_SINGLE_USE 0
 #define EVENT_MULTIPLE_USE 1
-#define EVENT_INACTIVE 0
-#define EVENT_ACTIVE 1
 
 struct Event {
     Component* component;
@@ -32,15 +30,7 @@ typedef struct Event Event;
 
 Component* Event_Init(char* type);
 
-void Event_Update(Component* c, float dt);
-
-void Event_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal);
-
-cJSON* Event_Serialise(Component* c);
-
 bool Event_Load(Component* c, cJSON* json);
-
-void Event_Free(Component* c);
 
 void Event_AddCommand(Component* c, Command* a);
 
