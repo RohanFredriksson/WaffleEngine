@@ -17,7 +17,7 @@
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"camera":	{
-		"position":	[0, 0],
+		"position":	[0.31250017881393433, 2.0468747615814209],
 		"projectionSize":	[21.34375, 12],
 		"zoom":	1
 	},
@@ -67,12 +67,12 @@
 					"child":	{
 						"isMoving":	false,
 						"initialPosition":	[0, 0],
-						"finalPosition":	[0, 0],
-						"timeCurrent":	0,
-						"timeTotal":	0,
-						"timeHalf":	0,
-						"distance":	0,
-						"maxVelocity":	0
+						"finalPosition":	[1, -1.5],
+						"timeCurrent":	1.01668119430542,
+						"timeTotal":	1,
+						"timeHalf":	0.5,
+						"distance":	1.8027756214141846,
+						"maxVelocity":	2.2953653335571289
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -114,7 +114,7 @@
 						"collider":	6,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1.3927987813949585, -4.4413070678710938],
+						"velocity":	[1.3927987813949585, -11.774643898010254],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -170,7 +170,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}],
-			"position":	[3.2789902687072754, -0.0629042163491249],
+			"position":	[4.3003792762756348, -6.0698623657226562],
 			"size":	[1, 1],
 			"rotation":	0
 		}]

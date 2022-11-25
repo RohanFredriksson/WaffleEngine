@@ -1,25 +1,6 @@
 #include "mousebutton.h"
 
-Component* MouseButton_Init(int button, int eventType, int checkType) {
-
-    Component* component = Event_Init("MouseButtonDown");
-    
-    Event* event = (Event*) component->data;
-
-    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
-    mb->event = event;
-    mb->button = button;
-    mb->checkType = checkType;
-    mb->eventType = eventType;
-
-    event->check = &MouseButton_Check;
-    event->serialise = &MouseButton_Serialise;
-    event->data = mb;
-
-    return component;
-}
-
-bool MouseButton_Check(Event* e, float dt) {
+static bool MouseButton_Check(Event* e, float dt) {
 
     MouseButtonEvent* mb = (MouseButtonEvent*) e->data;
     
@@ -64,7 +45,7 @@ bool MouseButton_Check(Event* e, float dt) {
     return 0;
 }
 
-cJSON* MouseButton_Serialise(Event* e) {
+static cJSON* MouseButton_Serialise(Event* e) {
 
     MouseButtonEvent* mb = (MouseButtonEvent*) e->data;
     cJSON* json = cJSON_CreateObject();
@@ -73,6 +54,31 @@ cJSON* MouseButton_Serialise(Event* e) {
     WIO_AddInt(json, "eventType", mb->eventType);
     return json;
 
+}
+
+static MouseButtonEvent* _MouseButton_Init(Event* event, int button, int eventType, int checkType) {
+
+    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
+    mb->event = event;
+    mb->button = button;
+    mb->checkType = checkType;
+    mb->eventType = eventType;
+
+    event->check = &MouseButton_Check;
+    event->serialise = &MouseButton_Serialise;
+    event->data = mb;
+
+    return mb;
+}
+
+Component* MouseButton_Init(int button, int eventType, int checkType) {
+
+    Component* component = Event_Init("MouseButtonDown");
+    
+    Event* event = (Event*) component->data;
+    _MouseButton_Init(event, button, eventType, checkType);
+
+    return component;
 }
 
 bool MouseButton_Load(Event* e, cJSON* json) {
@@ -85,15 +91,8 @@ bool MouseButton_Load(Event* e, cJSON* json) {
     if (!WIO_ParseInt(json, "checkType", &checkType)) {return 0;}
     if (!WIO_ParseInt(json, "eventType", &eventType)) {return 0;}
 
-    MouseButtonEvent* mb = malloc(sizeof(MouseButtonEvent));
-    mb->event = e;
-    mb->button = button;
-    mb->checkType = checkType;
-    mb->eventType = eventType;
-
-    e->check = &MouseButton_Check;
-    e->serialise = &MouseButton_Serialise;
-    e->data = mb;
+    // Initialise the mouse button class.
+    _MouseButton_Init(e, button, checkType, eventType);
 
     return 1;
 }

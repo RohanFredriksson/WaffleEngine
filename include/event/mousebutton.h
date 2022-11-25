@@ -24,10 +24,6 @@ typedef struct MouseButtonEvent MouseButtonEvent;
 
 Component* MouseButton_Init(int button, int eventType, int checkType);
 
-bool MouseButton_Check(Event* e, float dt);
-
-cJSON* MouseButton_Serialise(Event* e);
-
 bool MouseButton_Load(Event* e, cJSON* json);
 
 #endif

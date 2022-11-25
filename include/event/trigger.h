@@ -25,12 +25,6 @@ Component* TriggerOnEntity_Init(Entity* entity);
 
 Component* TriggerOnComponentType_Init(char* type);
 
-bool Trigger_Check(Event* e, float dt);
-
-void Trigger_OnCollision(Event* e, Entity* with, vec2 contact, vec2 normal);
-
-cJSON* Trigger_Serialise(Event* e);
-
 bool Trigger_Load(Event* e, cJSON* json);
 
 #endif
