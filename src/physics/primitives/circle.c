@@ -4,26 +4,7 @@
 #include "entity.h"
 #include "circle.h"
 
-Component* Circle_Init(float radius, Component* rigidbody) {
-
-    if (rigidbody != NULL && strcmp(rigidbody->type, "Rigidbody") != 0) {
-        printf("ERROR::CIRCLE::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
-    }
-
-    Component* component = Collider_Init("Circle", (Rigidbody*) rigidbody->data);
-    Collider* collider = (Collider*) component->data;
-    Circle* circle = malloc(sizeof(Circle));
-
-    circle->collider = collider;
-    circle->radius = radius;
-
-    collider->serialise = &Circle_Serialise;
-    collider->data = circle;
-    return component;
-
-}
-
-cJSON* Circle_Serialise(Collider* co) {
+static cJSON* Circle_Serialise(Collider* co) {
 
     Circle* c = (Circle*) co->data;
     cJSON* json = cJSON_CreateObject();
@@ -32,20 +13,38 @@ cJSON* Circle_Serialise(Collider* co) {
 
 }
 
+static Circle* _Circle_Init(Collider* collider, float radius) {
+
+    Circle* circle = malloc(sizeof(Circle));
+
+    circle->collider = collider;
+    circle->radius = radius;
+
+    collider->serialise = &Circle_Serialise;
+    collider->data = circle;
+
+    return circle;
+}
+
+Component* Circle_Init(float radius) {
+
+    Component* component = Collider_Init("Circle");
+
+    Collider* collider = (Collider*) component->data;
+    _Circle_Init(collider, radius);
+
+    return component;
+}
+
 bool Circle_Load(Collider* co, cJSON* json) {
 
     float radius;
     if (!WIO_ParseFloat(json, "radius", &radius)) {return 0;}
 
-    Circle* circle = malloc(sizeof(Circle));
+    // Initialise the circle class.
+    _Circle_Init(co, radius);
 
-    circle->collider = co;
-    circle->radius = radius;
-
-    co->serialise = &Circle_Serialise;
-    co->data = circle;
     return 1;
-
 }
 
 Component* Circle_GetRigidbody(Circle* c) {
@@ -54,8 +53,4 @@ Component* Circle_GetRigidbody(Circle* c) {
 
 void Circle_SetRadius(Circle* c, float radius) {
     c->radius = radius;
-}
-
-void Circle_SetRigidbody(Circle* c, Rigidbody* rb) {
-    Collider_SetRigidbody(c->collider, rb);
 }

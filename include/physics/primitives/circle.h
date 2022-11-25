@@ -12,12 +12,9 @@ struct Circle {
 };
 typedef struct Circle Circle;
 
-Component* Circle_Init(float radius, Component* rigidbody);
-cJSON* Circle_Serialise(Collider* co);
+Component* Circle_Init(float radius);
 bool Circle_Load(Collider* co, cJSON* json);
-
 Component* Circle_GetRigidbody(Circle* c);
 void Circle_SetRadius(Circle* c, float radius);
-void Circle_SetRigidbody(Circle* c, Rigidbody* rb);
 
 #endif

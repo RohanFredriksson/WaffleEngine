@@ -58,13 +58,13 @@ struct Collider {
 };
 typedef struct Collider Collider;
 
-Component* Collider_Init(char* type, Rigidbody* rigidbody);
+Component* Collider_Init(char* type);
 
 bool Collider_Load(Component* c, cJSON* json);
 
 Component* Collider_GetRigidbody(Collider* co);
 
-void Collider_SetRigidbody(Collider* co, Rigidbody* rb);
+void Collider_SetRigidbody(Component* c, Component* rigidbody);
 
 //float Collider_GetInertiaTensor(float mass);
 

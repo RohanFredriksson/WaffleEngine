@@ -52,9 +52,9 @@ static Collider* _Collider_Init(Component* c, char* type, int rigidbody) {
     return co;
 }
 
-Component* Collider_Init(char* type, Rigidbody* rigidbody) {
+Component* Collider_Init(char* type) {
     Component* c = Component_Init("Collider");
-    _Collider_Init(c, type, rigidbody->component->id);
+    _Collider_Init(c, type, -1);
     return c;
 }
 
@@ -84,6 +84,18 @@ Component* Collider_GetRigidbody(Collider* co) {
     return Entity_GetComponentByID(co->component->entity, co->rigidbody);
 }
 
-void Collider_SetRigidbody(Collider* co, Rigidbody* rb) {
-    co->rigidbody = rb->component->id;
+void Collider_SetRigidbody(Component* c, Component* rigidbody) {
+
+    if (strcmp(c->type, "Collider") != 0) {
+        printf("ERROR::COLLIDER_SETRIGIDBODY::COMPONENT_NOT_OF_COLLIDER_TYPE\n");
+        return;
+    }
+
+    if (strcmp(rigidbody->type, "Rigidbody") != 0) {
+        printf("ERROR::COLLIDER_SETRIGIDBODY::COMPONENT_NOT_OF_RIGIDBODY_TYPE");
+        return;
+    }
+
+    ((Collider*) c->data)->rigidbody = rigidbody->id;
+
 }

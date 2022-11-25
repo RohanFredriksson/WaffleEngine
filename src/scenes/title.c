@@ -18,9 +18,10 @@ void Title_Init(Scene* s) {
     // Armaan
     Sprite* spriteArmaan = SpritePool_Get("armaan");
     Component* rigidbodyArmaan = Rigidbody_Init();
-    Component* colliderArmaan = Box_Init((vec2) {5.0f, 1.0f}, rigidbodyArmaan);
+    Component* colliderArmaan = Box_Init((vec2) {5.0f, 1.0f});
     Rigidbody_SetCollider(rigidbodyArmaan, colliderArmaan);
     Rigidbody_SetMass(rigidbodyArmaan, 0.0f);
+    Collider_SetRigidbody(colliderArmaan, rigidbodyArmaan);
     Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
     Command* commandArmaan = MoveCamera_Init((vec2) { 1.0f, -1.5f }, 1.0f);
@@ -39,10 +40,11 @@ void Title_Init(Scene* s) {
     // Ainsley
     Sprite* spriteAinsley = SpritePool_Get("ainsley");
     Component* rigidbodyAinsley = Rigidbody_Init();
-    Component* colliderAinsley = Circle_Init(0.5f, rigidbodyAinsley);
+    Component* colliderAinsley = Circle_Init(0.5f);
     Rigidbody_SetCollider(rigidbodyAinsley, colliderAinsley);
     Rigidbody_SetVelocity(rigidbodyAinsley, (vec2) { 1.0f, 10.0f });
     Rigidbody_SetCor(rigidbodyAinsley, 0.75f);
+    Collider_SetRigidbody(colliderAinsley, rigidbodyAinsley);
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, 0);
     Command* commandAinsley = Console_Init("COLLISION\n");
     Component* eventAinsley = Trigger_Init();

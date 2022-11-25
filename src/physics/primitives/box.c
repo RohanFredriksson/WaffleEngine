@@ -3,27 +3,7 @@
 #include "wmath.h"
 #include "box.h"
 
-Component* Box_Init(vec2 size, Component* rigidbody) {
-
-    if (rigidbody != NULL && strcmp(rigidbody->type, "Rigidbody") != 0) {
-        printf("ERROR::BOX::INIT::SUPPLIED_COMPONENT_NOT_RIGIDBODY\n");
-    }
-
-    Component* component = Collider_Init("Box", (Rigidbody*) rigidbody->data);
-    Collider* collider = (Collider*) component->data;
-    Box* box = malloc(sizeof(Box));
-
-    box->collider = collider;
-    glm_vec2_copy(size, box->size);
-    glm_vec2_scale(size, 0.5f, box->halfSize);
-
-    collider->serialise = &Box_Serialise;
-    collider->data = box;
-    return component;
-
-}
-
-cJSON* Box_Serialise(Collider* co) {
+static cJSON* Box_Serialise(Collider* co) {
 
     Box* b = (Box*) co->data;
     cJSON* json = cJSON_CreateObject();
@@ -32,21 +12,38 @@ cJSON* Box_Serialise(Collider* co) {
 
 }
 
+static Box* _Box_Init(Collider* collider, vec2 size) {
+    
+    Box* box = malloc(sizeof(Box));
+
+    box->collider = collider;
+    glm_vec2_copy(size, box->size);
+    glm_vec2_scale(size, 0.5f, box->halfSize);
+
+    collider->serialise = &Box_Serialise;
+    collider->data = box;
+
+    return box;
+}
+
+Component* Box_Init(vec2 size) {
+
+    Component* component = Collider_Init("Box");
+    Collider* collider = (Collider*) component->data;
+    _Box_Init(collider, size);
+    
+    return component;
+}
+
 bool Box_Load(Collider* co, cJSON* json) {
 
     vec2 size;
     if (!WIO_ParseVec2(json, "size", size)) {return 0;}
 
-    Box* box = malloc(sizeof(Box));
+    // Initialise the box class.
+    _Box_Init(co, size);
 
-    box->collider = co;
-    glm_vec2_copy(size, box->size);
-    glm_vec2_scale(size, 0.5f, box->halfSize);
-
-    co->serialise = &Box_Serialise;
-    co->data = box;
     return 1;
-
 }
 
 Component* Box_GetRigidbody(Box* box) {
@@ -88,8 +85,4 @@ void Box_GetVertices(Box* box, vec2* buffer) {
 void Box_SetSize(Box* box, vec2 size) {
     glm_vec2_copy(size, box->size);
     glm_vec2_scale(box->size, 0.5f, box->halfSize);
-}
-
-void Box_SetRigidbody(Box* box, Rigidbody* rb) {
-    Collider_SetRigidbody(box->collider, rb);
 }
