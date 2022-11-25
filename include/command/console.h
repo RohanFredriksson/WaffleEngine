@@ -15,10 +15,6 @@ typedef struct Console Console;
 
 Command* Console_Init(char* message);
 
-void Console_Execute(Command* a, Component* c);
-
-cJSON* Console_Serialise(Command* a);
-
 bool Console_Load(Command* a, cJSON* json);
 
 #endif

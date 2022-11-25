@@ -33,12 +33,10 @@ Command* Command_Load(cJSON* json) {
     char* type;
     if (!WIO_ParseString(json, "type", &type)) {return NULL;}
 
-    Command* a = malloc(sizeof(Command));
-    a->type = type;
-    a->execute = NULL;
-    a->serialise = NULL;
-    a->free = NULL;
+    // Initialise the command class.
+    Command* a = Command_Init(type);
 
+    // Attempt to parse the child class. If cannot, free the command entirely.
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
     if (child == NULL) {free(a); return NULL;}
     if (strcmp(type, "MoveCamera") == 0) {if (!MoveCamera_Load(a, child)) {free(a); return NULL;}}

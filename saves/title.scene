@@ -17,7 +17,7 @@
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"camera":	{
-		"position":	[0, 0],
+		"position":	[1, -1.5],
 		"projectionSize":	[21.34375, 12],
 		"zoom":	1
 	},
@@ -66,13 +66,13 @@
 					"type":	"CameraController",
 					"child":	{
 						"isMoving":	false,
-						"initialPosition":	[0, 0],
-						"finalPosition":	[0, 0],
-						"timeCurrent":	0,
-						"timeTotal":	0,
-						"timeHalf":	0,
-						"distance":	0,
-						"maxVelocity":	0
+						"initialPosition":	[-0.34375, 2.171875],
+						"finalPosition":	[1, -1.5],
+						"timeCurrent":	1.01782488822937,
+						"timeTotal":	1,
+						"timeHalf":	0.5,
+						"distance":	3.910029411315918,
+						"maxVelocity":	4.97840404510498
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -114,7 +114,7 @@
 						"collider":	6,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1.3927987813949585, -2.2746398448944092],
+						"velocity":	[1.3927987813949585, -17.2746467590332],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -170,7 +170,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}],
-			"position":	[2.9772162437438965, 0.6827123761177063],
+			"position":	[5.0664210319519043, -14.104252815246582],
 			"size":	[1, 1],
 			"rotation":	0
 		}]

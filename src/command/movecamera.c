@@ -1,23 +1,6 @@
 #include "movecamera.h"
 
-void MoveCamera_Execute(Command* a, Component* c);
-
-Command* MoveCamera_Init(vec2 to, float time) {
-
-    Command* command = Command_Init("MoveCamera");
-    MoveCamera* m = malloc(sizeof(MoveCamera));
-
-    glm_vec2_copy(to, m->to);
-    m->time = time;
-
-    command->execute = &MoveCamera_Execute;
-    command->serialise = &MoveCamera_Serialise;
-    command->data = m;
-    return command;
-
-}
-
-void MoveCamera_Execute(Command* a, Component* c) {
+static void MoveCamera_Execute(Command* a, Component* c) {
 
     MoveCamera* m = (MoveCamera*) a->data;
 
@@ -35,7 +18,7 @@ void MoveCamera_Execute(Command* a, Component* c) {
 
 }
 
-cJSON* MoveCamera_Serialise(Command* a) {
+static cJSON* MoveCamera_Serialise(Command* a) {
 
     MoveCamera* moveCamera = (MoveCamera*) a->data;
     cJSON* json = cJSON_CreateObject();
@@ -43,6 +26,26 @@ cJSON* MoveCamera_Serialise(Command* a) {
     WIO_AddFloat(json, "time", moveCamera->time);
     return json;
 
+}
+
+static MoveCamera* _MoveCamera_Init(Command* command, vec2 to, float time) {
+
+    MoveCamera* m = malloc(sizeof(MoveCamera));
+
+    glm_vec2_copy(to, m->to);
+    m->time = time;
+
+    command->execute = &MoveCamera_Execute;
+    command->serialise = &MoveCamera_Serialise;
+    command->data = m;
+
+    return m;
+}
+
+Command* MoveCamera_Init(vec2 to, float time) {
+    Command* command = Command_Init("MoveCamera");
+    _MoveCamera_Init(command, to, time);
+    return command;
 }
 
 bool MoveCamera_Load(Command* a, cJSON* json) {
@@ -53,14 +56,8 @@ bool MoveCamera_Load(Command* a, cJSON* json) {
     if (!WIO_ParseVec2(json, "to", to)) {return 0;}
     if (!WIO_ParseFloat(json, "time", &time)) {return 0;}
 
-    MoveCamera* m = malloc(sizeof(MoveCamera));
-
-    glm_vec2_copy(to, m->to);
-    m->time = time;
-
-    a->execute = &MoveCamera_Execute;
-    a->serialise = &MoveCamera_Serialise;
-    a->data = m;
+    // Initialise the move camera class.
+    _MoveCamera_Init(a, to, time);    
+    
     return 1;
-
 }

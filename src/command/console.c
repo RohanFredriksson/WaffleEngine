@@ -1,8 +1,18 @@
 #include "console.h"
 
-Command* Console_Init(char* message) {
+static void Console_Execute(Command* a, Component* c) {
+    Console* l = (Console*) a->data;
+    printf("%s", l->message);
+}
 
-    Command* command = Command_Init("Console");
+static cJSON* Console_Serialise(Command* a) {
+    Console* console = (Console*) a->data;
+    cJSON* json = cJSON_CreateObject();
+    WIO_AddString(json, "message", console->message);
+    return json;
+}
+
+Console* _Console_Init(Command* command, char* message) {
 
     Console* console = malloc(sizeof(Console));
     console->message = StringPool_Get(message);
@@ -10,22 +20,14 @@ Command* Console_Init(char* message) {
     command->execute = &Console_Execute;
     command->serialise = &Console_Serialise;
     command->data = console;
+
+    return console;
+}
+
+Command* Console_Init(char* message) {
+    Command* command = Command_Init("Console");
+    _Console_Init(command, message);
     return command;
-
-}
-
-void Console_Execute(Command* a, Component* c) {
-    Console* l = (Console*) a->data;
-    printf("%s", l->message);
-}
-
-cJSON* Console_Serialise(Command* a) {
-
-    Console* console = (Console*) a->data;
-    cJSON* json = cJSON_CreateObject();
-    WIO_AddString(json, "message", console->message);
-    return json;
-
 }
 
 bool Console_Load(Command* a, cJSON* json) {
@@ -33,12 +35,8 @@ bool Console_Load(Command* a, cJSON* json) {
     char* message;
     if (!WIO_ParseString(json, "message", &message)) {return 0;}
 
-    Console* console = malloc(sizeof(Console));
-    console->message = StringPool_Get(message);
+    // Initialise the console class.
+    _Console_Init(a, message);
 
-    a->execute = &Console_Execute;
-    a->serialise = &Console_Serialise;
-    a->data = console;
     return 1;
-
 }
