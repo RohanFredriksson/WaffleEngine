@@ -3,7 +3,7 @@
 
 static int next = 0;
 
-Component* Component_Init(char* type) {
+Component* _Component_Init(int id, char* type, vec2 positionOffset, vec2 sizeScale, float rotationOffset) {
 
     Component* c = (Component*) malloc(sizeof(Component));
 
@@ -12,13 +12,18 @@ Component* Component_Init(char* type) {
     c->serialise = NULL;
     c->free = NULL;
 
-    c->id = next;
+    c->id = id;
     c->type = type;
-    glm_vec2_zero(c->positionOffset);
-    glm_vec2_one(c->sizeScale);
-    c->rotationOffset = 0;
+    glm_vec2_copy(positionOffset, c->positionOffset);
+    glm_vec2_copy(sizeScale, c->sizeScale);
+    c->rotationOffset = rotationOffset;
 
-    next++;
+    next = WMath_MaxFloat(next+1, id+1);
+    return c;
+}
+
+Component* Component_Init(char* type) {
+    Component* c = _Component_Init(next, type, (vec2) {0,0}, (vec2) {1,1}, 0);
     return c;
 }
 
@@ -78,12 +83,10 @@ Component* Component_Load(cJSON* json) {
     if (!WIO_ParseString(json, "type", &type)) {return NULL;}
     if (type == NULL) {return NULL;}
 
-    Component* c = malloc(sizeof(Component));
-    c->update = NULL;
-    c->collision = NULL;
-    c->serialise = NULL;
-    c->free = NULL;
+    // Initialise the component class.
+    Component* c = _Component_Init(id, type, positionOffset, sizeScale, rotationOffset);
 
+    // Attempt to parse the child class. If cannot, free the component entirely.
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");
     if (child == NULL) {free(c); return NULL;}
     if (strcmp(type, "SpriteRenderer") == 0) {if (!SpriteRenderer_Load(c, child)) {free(c); return NULL;}}
@@ -93,12 +96,5 @@ Component* Component_Load(cJSON* json) {
     else if (strcmp(type, "CameraController") == 0) {if (!CameraController_Load(c, child)) {free(c); return NULL;}}
     else {free(c); return NULL;}
 
-    c->id = id;
-    c->type = type;
-    glm_vec2_copy(positionOffset, c->positionOffset);
-    glm_vec2_copy(sizeScale, c->sizeScale);
-    c->rotationOffset = rotationOffset;
-
-    next = WMath_MaxFloat(next, id);
     return c;
 }
