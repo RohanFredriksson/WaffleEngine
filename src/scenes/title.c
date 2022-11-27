@@ -5,17 +5,18 @@
 #include "primitives.h"
 #include "spritesheet.h"
 
-#include "movecamera.h"
-#include "console.h"
-#include "mousebutton.h"
-#include "trigger.h"
+#include "event.h"
+#include "events.h"
 #include "command.h"
+#include "commands.h"
 
 void Title_Init(Scene* s) {
 
     Spritesheet_Load("assets/textures/faces.png");
 
     // Armaan
+    Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+
     Sprite* spriteArmaan = SpritePool_Get("armaan");
     Component* rigidbodyArmaan = Rigidbody_Init();
     Component* colliderArmaan = Box_Init((vec2) {5.0f, 1.0f});
@@ -27,8 +28,6 @@ void Title_Init(Scene* s) {
     Command* commandArmaan = MoveCamera_Init((vec2) { 1.0f, -1.5f }, 1.0f);
     Component* eventArmaan = MouseButton_Init(GLFW_MOUSE_BUTTON_LEFT, MOUSEBUTTON_EVENT_BEGINDOWN, MOUSEBUTTON_CHECK_PICKINGTEXTURE);
     Event_AddCommand(eventArmaan, commandArmaan);
-    
-    Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
     Entity_AddComponent(entityArmaan, spriteRendererArmaan);
     Entity_AddComponent(entityArmaan, rigidbodyArmaan);
@@ -38,6 +37,8 @@ void Title_Init(Scene* s) {
     Scene_AddEntity(s, entityArmaan);
 
     // Ainsley
+    Entity* entityAinsley = Entity_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+
     Sprite* spriteAinsley = SpritePool_Get("ainsley");
     Component* rigidbodyAinsley = Rigidbody_Init();
     Component* colliderAinsley = Circle_Init(0.5f);
@@ -46,12 +47,10 @@ void Title_Init(Scene* s) {
     Rigidbody_SetCor(rigidbodyAinsley, 0.75f);
     Collider_SetRigidbody(colliderAinsley, rigidbodyAinsley);
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, 0);
-    Command* commandAinsley = Console_Init("COLLISION\n");
+    Command* commandAinsley = DeleteEntity_Init(entityAinsley);
     Component* eventAinsley = Trigger_Init();
     Event_AddCommand(eventAinsley, commandAinsley);
     Event_SetMulti(eventAinsley, EVENT_MULTIPLE_USE);
-
-    Entity* entityAinsley = Entity_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
     Entity_AddComponent(entityAinsley, rigidbodyAinsley);
     Entity_AddComponent(entityAinsley, colliderAinsley);

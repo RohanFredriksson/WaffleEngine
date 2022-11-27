@@ -31,7 +31,7 @@ static cJSON* MoveCamera_Serialise(Command* a) {
 static MoveCamera* _MoveCamera_Init(Command* command, vec2 to, float time) {
 
     MoveCamera* m = malloc(sizeof(MoveCamera));
-
+    m->command = command;
     glm_vec2_copy(to, m->to);
     m->time = time;
 

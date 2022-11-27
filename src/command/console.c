@@ -15,6 +15,7 @@ static cJSON* Console_Serialise(Command* a) {
 Console* _Console_Init(Command* command, char* message) {
 
     Console* console = malloc(sizeof(Console));
+    console->command = command;
     console->message = StringPool_Get(message);
 
     command->execute = &Console_Execute;
