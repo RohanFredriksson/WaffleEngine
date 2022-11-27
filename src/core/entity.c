@@ -25,10 +25,19 @@ void Entity_Update(Entity* e, float dt) {
 
     // Update all components.
     Component* component;
-    int n = List_Length(&e->components);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < List_Length(&e->components); i++) {
+
         List_Get(&e->components, i, &component);
         Component_Update(component, dt);
+
+        // If the component is dead, remove it.
+        if (component->dead) {
+            Component_Free(component);
+            free(component);
+            List_Remove(&e->components, i);
+            i--;
+        }
+
     }
 
 }
@@ -61,25 +70,13 @@ void Entity_Free(Entity* e) {
 
 }
 
+void Entity_Kill(Entity* e) {
+    e->dead = 1; // Flags for the scene to remove this entity at the end of its update call.
+}
+
 void Entity_AddComponent(Entity* e, Component* c) {
     c->entity = e;
     List_Push(&e->components, &c);
-}
-
-void Entity_RemoveComponent(Entity* e, Component* c) {
-
-    Component* component;
-    int n = List_Length(&e->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&e->components, i, &component);
-        if (component == c) {
-            Component_Free(component);
-            free(component);
-            List_Remove(&e->components, i);
-            break;
-        }
-    }
-
 }
 
 Component* Entity_GetComponent(Entity* e, char* type) {

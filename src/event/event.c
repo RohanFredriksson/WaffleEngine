@@ -44,8 +44,8 @@ static void Event_Update(Component* c, float dt) {
                     Command_Execute(command, c);
                 }
 
-                // Remove the object.
-                Entity_RemoveComponent(c->entity, c);
+                // Remove the component.
+                Component_Kill(c);
 
             }
         }

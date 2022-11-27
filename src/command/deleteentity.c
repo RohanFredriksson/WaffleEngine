@@ -5,7 +5,7 @@
 static void DeleteEntity_Execute(Command* a, Component* c) {
     DeleteEntity* d = (DeleteEntity*) a->data;
     Scene* s = Window_GetScene();
-    if (d->deleteType == DELETE_TYPE_THIS) {Scene_RemoveEntityByID(s, c->entity->id);}
+    if (d->deleteType == DELETE_TYPE_THIS) {Entity_Kill(c->entity);}
     else {Scene_RemoveEntityByID(s, d->id);}
 }
 

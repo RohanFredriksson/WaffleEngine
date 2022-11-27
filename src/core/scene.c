@@ -39,21 +39,17 @@ void Scene_Update(Scene* s, float dt) {
 
     // Update all entities.
     Entity* entity;
-    int n = List_Length(&s->entities);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < List_Length(&s->entities); i++) {
         
         List_Get(&s->entities, i, &entity);
         Entity_Update(entity, dt);
         
         // If the entity is dead, remove it.
         if (entity->dead) {
-
             Entity_Free(entity);
             free(entity);
             List_Remove(&s->entities, i);
-            
             i--;
-            n--;
         }
 
     }
@@ -220,5 +216,5 @@ Entity* Scene_GetEntityByID(Scene* s, int id) {
 
 void Scene_RemoveEntityByID(Scene* s, int id) {
     Entity* entity = Scene_GetEntityByID(s, id);
-    if (entity != NULL) {entity->dead = 1;}
+    if (entity != NULL) {Entity_Kill(entity);}
 }

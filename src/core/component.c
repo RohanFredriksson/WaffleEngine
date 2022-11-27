@@ -3,7 +3,7 @@
 
 static int next = 0;
 
-Component* _Component_Init(int id, char* type, vec2 positionOffset, vec2 sizeScale, float rotationOffset) {
+Component* _Component_Init(int id, bool dead, char* type, vec2 positionOffset, vec2 sizeScale, float rotationOffset) {
 
     Component* c = (Component*) malloc(sizeof(Component));
 
@@ -13,6 +13,7 @@ Component* _Component_Init(int id, char* type, vec2 positionOffset, vec2 sizeSca
     c->free = NULL;
 
     c->id = id;
+    c->dead = dead;
     c->type = type;
     glm_vec2_copy(positionOffset, c->positionOffset);
     glm_vec2_copy(sizeScale, c->sizeScale);
@@ -23,7 +24,7 @@ Component* _Component_Init(int id, char* type, vec2 positionOffset, vec2 sizeSca
 }
 
 Component* Component_Init(char* type) {
-    Component* c = _Component_Init(next, type, (vec2) {0,0}, (vec2) {1,1}, 0);
+    Component* c = _Component_Init(next, 0, type, (vec2) {0,0}, (vec2) {1,1}, 0);
     return c;
 }
 
@@ -38,6 +39,10 @@ void Component_OnCollision(Component* c, Entity* with, vec2 contact, vec2 normal
 void Component_Free(Component* c) {
     if (c->free != NULL) {c->free(c);}
     if (c->data != NULL) {free(c->data);}
+}
+
+void Component_Kill(Component* c) {
+    c->dead = 1; // Flags for the entity to remove this component at the end of its update call.
 }
 
 void Component_GetPosition(Component* c, vec2 dest) {
@@ -71,12 +76,14 @@ cJSON* Component_Serialise(Component* c) {
 Component* Component_Load(cJSON* json) {
 
     int id;
+    bool dead;
     char* type;
     vec2 positionOffset;
     vec2 sizeScale;
     float rotationOffset;
 
     if (!WIO_ParseInt(json, "id", &id)) {return NULL;}
+    if (!WIO_ParseBool(json, "dead", &dead)) {return NULL;}
     if (!WIO_ParseVec2(json, "positionOffset", positionOffset)) {return NULL;}
     if (!WIO_ParseVec2(json, "sizeScale", sizeScale)) {return NULL;}
     if (!WIO_ParseFloat(json, "rotationOffset", &rotationOffset)) {return NULL;}
@@ -84,7 +91,7 @@ Component* Component_Load(cJSON* json) {
     if (type == NULL) {return NULL;}
 
     // Initialise the component class.
-    Component* c = _Component_Init(id, type, positionOffset, sizeScale, rotationOffset);
+    Component* c = _Component_Init(id, dead, type, positionOffset, sizeScale, rotationOffset);
 
     // Attempt to parse the child class. If cannot, free the component entirely.
     cJSON* child = cJSON_GetObjectItemCaseSensitive(json, "child");

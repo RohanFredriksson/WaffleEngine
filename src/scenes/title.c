@@ -47,7 +47,7 @@ void Title_Init(Scene* s) {
     Rigidbody_SetCor(rigidbodyAinsley, 0.75f);
     Collider_SetRigidbody(colliderAinsley, rigidbodyAinsley);
     Component* spriteRendererAinsley = SpriteRenderer_Init(spriteAinsley, (vec4){ 1, 1, 1, 1 }, 0);
-    Command* commandAinsley = DeleteThisEntity_Init();
+    Command* commandAinsley = Console_Init("COLLISION\n");
     Component* eventAinsley = Trigger_Init();
     Event_AddCommand(eventAinsley, commandAinsley);
     Event_SetMulti(eventAinsley, EVENT_MULTIPLE_USE);

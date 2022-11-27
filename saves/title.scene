@@ -115,7 +115,7 @@
 						"collider":	6,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1, -6.6666650772094727],
+						"velocity":	[1.3927987813949585, -29.941265106201172],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -158,10 +158,9 @@
 							"flag":	false
 						},
 						"commands":	[{
-								"type":	"DeleteEntity",
+								"type":	"Console",
 								"child":	{
-									"id":	-1,
-									"deleteType":	1
+									"message":	"Object bounced lol\n"
 								}
 							}],
 						"multi":	true,
@@ -173,7 +172,7 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-2.3166682720184326, 2.8055539131164551],
+			"position":	[6.83063840866089, -44.11322021484375],
 			"size":	[1, 1],
 			"rotation":	0
 		}]
