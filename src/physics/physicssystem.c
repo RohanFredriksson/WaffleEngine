@@ -264,6 +264,20 @@ void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 }
 
+void PhysicsSystem_RemoveRigidbody(PhysicsSystem* p, Rigidbody* rb) {
+
+    for (int i = 0; i < p->numRigidbodies; i++) {
+        Rigidbody* current = p->rigidbodies[i];
+        if (current == rb) {
+            ForceRegistry_Remove(&p->forceRegistry, p->gravity, current);
+            memmove(current, current + 1, (p->numRigidbodies - i - 1) * sizeof(Rigidbody*));
+            p->numRigidbodies--;
+            return;
+        }
+    }
+
+}
+
 void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity) {
 
     Component* component;
@@ -272,6 +286,19 @@ void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity) {
         List_Get(&entity->components, i, &component);
         if (strcmp(component->type, "Rigidbody") == 0) {
             PhysicsSystem_AddRigidbody(p, (Rigidbody*) component->data);
+        }
+    }
+
+}
+
+void PhysicsSystem_RemoveEntity(PhysicsSystem* p, Entity* entity) {
+
+    Component* component;
+    int n = List_Length(&entity->components);
+    for (int i = 0; i < n; i++) {
+        List_Get(&entity->components, i, &component);
+        if (strcmp(component->type, "Rigidbody") == 0) {
+            PhysicsSystem_RemoveRigidbody(p, (Rigidbody*) component->data);
         }
     }
 

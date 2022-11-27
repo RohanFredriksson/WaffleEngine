@@ -47,9 +47,14 @@ void Scene_Update(Scene* s, float dt) {
         
         // If the entity is dead, remove it.
         if (entity->dead) {
+
+            Renderer_RemoveEntity(&s->renderer, entity);
+            PhysicsSystem_RemoveEntity(&s->physics, entity);
+
             Entity_Free(entity);
             free(entity);
             List_Remove(&s->entities, i);
+            
             i--;
             n--;
         }

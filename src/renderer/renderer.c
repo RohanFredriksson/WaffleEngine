@@ -337,6 +337,7 @@ void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
             memmove(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
             r->numSprites--;
             removed = 1;
+            break;
         }
     }
 
@@ -516,6 +517,7 @@ void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
             memmove(r->textures + i, r->textures + i + 1, (r->numTextures - i - 1) * sizeof(Texture*));
             r->numTextures--;
             r->hasTextureRoom = 1;
+            return;
         }
     }
 

@@ -39,7 +39,9 @@ void PhysicsSystem_Update(PhysicsSystem* p, float dt);
 void PhysicsSystem_Render(PhysicsSystem* p);
 void PhysicsSystem_FixedUpdate(PhysicsSystem* p);
 void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb);
+void PhysicsSystem_RemoveRigidbody(PhysicsSystem* p, Rigidbody* rb);
 void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity);
+void PhysicsSystem_RemoveEntity(PhysicsSystem* p, Entity* entity);
 bool PhysicsSystem_Raycast(PhysicsSystem*p, Ray ray, RaycastResult* result);
 void PhysicsSystem_Free(PhysicsSystem* p);
 
