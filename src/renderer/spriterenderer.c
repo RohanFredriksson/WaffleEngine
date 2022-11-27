@@ -1,8 +1,7 @@
-#include <stdlib.h>
-#include "external.h"
-#include "entity.h"
 #include "spriterenderer.h"
-#include "sprite.h"
+#include "window.h"
+#include "scene.h"
+#include "renderer.h"
 
 static void SpriteRenderer_Update(Component* c, float dt) {
 
@@ -62,6 +61,14 @@ static cJSON* SpriteRenderer_Serialise(Component* c) {
 
 }
 
+static void SpriteRenderer_Free(Component* c) {
+
+    SpriteRenderer* s = (SpriteRenderer*) c->data;
+    Scene* scene = Window_GetScene();
+    Renderer_RemoveSprite(&scene->renderer, s);
+
+}
+
 static SpriteRenderer* _SpriteRenderer_Init(Component* c, 
                                             Sprite* sprite, 
                                             vec4 colour, 
@@ -84,6 +91,7 @@ static SpriteRenderer* _SpriteRenderer_Init(Component* c,
     c->data = s;
     c->update = &SpriteRenderer_Update;
     c->serialise = &SpriteRenderer_Serialise;
+    c->free = &SpriteRenderer_Free;
     
     return s;
 }

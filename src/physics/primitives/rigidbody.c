@@ -1,4 +1,7 @@
 #include "rigidbody.h"
+#include "physicssystem.h"
+#include "window.h"
+#include "scene.h"
 
 static cJSON* Rigidbody_Serialise(Component* c) {
 
@@ -11,6 +14,14 @@ static cJSON* Rigidbody_Serialise(Component* c) {
     WIO_AddBool(json, "sensor", rb->sensor);
     WIO_AddFloat(json, "cor", rb->cor);
     return json;
+
+}
+
+static void Rigidbody_Free(Component* c) {
+
+    Rigidbody* rb = (Rigidbody*) c->data;
+    Scene* scene = Window_GetScene();
+    PhysicsSystem_RemoveRigidbody(&scene->physics, rb);
 
 }
 
@@ -32,6 +43,7 @@ static Rigidbody* _Rigidbody_Init(Component* c,
     rb->cor = cor;
 
     c->serialise = &Rigidbody_Serialise;
+    c->free = &Rigidbody_Free;
     c->data = rb;
 
     return rb;

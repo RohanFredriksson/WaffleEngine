@@ -106,5 +106,75 @@
 			"position":	[0, 0],
 			"size":	[1, 1],
 			"rotation":	0
+		}, {
+			"id":	1,
+			"components":	[{
+					"id":	5,
+					"type":	"Rigidbody",
+					"child":	{
+						"collider":	6,
+						"mass":	1,
+						"forceAccum":	[0, -10],
+						"velocity":	[1, -6.6666650772094727],
+						"sensor":	false,
+						"cor":	0.75
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	6,
+					"type":	"Collider",
+					"child":	{
+						"type":	"Circle",
+						"child":	{
+							"radius":	0.5
+						},
+						"rigidbody":	5
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	7,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"ainsley",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	8,
+					"type":	"Event",
+					"child":	{
+						"type":	"Trigger",
+						"child":	{
+							"withType":	0,
+							"entityId":	-1,
+							"componentType":	null,
+							"flag":	false
+						},
+						"commands":	[{
+								"type":	"DeleteEntity",
+								"child":	{
+									"id":	-1,
+									"deleteType":	1
+								}
+							}],
+						"multi":	true,
+						"cooldown":	0,
+						"cooldownTimeLeft":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[-2.3166682720184326, 2.8055539131164551],
+			"size":	[1, 1],
+			"rotation":	0
 		}]
 }

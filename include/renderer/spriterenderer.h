@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdbool.h>
 #include "external.h"
 #include "assetpool.h"
