@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "external.h"
 #include "list.h"
 #include "wmath.h"
@@ -11,6 +12,7 @@
 struct Entity {
 
     int id;
+    bool dead;
     List components;
     vec2 position;
     vec2 size;

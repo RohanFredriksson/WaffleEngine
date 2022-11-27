@@ -44,4 +44,6 @@ void Scene_AddEntity(Scene* s, Entity* entity);
 
 Entity* Scene_GetEntityByID(Scene* s, int id);
 
+void Scene_RemoveEntityByID(Scene* s, int id);
+
 #endif

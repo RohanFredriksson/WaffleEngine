@@ -2,17 +2,23 @@
 
 static int next = 0;
 
-Entity* Entity_Init(vec2 position, vec2 size, float rotation) {
-    
+static Entity* _Entity_Init(int id, bool dead, vec2 position, vec2 size, float rotation) {
+
     Entity* e = (Entity*) malloc(sizeof(Entity));
-    e->id = next;
+    e->id = id;
+    e->dead = dead;
     List_Init(&e->components, sizeof(Component*));
     glm_vec2_copy(position, e->position);
     glm_vec2_copy(size, e->size);
     e->rotation = rotation;
 
-    next++;
+    next = WMath_MaxFloat(next+1, id+1);
     return e;
+
+}
+
+Entity* Entity_Init(vec2 position, vec2 size, float rotation) {
+    return _Entity_Init(next, 0, position, size, rotation);
 }
 
 void Entity_Update(Entity* e, float dt) {
@@ -108,22 +114,18 @@ Component* Entity_GetComponentByID(Entity* e, int id) {
 Entity* Entity_Parse(cJSON* json) {
 
     int id;
+    bool dead;
     vec2 position;
     vec2 size;
     float rotation;
 
     if (!WIO_ParseInt(json, "id", &id)) {return NULL;}
+    if (!WIO_ParseBool(json, "dead", &dead)) {return NULL;}
     if (!WIO_ParseVec2(json, "position", position)) {return NULL;}
     if (!WIO_ParseVec2(json, "size", size)) {return NULL;}
     if (!WIO_ParseFloat(json, "rotation", &rotation)) {return NULL;}
 
-    Entity* e = malloc(sizeof(Entity));
-    e->id = id;
-    glm_vec2_copy(position, e->position);
-    glm_vec2_copy(size, e->size);
-    e->rotation = rotation;
-
-    List_Init(&e->components, sizeof(Component*));
+    Entity* e = _Entity_Init(id, dead, position, size, rotation);
     cJSON* components = cJSON_GetObjectItemCaseSensitive(json, "components");
     if (components != NULL && cJSON_IsArray(components)) {
         cJSON* component = NULL;
@@ -133,9 +135,7 @@ Entity* Entity_Parse(cJSON* json) {
         }
     }
 
-    WMath_MaxFloat(id, next);
     return e;
-
 }
 
 cJSON* Entity_Serialise(Entity* e) {
@@ -151,6 +151,7 @@ cJSON* Entity_Serialise(Entity* e) {
         cJSON_AddItemToArray(components, component);
     }
     cJSON_AddItemToObject(json, "components", components);
+    WIO_AddBool(json, "dead", e->dead);
     WIO_AddVec2(json, "position", e->position);
     WIO_AddVec2(json, "size", e->size);
     WIO_AddFloat(json, "rotation", e->rotation);
