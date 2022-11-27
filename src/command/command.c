@@ -42,7 +42,6 @@ Command* Command_Load(cJSON* json) {
     if (strcmp(type, "MoveCamera") == 0) {if (!MoveCamera_Load(a, child)) {free(a); return NULL;}}
     else if (strcmp(type, "Console") == 0) {if (!Console_Load(a, child)) {free(a); return NULL;}}
     else if (strcmp(type, "DeleteEntity") == 0) {if (!DeleteEntity_Load(a, child)) {free(a); return NULL;}}
-    else if (strcmp(type, "DeleteThisEntity") == 0) {if (!DeleteThisEntity_Load(a, child)) {free(a); return NULL;}}
     else {free(a); return NULL;}
 
     return a;
