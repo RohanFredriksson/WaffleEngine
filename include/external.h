@@ -7,6 +7,8 @@
 #include <cdsl.h>
 #include <cJSON.h>
 
+#define CIMGUI_USE_GLFW
+#define CIMGUI_USE_OPENGL3
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include <cimgui.h>
 #include <cimgui_impl.h>
