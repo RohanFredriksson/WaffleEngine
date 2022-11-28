@@ -115,7 +115,7 @@
 						"collider":	6,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1.3927987813949585, -29.941265106201172],
+						"velocity":	[1, -2.9166662693023682],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -160,7 +160,7 @@
 						"commands":	[{
 								"type":	"Console",
 								"child":	{
-									"message":	"Object bounced lol\n"
+									"message":	"COLLISION\n"
 								}
 							}],
 						"multi":	true,
@@ -172,7 +172,7 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[6.83063840866089, -44.11322021484375],
+			"position":	[-1.1166694164276123, 2.7722229957580566],
 			"size":	[1, 1],
 			"rotation":	0
 		}]
