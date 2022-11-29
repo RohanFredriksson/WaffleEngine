@@ -166,7 +166,6 @@ void Spritesheet_Load(char* filename) {
             Sprite* sprite = malloc(sizeof(Sprite));
             Sprite_Init(sprite, texture, StringPool_Get(metadata.names[i]));
             Sprite_SetTexCoords(sprite, texCoords);
-            Sprite_SetSize(sprite, (vec2) { metadata.width, metadata.height });
             SpritePool_Put(sprite);
 
         }

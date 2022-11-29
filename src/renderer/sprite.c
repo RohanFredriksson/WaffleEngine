@@ -7,10 +7,6 @@
 void Sprite_Init(Sprite* s, Texture* t, char* name) {
     
     s->texture = t;
-    if (s->texture != NULL) {    
-        s->size[0] = s->texture->width;
-        s->size[1] = s->texture->height;
-    }
 
     if (name != NULL) {s->name = StringPool_Get(name);} 
     else if (t != NULL) {s->name = StringPool_Get(t->filename);} 
@@ -27,6 +23,10 @@ void Sprite_Init(Sprite* s, Texture* t, char* name) {
 
 }
 
+void Sprite_SetTexture(Sprite* s, Texture* texture) {
+    s->texture = texture;
+}
+
 void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]) {
 
     s->texCoords[0][0] = texCoords[0][0];
@@ -40,10 +40,6 @@ void Sprite_SetTexCoords(Sprite* s, vec2 texCoords[4]) {
     
 }
 
-void Sprite_SetSize(Sprite* s, vec2 size) {
-    glm_vec2_copy(size, s->size);
-}
-
 void Sprite_SetName(Sprite* s, char* name) {
     s->name = StringPool_Get(name);
 }
@@ -53,11 +49,6 @@ bool Sprite_Equals(Sprite* s1, Sprite* s2) {
     // If the textures are not the same, return 0.
     if (s1->texture != s2->texture) {
         return 0;
-    }
-    
-    // If the size is not the same, return 0.
-    for (int i = 0; i < 2; i++) {
-        if (s1->size[i] != s2->size[i]) {return 0;}
     }
 
     // If the texture coords are not the same, return 0.

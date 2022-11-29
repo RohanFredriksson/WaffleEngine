@@ -68,7 +68,8 @@ int Window_Init() {
     AssetPool_Init();
 
     // HIJACKED
-    Font_Init(NULL, "assets/fonts/Pixellari.ttf", 64);
+    Font f;
+    Font_Init(&f, "assets/fonts/Pixellari.ttf", 64);
     return 0;
 
     // Initialise cimgui

@@ -11,22 +11,23 @@
 #define FONT_H
 
 struct Font {
-    HashMap sprites;
+    char* filename;
+    int size;
+    float scale;
+    Sprite* sprites;
     Texture texture;
     stbtt_fontinfo info;
 };
 typedef struct Font Font;
 
-void Font_Init(Font* font, char* filepath, int fontSize);
+bool Font_Init(Font* font, char* filename, int size);
 
 void Font_Free(Font* font);
 
-/*
-Sprite* Font_Get(Font* font, int code);
+Sprite* Font_Get(Font* font, char code);
 
-int Font_Kerning(Font* font, int current, int next);
+int Font_Kerning(Font* font, char current, char next);
 
 Texture* Font_GetTexture(Font* font);
-*/
 
 #endif
