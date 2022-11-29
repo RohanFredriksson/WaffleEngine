@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "external.h"
 #include "texture.h"
 #include "sprite.h"
@@ -18,7 +21,7 @@ struct CharInfo {
 };
 typedef struct CharInfo CharInfo;
 
-void CharInfo_CalculateTexCoords(CharInfo* info, int fontWidth, int fontHeight);
+//void CharInfo_CalculateTexCoords(CharInfo* info, int fontWidth, int fontHeight);
 
 struct Font {
     HashMap sprites;
@@ -29,6 +32,7 @@ typedef struct Font Font;
 
 void Font_Init(Font* font, char* filepath, int fontSize);
 
+/*
 void Font_Free(Font* font);
 
 Sprite* Font_Get(Font* font, int code);
@@ -36,5 +40,6 @@ Sprite* Font_Get(Font* font, int code);
 CharInfo* Font_Info(Font* font, int code);
 
 Texture* Font_GetTexture(Font* font);
+*/
 
 #endif

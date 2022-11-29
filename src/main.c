@@ -1,5 +1,7 @@
-#include "window.h"
+//#include "window.h"
+#include "font.h"
 
 int main() {
-    Window_Run();
+    Font_Init(NULL, "assets/fonts/Pixellari.ttf", 64);
+    //Window_Run();
 }
