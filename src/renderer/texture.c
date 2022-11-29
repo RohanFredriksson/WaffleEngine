@@ -6,13 +6,14 @@
 #include "texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
-#include "stb_image_write.h"
+
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#include "stb_image_write.h"
 
 bool Texture_Init(Texture* t, char* filename) {
     
-    // Allocate space to store the string.
+    // Store the string.
     t->filename = filename;
 
     // Generate texture on GPU
@@ -66,7 +67,7 @@ void Texture_New(Texture* t, int width, int height) {
     t->width = width;
     t->height = height;
 
-    // Allocate space to store the string.
+    // Store the string.
     t->filename = "Generated";
 
     // Generate texture on GPU
@@ -88,7 +89,7 @@ void Texture_New_RGB32F(Texture* t, int width, int height) {
     t->width = width;
     t->height = height;
 
-    // Allocate space to store the string.
+    // Store the string.
     t->filename = "Generated";
 
     // Generate texture on GPU
@@ -124,6 +125,26 @@ void Texture_Init_Missing(Texture* t) {
 
 }
 
+void Texture_Init_RGBA(Texture* t, unsigned char* image, int width, int height) {
+
+    // Store the string.
+    t->filename = "Generated";
+
+    // Generate texture on GPU
+    glGenTextures(1, &t->id);
+    glBindTexture(GL_TEXTURE_2D, t->id);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+}
+
+/*
 void Texture_Save(Texture* t, char* filename) {
     stbi_flip_vertically_on_write(1);
     unsigned char* image = malloc(t->width * t->height * 4 * sizeof(unsigned char));
@@ -131,6 +152,7 @@ void Texture_Save(Texture* t, char* filename) {
     stbi_write_png(filename, t->width, t->height, 4, image, t->width * 4 * sizeof(unsigned char));
     free(image);
 }
+*/
 
 void Texture_Bind(Texture* t) {
     glBindTexture(GL_TEXTURE_2D, t->id);

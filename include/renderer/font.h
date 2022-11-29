@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "stb_truetype.h"
 #include "external.h"
 #include "texture.h"
 #include "sprite.h"
@@ -9,35 +10,21 @@
 #ifndef FONT_H
 #define FONT_H
 
-struct CharInfo {
-
-    int sourceX;
-    int sourceY;
-    int width;
-    int height;
-
-    vec2 texCoords[4];
-
-};
-typedef struct CharInfo CharInfo;
-
-//void CharInfo_CalculateTexCoords(CharInfo* info, int fontWidth, int fontHeight);
-
 struct Font {
     HashMap sprites;
-    HashMap info;
     Texture texture;
+    stbtt_fontinfo info;
 };
 typedef struct Font Font;
 
 void Font_Init(Font* font, char* filepath, int fontSize);
 
-/*
 void Font_Free(Font* font);
 
+/*
 Sprite* Font_Get(Font* font, int code);
 
-CharInfo* Font_Info(Font* font, int code);
+int Font_Kerning(Font* font, int current, int next);
 
 Texture* Font_GetTexture(Font* font);
 */

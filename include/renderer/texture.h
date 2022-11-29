@@ -14,6 +14,7 @@ bool Texture_Init(Texture* t, char* filename);
 void Texture_New(Texture* t, int width, int height);
 void Texture_New_RGB32F(Texture* t, int width, int height);
 void Texture_Init_Missing(Texture* t);
+void Texture_Init_RGBA(Texture* t, unsigned char* image, int width, int height);
 void Texture_Save(Texture* t, char* filename);
 void Texture_Bind(Texture* t);
 void Texture_Unbind(Texture* t);

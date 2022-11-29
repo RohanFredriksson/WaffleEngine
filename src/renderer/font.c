@@ -12,6 +12,10 @@ void Font_Init(Font* font, char* filepath, int fontSize) {
     unsigned char* fontBuffer;
     
     FILE* fontFile = fopen(filepath, "rb");
+    if (fontFile == NULL) {
+        printf("ERROR::FONT::INIT::FILE_NOT_FOUND\n");
+        return;
+    }
     fseek(fontFile, 0, SEEK_END);
     size = ftell(fontFile);
     fseek(fontFile, 0, SEEK_SET);
@@ -24,7 +28,8 @@ void Font_Init(Font* font, char* filepath, int fontSize) {
     // Prepare the font
     stbtt_fontinfo info;
     if (!stbtt_InitFont(&info, fontBuffer, 0)) {
-        printf("failed\n");
+        printf("ERROR::FONT::INIT::FONT_LOADING_FAILED\n");
+        return;
     }
 
     // Find the scale for a certain pixel height.
@@ -35,15 +40,13 @@ void Font_Init(Font* font, char* filepath, int fontSize) {
     ascent = roundf(ascent * scale);
     descent = roundf(descent * scale);
 
-    char* word = "quick";
-
     // Determine the total width required to display all characters.
     int width = 0;
     int height;
-    for (char i = 0; i < 5; i++) {
+    for (int i = 0; i < 128; i++) {
         int ax;
 	    int lsb;
-        stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
+        stbtt_GetCodepointHMetrics(&info, i, &ax, &lsb);
         width += roundf(ax * scale);
     }
 
@@ -51,38 +54,33 @@ void Font_Init(Font* font, char* filepath, int fontSize) {
     width = sqrtf(area) + 1;
     height = ((width / fontSize) + 1) * fontSize;
     
-    unsigned char* bitmap = calloc(width * height, sizeof(unsigned char));
+    unsigned char* mask = calloc(width * height, sizeof(unsigned char));
 
     int x = 0;
     int line = 0;
-    for (char i = 0; i < 5; i++) {
-
-        printf("LOOP START\n");
+    for (int i = 0; i < 128; i++) {
 
         int ax;
 	    int lsb;
-        stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
+        stbtt_GetCodepointHMetrics(&info, i, &ax, &lsb);
 
         // If the character is going out of the buffer, move to new line
         int advance = roundf(ax * scale);
         if (x + advance > width) {
-            printf("NEW LINE\n");
             x = 0;
             line++;
         }
 
         // Get bounding box for characters.
         int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
-    
-        printf("%d %d %d %d %d\n", ax, c_x1, c_y1, c_x2, c_y2);
+        stbtt_GetCodepointBitmapBox(&info, i, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
         // Compute the y value
         int y = (line * fontSize) + ascent + c_y1;
         
         // Render the character
         int byteOffset = x + roundf(lsb * scale) + (y * width);
-        stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, word[i]);
+        stbtt_MakeCodepointBitmap(&info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, i);
 
         // Advance x
         x += roundf(ax * scale);
@@ -93,33 +91,25 @@ void Font_Init(Font* font, char* filepath, int fontSize) {
         //x += roundf(kern * scale);
 
     }
-    
-    printf("END\n");
+
+    // Convert the grayscale to a transparent image.
+    unsigned char* image = calloc(width * height * 4, sizeof(unsigned char));
+    for (int i = 0; i < width * height; i++) {
+        image[4 * i + 0] = 255;
+        image[4 * i + 1] = 255;
+        image[4 * i + 2] = 255;
+        image[4 * i + 3] = mask[i];
+    }
 
     // Save output
-    stbi_write_png("out.png", width, height, 1, bitmap, width);
-
-    printf("SAVED\n");
+    stbi_write_png("out.png", width, height, 4, image, width * 4);
 
     free(fontBuffer);
-    free(bitmap);
+    free(mask);
+    free(image);
 
 }
 
-/*
 void Font_Free(Font* font) {
 
 }
-
-Sprite* Font_Get(Font* font, int code) {
-    return NULL;
-}
-
-CharInfo* Font_Info(Font* font, int code) {
-    return NULL;
-}
-
-Texture* Font_GetTexture(Font* font) {
-    return NULL;
-}
-*/

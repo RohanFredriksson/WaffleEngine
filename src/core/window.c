@@ -4,6 +4,7 @@
 #include "window.h"
 #include "debugdraw.h"
 #include "cameracontroller.h"
+#include "font.h"
 
 #define MAX_VERTEX_BUFFER 512 * 1024
 #define MAX_ELEMENT_BUFFER 128 * 1024
@@ -65,6 +66,10 @@ int Window_Init() {
 
     // Load the asset pool
     AssetPool_Init();
+
+    // HIJACKED
+    Font_Init(NULL, "assets/fonts/Pixellari.ttf", 64);
+    return 0;
 
     // Initialise cimgui
     ctx = igCreateContext(NULL);
