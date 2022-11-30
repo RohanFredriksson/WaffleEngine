@@ -37,7 +37,6 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
     glm_vec2_sub(min, halfSize, min);
 
     float scale = Font_GetScaleForHeight(t->font, size[1]);
-    printf("%f\n", scale);
 
     float x = min[0];
     float y = min[1];

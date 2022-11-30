@@ -42,9 +42,6 @@ bool Font_Init(Font* font, char* filename, int size) {
     // Find the scale for a certain pixel height.
     float scale = stbtt_ScaleForPixelHeight(&info, size);
 
-    // Create vertical spacing.
-    int vSpacing = size / 4;
-
     // Get font's vertical metrics
     stbtt_GetFontVMetrics(&info, &font->ascent, &font->descent, &font->lineGap);
     int ascent = roundf(scale * font->ascent);
@@ -62,7 +59,7 @@ bool Font_Init(Font* font, char* filename, int size) {
     // Determine the most optimal square shape for the texture.
     int area = width * size;
     width = sqrtf(area) + 1;
-    height = ((width / size) + 2) * (size + vSpacing);
+    height = ((width / size) + 2) * size;
     
     // Allocate memory to store the grayscale image.
     unsigned char* mask = calloc(width * height, sizeof(unsigned char));
@@ -92,12 +89,12 @@ bool Font_Init(Font* font, char* filename, int size) {
         stbtt_GetCodepointBitmapBox(&info, i, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
         // Compute the y value
-        int y = (line * (size + vSpacing)) + ascent + c_y1;
+        int y = (line * size) + ascent + c_y1;
         
         // Create the sprite object.
         float x0 = (float) (x) / (float) width;
         float x1 = (float) (x + advance) / (float) width;
-        float y0 = (float) (y + size) / (float) height;
+        float y0 = (float) (y - ascent - c_y1 + size) / (float) height;
         float y1 = (float) (y - ascent - c_y1) / (float) height;
         
         vec2 texCoords[4];
