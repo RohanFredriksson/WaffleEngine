@@ -100,6 +100,7 @@ Component* Component_Load(cJSON* json) {
     else if (strcmp(type, "Collider") == 0) {if (!Collider_Load(c, child)) {free(c); return NULL;}}
     else if (strcmp(type, "Rigidbody") == 0) {if (!Rigidbody_Load(c, child)) {free(c); return NULL;}}
     else if (strcmp(type, "Event") == 0) {if (!Event_Load(c, child)) {free(c); return NULL;}}
+    else if (strcmp(type, "TextRenderer") == 0) {if (!TextRenderer_Load(c, child)) {free(c); return NULL;}}
     else if (strcmp(type, "CameraController") == 0) {if (!CameraController_Load(c, child)) {free(c); return NULL;}}
     else {free(c); return NULL;}
 

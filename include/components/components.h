@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "spriterenderer.h"
 #include "rigidbody.h"
-#include "cameracontroller.h"
 #include "event.h"
+#include "textrenderer.h"
+#include "cameracontroller.h"
