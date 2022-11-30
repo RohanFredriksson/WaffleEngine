@@ -185,3 +185,7 @@ int Font_Kerning(Font* font, char current, char next) {
 Texture* Font_GetTexture(Font* font) {
     return &font->texture;   
 }
+
+bool Font_Equals(Font* a, Font* b) {
+    return ((strcmp(a->filename, b->filename) == 0) && (a->size == b->size));
+}

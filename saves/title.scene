@@ -133,7 +133,7 @@
 						"collider":	7,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1, -3.6666676998138428],
+						"velocity":	[1, -0.91666597127914429],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -190,7 +190,7 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-2.6166679859161377, 4.38055419921875],
+			"position":	[-1.316669225692749, 3.17222261428833],
 			"size":	[1, 1],
 			"rotation":	0
 		}]

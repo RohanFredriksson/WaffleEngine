@@ -33,4 +33,6 @@ int Font_Kerning(Font* font, char current, char next);
 
 Texture* Font_GetTexture(Font* font);
 
+bool Font_Equals(Font* a, Font* b);
+
 #endif
