@@ -56,8 +56,11 @@ bool Font_Init(Font* font, char* filename, int size) {
         width += roundf(ax * scale);
     }
 
-    // Determine the most optimal square shape for the texture.
-    int area = width * size;
+    int average = width / FONT_NUM_CHARACTERS;
+    int hSpacing = roundf(0.125f * average);
+
+    // Create a square shaped image for the texture.
+    int area = width * size * 1.25f;
     width = sqrtf(area) + 1;
     height = ((width / size) + 2) * size;
     
@@ -79,7 +82,7 @@ bool Font_Init(Font* font, char* filename, int size) {
 
         // If the character is going out of the buffer, move to new line
         int advance = roundf(ax * scale);
-        if (x + advance >= width) {
+        if (x + advance + hSpacing >= width) {
             x = 0;
             line++;
         }
@@ -117,7 +120,7 @@ bool Font_Init(Font* font, char* filename, int size) {
         stbtt_MakeCodepointBitmap(&info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, i);
 
         // Advance x
-        x += advance;
+        x += advance + hSpacing;
 
     }
 
