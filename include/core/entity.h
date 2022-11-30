@@ -80,6 +80,18 @@ void Component_GetSize(Component* c, vec2 dest);
 
 float Component_GetRotation(Component* c);
 
+void Component_GetPositionOffset(Component* c, vec2 dest);
+
+void Component_GetSizeScale(Component* c, vec2 dest);
+
+float Component_GetRotationOffset(Component* c);
+
+void Component_SetPositionOffset(Component* c, vec2 offset);
+
+void Component_SetSizeScale(Component* c, vec2 scale);
+
+void Component_SetRotationOffset(Component* c, float offset);
+
 Component* Component_Load(cJSON* json);
 
 #endif

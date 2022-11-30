@@ -57,6 +57,30 @@ float Component_GetRotation(Component* c) {
     return c->entity->rotation + c->rotationOffset;
 }
 
+void Component_GetPositionOffset(Component* c, vec2 dest) {
+    glm_vec2_copy(c->positionOffset, dest);
+}
+
+void Component_GetSizeScale(Component* c, vec2 dest) {
+    glm_vec2_copy(c->sizeScale, dest);
+}
+
+float Component_GetRotationOffset(Component* c) {
+    return c->rotationOffset;
+}
+
+void Component_SetPositionOffset(Component* c, vec2 offset) {
+    glm_vec2_copy(offset, c->positionOffset);
+}
+
+void Component_SetSizeScale(Component* c, vec2 scale) {
+    glm_vec2_copy(scale, c->sizeScale);
+}
+
+void Component_SetRotationOffset(Component* c, float offset) {
+    c->rotationOffset = offset;
+}
+
 cJSON* Component_Serialise(Component* c) {
 
     cJSON* json = cJSON_CreateObject();
