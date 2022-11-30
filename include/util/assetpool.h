@@ -5,6 +5,7 @@
 #include "shader.h"
 #include "sprite.h"
 #include "texture.h"
+#include "font.h"
 #include "hashmap.h"
 #include "hash.h"
 #include "list.h"
@@ -42,5 +43,11 @@ void TexturePool_Free();
 
 Texture* TexturePool_Get(char* filename);
 void TexturePool_Put(Texture* texture);
+
+void FontPool_Init();
+void FontPool_Clear();
+void FontPool_Free();
+
+Font* FontPool_Get(char* filename, int size);
 
 #endif

@@ -1,7 +1,7 @@
 #include "font.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#include "stb_image_write.h"
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
@@ -38,12 +38,12 @@ bool Font_Init(Font* font, char* filename, int size) {
     font->sprites = malloc(FONT_NUM_CHARACTERS * sizeof(Sprite));
 
     // Find the scale for a certain pixel height.
-    font->scale = stbtt_ScaleForPixelHeight(&font->info, size);
+    float scale = stbtt_ScaleForPixelHeight(&font->info, size);
     
     int ascent, descent, lineGap;
     stbtt_GetFontVMetrics(&font->info, &ascent, &descent, &lineGap);
-    ascent = roundf(ascent * font->scale);
-    descent = roundf(descent * font->scale);
+    ascent = roundf(ascent * scale);
+    descent = roundf(descent * scale);
 
     // Determine the total width required to display all characters.
     int width = 0;
@@ -52,7 +52,7 @@ bool Font_Init(Font* font, char* filename, int size) {
         int ax;
 	    int lsb;
         stbtt_GetCodepointHMetrics(&font->info, i, &ax, &lsb);
-        width += roundf(ax * font->scale);
+        width += roundf(ax * scale);
     }
 
     // Determine the most optimal square shape for the texture.
@@ -76,7 +76,7 @@ bool Font_Init(Font* font, char* filename, int size) {
         stbtt_GetCodepointHMetrics(&font->info, i, &ax, &lsb);
 
         // If the character is going out of the buffer, move to new line
-        int advance = roundf(ax * font->scale);
+        int advance = roundf(ax * scale);
         if (x + advance >= width) {
             x = 0;
             line++;
@@ -84,7 +84,7 @@ bool Font_Init(Font* font, char* filename, int size) {
 
         // Get bounding box for characters.
         int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(&font->info, i, font->scale, font->scale, &c_x1, &c_y1, &c_x2, &c_y2);
+        stbtt_GetCodepointBitmapBox(&font->info, i, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
         // Compute the y value
         int y = (line * size) + ascent + c_y1;
@@ -92,9 +92,9 @@ bool Font_Init(Font* font, char* filename, int size) {
         // Create the sprite object.
         float x0 = (float) (x) / (float) width;
         float x1 = (float) (x + advance) / (float) width;
-        float y0 = (float) (y - (line * size)) / (float) height;
+        float y0 = (float) (y + size) / (float) height;
         float y1 = (float) (y) / (float) height;
-
+        
         vec2 texCoords[4];
         texCoords[0][0] = x1;
         texCoords[0][1] = y1;
@@ -111,8 +111,8 @@ bool Font_Init(Font* font, char* filename, int size) {
         Sprite_SetTexCoords(s, texCoords);
 
         // Render the character
-        int byteOffset = x + roundf(lsb * font->scale) + (y * width);
-        stbtt_MakeCodepointBitmap(&font->info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, font->scale, font->scale, i);
+        int byteOffset = x + roundf(lsb * scale) + (y * width);
+        stbtt_MakeCodepointBitmap(&font->info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, i);
 
         // Advance x
         x += advance;
@@ -122,9 +122,19 @@ bool Font_Init(Font* font, char* filename, int size) {
     // Convert the grayscale to a transparent image.
     unsigned char* image = calloc(width * height * 4, sizeof(unsigned char));
     for (int i = 0; i < width * height; i++) {
-        image[4 * i + 0] = 255;
-        image[4 * i + 1] = 255;
-        image[4 * i + 2] = 255;
+        
+        if (mask[i] > 0) {
+            image[4 * i + 0] = 255;
+            image[4 * i + 1] = 255;
+            image[4 * i + 2] = 255;
+        } 
+        
+        else {
+            image[4 * i + 0] = 0;
+            image[4 * i + 1] = 0;
+            image[4 * i + 2] = 0;
+        }
+        
         image[4 * i + 3] = mask[i];
     }
 
@@ -136,8 +146,8 @@ bool Font_Init(Font* font, char* filename, int size) {
         Sprite_SetTexture(font->sprites + i, &font->texture);
     }
 
-    // Save output
-    stbi_write_png("out.png", width, height, 4, image, width * 4);
+    // Debug output
+    // stbi_write_png("out.png", width, height, 4, image, width * 4);
 
     free(fontBuffer);
     free(mask);
@@ -157,10 +167,19 @@ Sprite* Font_Get(Font* font, char code) {
     return font->sprites + index;
 }
 
+float Font_GetScaleForHeight(Font* font, float height) {
+    return stbtt_ScaleForPixelHeight(&font->info, height);
+}
+
+int Font_Advance(Font* font, char code) {
+    int ax;
+    int lsb;
+    stbtt_GetCodepointHMetrics(&font->info, code, &ax, &lsb);
+    return ax;
+}
+
 int Font_Kerning(Font* font, char current, char next) {
-    int kern;
-    kern = stbtt_GetCodepointKernAdvance(&font->info, current, next);
-    return kern * font->scale;
+    return stbtt_GetCodepointKernAdvance(&font->info, current, next);
 }
 
 Texture* Font_GetTexture(Font* font) {

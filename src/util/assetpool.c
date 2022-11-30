@@ -5,6 +5,7 @@ void AssetPool_Init() {
     ShaderPool_Init();
     TexturePool_Init();
     SpritePool_Init();
+    FontPool_Init();
 }
 
 void AssetPool_Free() {
@@ -12,6 +13,7 @@ void AssetPool_Free() {
     ShaderPool_Free();
     TexturePool_Free();
     SpritePool_Free();
+    FontPool_Init();
 }
 
 static HashMap StringPool;
@@ -305,4 +307,78 @@ Texture* TexturePool_Get(char* filename) {
 void TexturePool_Put(Texture* texture) {
     uint64_t hash = OAAT(texture->filename);
     HashMap_Put(&TexturePool, &hash, &texture);
+}
+
+static HashMap FontPool;
+
+struct FontHash {
+    uint64_t filename;
+    uint64_t size;
+};
+typedef struct FontHash FontHash;
+
+FontHash FontPool_Hash(char* filename, int size) {
+
+    FontHash result;
+    result.filename = OAAT(filename);
+    result.size = (uint64_t) size;
+    return result;
+
+}
+
+void FontPool_Init() {
+    HashMap_Init(&FontPool, sizeof(FontHash), sizeof(Font*));
+}
+
+void FontPool_Clear() {
+
+    // Free all texture data.
+    KeyValue* current = HashMap_Elements(&FontPool);
+    while (current != NULL) {
+        Font* font = *((Font**) current->value);
+        Font_Free(font);
+        free(font);
+        current = current->next;
+    }
+    HashMap_Clear(&FontPool);
+
+}
+void FontPool_Free() {
+
+    // Free all texture data.
+    KeyValue* current = HashMap_Elements(&FontPool);
+    while (current != NULL) {
+        Font* font = *((Font**) current->value);
+        Font_Free(font);
+        free(font);
+        current = current->next;
+    }
+    HashMap_Free(&FontPool);
+
+}
+
+Font* FontPool_Get(char* filename, int size) {
+
+    // Create the ShaderHash object.
+    FontHash hash = FontPool_Hash(filename, size);
+    Font* font;
+
+    // If the font already exists, return the font.
+    if (HashMap_Get(&FontPool, &hash, &font)) {
+        return font;
+    }
+
+    // Initialise the font.
+    font = malloc(sizeof(Font));
+    if (!Font_Init(font, filename, size)) {
+        free(font);
+        return NULL;
+    }
+    
+    // Add the font to the pool.
+    HashMap_Put(&FontPool, &hash, &font);
+
+    // Return the new font.
+    return font;
+
 }

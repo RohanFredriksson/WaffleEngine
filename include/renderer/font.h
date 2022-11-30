@@ -13,7 +13,6 @@
 struct Font {
     char* filename;
     int size;
-    float scale;
     Sprite* sprites;
     Texture texture;
     stbtt_fontinfo info;
@@ -25,6 +24,10 @@ bool Font_Init(Font* font, char* filename, int size);
 void Font_Free(Font* font);
 
 Sprite* Font_Get(Font* font, char code);
+
+float Font_GetScaleForHeight(Font* font, float height);
+
+int Font_Advance(Font* font, char code);
 
 int Font_Kerning(Font* font, char current, char next);
 

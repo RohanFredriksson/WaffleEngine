@@ -67,11 +67,6 @@ int Window_Init() {
     // Load the asset pool
     AssetPool_Init();
 
-    // HIJACKED
-    Font f;
-    Font_Init(&f, "assets/fonts/Pixellari.ttf", 64);
-    return 0;
-
     // Initialise cimgui
     ctx = igCreateContext(NULL);
     io  = igGetIO();
@@ -85,6 +80,10 @@ int Window_Init() {
 
     // Set the window configuration.
     //Window_SetFullscreenWindowed();
+
+    // Enable alpha transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     // Set up the framebuffers.
     PickingTexture_Init(&entityTexture, windowSize[0], windowSize[1]);
@@ -151,12 +150,17 @@ void Window_Loop() {
             igShowDemoWindow(NULL);
             //----
             
+            glDisable(GL_BLEND);
             FrameBuffer_Bind(&entityTexture);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
             Renderer_BindShader(entityShader);
             Scene_Render(&scene);
             FrameBuffer_Unbind(&entityTexture);
+            glEnable(GL_BLEND);
+
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
             
             Renderer_BindShader(defaultShader);
             Scene_Render(&scene);

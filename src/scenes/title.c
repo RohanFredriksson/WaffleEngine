@@ -15,7 +15,7 @@ void Title_Init(Scene* s) {
     Spritesheet_Load("assets/textures/faces.png");
 
     // Armaan
-    Entity* entityArmaan = Entity_Init((vec2){ 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+    Entity* entityArmaan = Entity_Init((vec2) { 0.0f, 0.0f }, (vec2){ 1, 1 }, 0);
 
     Sprite* spriteArmaan = SpritePool_Get("armaan");
     Component* rigidbodyArmaan = Rigidbody_Init();
@@ -23,7 +23,7 @@ void Title_Init(Scene* s) {
     Rigidbody_SetCollider(rigidbodyArmaan, colliderArmaan);
     Rigidbody_SetMass(rigidbodyArmaan, 0.0f);
     Collider_SetRigidbody(colliderArmaan, rigidbodyArmaan);
-    Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4){ 1, 1, 1, 1 }, 0);
+    Component* spriteRendererArmaan = SpriteRenderer_Init(spriteArmaan, (vec4) { 1, 1, 1, 0.5f }, 0);
     Component* cameraControllerArmaan = CameraController_Init(NULL);
     Command* commandArmaan = MoveCamera_Init((vec2) { 1.0f, -1.5f }, 1.0f);
     Component* eventArmaan = MouseButton_Init(GLFW_MOUSE_BUTTON_LEFT, MOUSEBUTTON_EVENT_BEGINDOWN, MOUSEBUTTON_CHECK_PICKINGTEXTURE);
@@ -36,8 +36,15 @@ void Title_Init(Scene* s) {
     Entity_AddComponent(entityArmaan, eventArmaan);
     Scene_AddEntity(s, entityArmaan);
 
+    Font* fontTmp = FontPool_Get("assets/fonts/pixellari.ttf", 64);
+    Entity* entityTmp = Entity_Init((vec2) {0.25, 0.25}, (vec2) {1, 1}, 0);
+    Sprite* spriteTmp = Font_Get(fontTmp, 'A');
+    Component* spriteRendererTmp = SpriteRenderer_Init(spriteTmp, (vec4) {1, 1, 1, 1}, 1);
+    Entity_AddComponent(entityTmp, spriteRendererTmp);
+    Scene_AddEntity(s, entityTmp);
+
     // Ainsley
-    Entity* entityAinsley = Entity_Init((vec2){ -4.0f, 0.0f }, (vec2){ 1, 1 }, 0);
+    Entity* entityAinsley = Entity_Init((vec2) {-4.0f, 0.0f}, (vec2) {1, 1}, 0);
 
     Sprite* spriteAinsley = SpritePool_Get("ainsley");
     Component* rigidbodyAinsley = Rigidbody_Init();

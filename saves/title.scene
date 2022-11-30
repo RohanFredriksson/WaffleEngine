@@ -28,7 +28,7 @@
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"armaan",
-						"colour":	[1, 1, 1, 1],
+						"colour":	[1, 1, 1, 0.5],
 						"zIndex":	0
 					},
 					"positionOffset":	[0, 0],
@@ -110,12 +110,30 @@
 			"id":	1,
 			"components":	[{
 					"id":	5,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"A",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	1
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[0.25, 0.25],
+			"size":	[1, 1],
+			"rotation":	0
+		}, {
+			"id":	2,
+			"components":	[{
+					"id":	6,
 					"type":	"Rigidbody",
 					"child":	{
-						"collider":	6,
+						"collider":	7,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1, -0.66666698455810547],
+						"velocity":	[1, -3.6666676998138428],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -123,20 +141,20 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	6,
+					"id":	7,
 					"type":	"Collider",
 					"child":	{
 						"type":	"Circle",
 						"child":	{
 							"radius":	0.5
 						},
-						"rigidbody":	5
+						"rigidbody":	6
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	7,
+					"id":	8,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"ainsley",
@@ -147,7 +165,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	8,
+					"id":	9,
 					"type":	"Event",
 					"child":	{
 						"type":	"Trigger",
@@ -172,7 +190,7 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-2.9166676998138428, 5.0555543899536133],
+			"position":	[-2.6166679859161377, 4.38055419921875],
 			"size":	[1, 1],
 			"rotation":	0
 		}]
