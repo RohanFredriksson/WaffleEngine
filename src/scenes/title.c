@@ -1,9 +1,8 @@
 #include "title.h"
 #include "assetpool.h"
-#include "cameracontroller.h"
-#include "rigidbody.h"
-#include "primitives.h"
 #include "spritesheet.h"
+#include "primitives.h"
+#include "components.h"
 
 #include "event.h"
 #include "events.h"
@@ -36,12 +35,12 @@ void Title_Init(Scene* s) {
     Entity_AddComponent(entityArmaan, eventArmaan);
     Scene_AddEntity(s, entityArmaan);
 
-    Font* fontTmp = FontPool_Get("assets/fonts/pixellari.ttf", 64);
-    Entity* entityTmp = Entity_Init((vec2) {0.25, 0.25}, (vec2) {1, 1}, 0);
-    Sprite* spriteTmp = Font_Get(fontTmp, 'A');
-    Component* spriteRendererTmp = SpriteRenderer_Init(spriteTmp, (vec4) {1, 1, 1, 1}, 1);
-    Entity_AddComponent(entityTmp, spriteRendererTmp);
-    Scene_AddEntity(s, entityTmp);
+    // Text Entity
+    Font* pixellari = FontPool_Get("assets/fonts/pixellari.ttf", 64);
+    Entity* entityText = Entity_Init((vec2) {-3.0f, 0.0f}, (vec2) {1, 1}, 1);
+    Component* text = TextRenderer_Init("HELLO WORLD", pixellari, (vec4) {1, 1, 1, 1}, 0);
+    Entity_AddComponent(entityText, text);
+    Scene_AddEntity(s, entityText);
 
     // Ainsley
     Entity* entityAinsley = Entity_Init((vec2) {-4.0f, 0.0f}, (vec2) {1, 1}, 0);

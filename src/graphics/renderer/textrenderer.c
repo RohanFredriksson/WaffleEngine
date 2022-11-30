@@ -1,7 +1,64 @@
 #include "stdlib.h"
 #include "string.h"
+#include "window.h"
+#include "scene.h"
 #include "assetpool.h"
 #include "textrenderer.h"
+
+static void TextRenderer_ClearText(TextRenderer* t) {
+
+    Entity* entity;
+    int n = List_Length(&t->entities);
+    for (int i = 0; i < n; i++) {
+        int id;
+        List_Get(&t->entities, i, &id);
+        Scene* scene = Window_GetScene();
+        entity = Scene_GetEntityByID(scene, id);
+        Entity_Kill(entity);
+    }
+    List_Clear(&t->entities);
+
+}
+
+static void TextRenderer_UpdateText(TextRenderer* t) {
+
+    // Clear the old text that was there.
+    TextRenderer_ClearText(t);
+
+    Scene* scene = Window_GetScene();
+
+    vec2 size;
+    Component_GetSize(t->component, size);
+
+    vec2 halfSize;
+    vec2 min;
+    Component_GetPosition(t->component, min);
+    glm_vec2_scale(size, 0.5f, halfSize);
+    glm_vec2_sub(min, halfSize, min);
+
+    float x = min[0];
+    float y = min[1];
+    float scale = Font_GetScaleForHeight(t->font, size[1]);
+
+    int n = strlen(t->text);
+    for (int i = 0; i < n; i++) {
+
+        float width = scale * Font_Advance(t->font, t->text[i]);
+        float height = size[1];
+
+        float kerning = 0.0f;
+        if (i < n - 1) {kerning = scale * Font_Kerning(t->font, t->text[i], t->text[i+1]);}
+
+        Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
+        Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
+        Entity_AddComponent(entity, spriteRenderer);
+        Scene_AddEntity(scene, entity);
+        List_Push(&t->entities, &entity->id);
+
+        x += width + kerning;
+    }
+    t->isDirty = 0;
+}
 
 static void TextRenderer_Update(Component* c, float dt) {
 
@@ -49,6 +106,9 @@ static void TextRenderer_Update(Component* c, float dt) {
         t->isDirty = 1;
     }
 
+    // If the text has changed, update the text.
+    if (t->isDirty) {TextRenderer_UpdateText(t);}
+
 }
 
 static cJSON* TextRenderer_Serialise(Component* c) {
@@ -57,6 +117,17 @@ static cJSON* TextRenderer_Serialise(Component* c) {
     cJSON* json = cJSON_CreateObject();
     WIO_AddString(json, "text", t->text);
     WIO_AddString(json, "font", t->font->filename);
+
+    cJSON* entities = cJSON_CreateArray();
+    int id;
+    int n = List_Length(&t->entities);
+    for (int i = 0; i < n; i++) {
+        List_Get(&t->entities, i, &id);
+        cJSON* entity = cJSON_CreateNumber(id);
+        cJSON_AddItemToArray(entities, entity);
+    }
+    cJSON_AddItemToObject(json, "entities", entities);
+
     WIO_AddVec4(json, "colour", t->colour);
     WIO_AddInt(json, "zIndex", t->zIndex);
     return json;
@@ -64,14 +135,29 @@ static cJSON* TextRenderer_Serialise(Component* c) {
 }
 
 static void TextRenderer_Free(Component* c) {
+    
     TextRenderer* t = (TextRenderer*) c->data;
     free(t->lastText);
+
+    // Kill all the other components.
+    Entity* entity;
+    int n = List_Length(&t->entities);
+    for (int i = 0; i < n; i++) {
+        int id;
+        List_Get(&t->entities, i, &id);
+        Scene* scene = Window_GetScene();
+        entity = Scene_GetEntityByID(scene, id);
+        Entity_Kill(entity);
+    }
+    List_Free(&t->entities);
+
 }
 
 TextRenderer* _TextRenderer_Init(Component* c, char* text, Font* font, vec4 colour, int zIndex) {
 
     TextRenderer* t = malloc(sizeof(TextRenderer));
     t->component = c;
+    List_Init(&t->entities, sizeof(int));
     t->text = text;
     t->font = font;
     glm_vec4_copy(colour, t->colour);
@@ -116,8 +202,16 @@ bool TextRenderer_Load(Component* c, cJSON* json) {
     Font* font = FontPool_Get(fontName, 64);
 
     // Initialise the textrenderer class.
-    _TextRenderer_Init(c, text, font, colour, zIndex);
+    TextRenderer* t = _TextRenderer_Init(c, text, font, colour, zIndex);
+
+    cJSON* entities = cJSON_GetObjectItemCaseSensitive(json, "entities");
+    if (entities != NULL && cJSON_IsArray(entities)) {
+        cJSON* id;
+        cJSON_ArrayForEach(id, entities) {
+            int value = id->valueint;
+            List_Push(&t->entities, &value);
+        }
+    }
 
     return 1;
-
 }

@@ -15,6 +15,8 @@ struct TextRenderer {
     vec4 colour;
     int zIndex;
 
+    List entities;
+
     char* lastText;
     Font lastFont;
     vec4 lastColour;
@@ -22,7 +24,7 @@ struct TextRenderer {
     vec2 lastSize;
     float lastRotation;
     int lastZIndex;
-    
+
     bool isDirty;
 };
 typedef struct TextRenderer TextRenderer;
