@@ -17,9 +17,9 @@
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"camera":	{
-		"position":	[6.2203240394592285, 2.3720531463623047],
+		"position":	[7.6973652839660645, 3.3266139030456543],
 		"projectionSize":	[21.34375, 12],
-		"zoom":	0.513158142566681
+		"zoom":	0.385543406009674
 	},
 	"entities":	[{
 			"id":	0,
@@ -112,9 +112,9 @@
 					"id":	5,
 					"type":	"TextRenderer",
 					"child":	{
-						"text":	"HELLO WORLD",
+						"text":	"The quick brown fox jumps over the lazy dog.",
 						"font":	"assets/fonts/pixellari.ttf",
-						"entities":	[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+						"entities":	[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -123,85 +123,34 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-3, 0],
+			"position":	[0, 0],
 			"size":	[1, 1],
 			"rotation":	1
 		}, {
 			"id":	2,
 			"components":	[{
 					"id":	6,
-					"type":	"Rigidbody",
-					"child":	{
-						"collider":	7,
-						"mass":	1,
-						"forceAccum":	[0, -10],
-						"velocity":	[1.3927987813949585, -58.108123779296875],
-						"sensor":	false,
-						"cor":	0.75
-					},
-					"positionOffset":	[0, 0],
-					"sizeScale":	[1, 1],
-					"rotationOffset":	0
-				}, {
-					"id":	7,
-					"type":	"Collider",
-					"child":	{
-						"type":	"Circle",
-						"child":	{
-							"radius":	0.5
-						},
-						"rigidbody":	6
-					},
-					"positionOffset":	[0, 0],
-					"sizeScale":	[1, 1],
-					"rotationOffset":	0
-				}, {
-					"id":	8,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"ainsley",
+						"sprite":	"T",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
-				}, {
-					"id":	9,
-					"type":	"Event",
-					"child":	{
-						"type":	"Trigger",
-						"child":	{
-							"withType":	0,
-							"entityId":	-1,
-							"componentType":	null,
-							"flag":	false
-						},
-						"commands":	[{
-								"type":	"Console",
-								"child":	{
-									"message":	"COLLISION\n"
-								}
-							}],
-						"multi":	true,
-						"cooldown":	0,
-						"cooldownTimeLeft":	0
-					},
-					"positionOffset":	[0, 0],
-					"sizeScale":	[1, 1],
-					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[10.753700256347656, -168.350830078125],
-			"size":	[1, 1],
+			"position":	[-0.1875, 0],
+			"size":	[0.625, 1],
 			"rotation":	0
 		}, {
 			"id":	3,
 			"components":	[{
-					"id":	10,
+					"id":	7,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"H",
+						"sprite":	"h",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -210,16 +159,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-2.75, 0],
-			"size":	[1.5, 1],
+			"position":	[0.40625, 0],
+			"size":	[0.5625, 1],
 			"rotation":	0
 		}, {
 			"id":	4,
 			"components":	[{
-					"id":	11,
+					"id":	8,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"E",
+						"sprite":	"e",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -228,16 +177,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[-1.25, 0],
-			"size":	[1.5, 1],
+			"position":	[0.9375, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	5,
 			"components":	[{
-					"id":	12,
+					"id":	9,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"L",
+						"sprite":	"q",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -246,16 +195,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[0.25, 0],
-			"size":	[1.5, 1],
+			"position":	[1.78125, 0],
+			"size":	[0.5625, 1],
 			"rotation":	0
 		}, {
 			"id":	6,
 			"components":	[{
-					"id":	13,
+					"id":	10,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"L",
+						"sprite":	"u",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -264,16 +213,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[1.75, 0],
-			"size":	[1.5, 1],
+			"position":	[2.3125, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	7,
 			"components":	[{
-					"id":	14,
+					"id":	11,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"O",
+						"sprite":	"i",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -282,16 +231,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[3.25, 0],
-			"size":	[1.5, 1],
+			"position":	[2.6875, 0],
+			"size":	[0.25, 1],
 			"rotation":	0
 		}, {
 			"id":	8,
 			"components":	[{
-					"id":	15,
+					"id":	12,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	" ",
+						"sprite":	"c",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -300,16 +249,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[4.75, 0],
-			"size":	[1.5, 1],
+			"position":	[3.0625, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	9,
 			"components":	[{
-					"id":	16,
+					"id":	13,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"W",
+						"sprite":	"k",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -318,16 +267,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[6.25, 0],
-			"size":	[1.5, 1],
+			"position":	[3.5625, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	10,
 			"components":	[{
-					"id":	17,
+					"id":	14,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"O",
+						"sprite":	"b",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -336,16 +285,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[7.75, 0],
-			"size":	[1.5, 1],
+			"position":	[4.40625, 0],
+			"size":	[0.5625, 1],
 			"rotation":	0
 		}, {
 			"id":	11,
 			"components":	[{
-					"id":	18,
+					"id":	15,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"R",
+						"sprite":	"r",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -354,16 +303,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[9.25, 0],
-			"size":	[1.5, 1],
+			"position":	[4.9375, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	12,
 			"components":	[{
-					"id":	19,
+					"id":	16,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"L",
+						"sprite":	"o",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -372,16 +321,16 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[10.75, 0],
-			"size":	[1.5, 1],
+			"position":	[5.4375, 0],
+			"size":	[0.5, 1],
 			"rotation":	0
 		}, {
 			"id":	13,
 			"components":	[{
-					"id":	20,
+					"id":	17,
 					"type":	"SpriteRenderer",
 					"child":	{
-						"sprite":	"D",
+						"sprite":	"w",
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -390,8 +339,440 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[12.251017570495605, 0],
-			"size":	[1.5020345449447632, 1],
+			"position":	[6.0625, 0],
+			"size":	[0.75, 1],
+			"rotation":	0
+		}, {
+			"id":	14,
+			"components":	[{
+					"id":	18,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"n",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[6.6875, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	15,
+			"components":	[{
+					"id":	19,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"f",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[7.4375, 0],
+			"size":	[0.375, 1],
+			"rotation":	0
+		}, {
+			"id":	16,
+			"components":	[{
+					"id":	20,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"o",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[7.875, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	17,
+			"components":	[{
+					"id":	21,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"x",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[8.375, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	18,
+			"components":	[{
+					"id":	22,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"j",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[9.0625, 0],
+			"size":	[0.25, 1],
+			"rotation":	0
+		}, {
+			"id":	19,
+			"components":	[{
+					"id":	23,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"u",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[9.4375, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	20,
+			"components":	[{
+					"id":	24,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"m",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[10.0625, 0],
+			"size":	[0.75, 1],
+			"rotation":	0
+		}, {
+			"id":	21,
+			"components":	[{
+					"id":	25,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"p",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[10.71875, 0],
+			"size":	[0.5625, 1],
+			"rotation":	0
+		}, {
+			"id":	22,
+			"components":	[{
+					"id":	26,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"s",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[11.25, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	23,
+			"components":	[{
+					"id":	27,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"o",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[12.0625, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	24,
+			"components":	[{
+					"id":	28,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"v",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[12.5625, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	25,
+			"components":	[{
+					"id":	29,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"e",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[13.0625, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	26,
+			"components":	[{
+					"id":	30,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"r",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[13.5625, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	27,
+			"components":	[{
+					"id":	31,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"t",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[14.28125, 0],
+			"size":	[0.3125, 1],
+			"rotation":	0
+		}, {
+			"id":	28,
+			"components":	[{
+					"id":	32,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"h",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[14.71875, 0],
+			"size":	[0.5625, 1],
+			"rotation":	0
+		}, {
+			"id":	29,
+			"components":	[{
+					"id":	33,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"e",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[15.25, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	30,
+			"components":	[{
+					"id":	34,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"l",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[15.9375, 0],
+			"size":	[0.25, 1],
+			"rotation":	0
+		}, {
+			"id":	31,
+			"components":	[{
+					"id":	35,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"a",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[16.3125, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	32,
+			"components":	[{
+					"id":	36,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"z",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[16.8125, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	33,
+			"components":	[{
+					"id":	37,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"y",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[17.3125, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	34,
+			"components":	[{
+					"id":	38,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"d",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[18.15625, 0],
+			"size":	[0.5625, 1],
+			"rotation":	0
+		}, {
+			"id":	35,
+			"components":	[{
+					"id":	39,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"o",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[18.6875, 0],
+			"size":	[0.5, 1],
+			"rotation":	0
+		}, {
+			"id":	36,
+			"components":	[{
+					"id":	40,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"g",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[19.21875, 0],
+			"size":	[0.5625, 1],
+			"rotation":	0
+		}, {
+			"id":	37,
+			"components":	[{
+					"id":	41,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	".",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[19.625, 0],
+			"size":	[0.25, 1],
 			"rotation":	0
 		}]
 }

@@ -36,9 +36,11 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
     glm_vec2_scale(size, 0.5f, halfSize);
     glm_vec2_sub(min, halfSize, min);
 
+    float scale = Font_GetScaleForHeight(t->font, size[1]);
+    printf("%f\n", scale);
+
     float x = min[0];
     float y = min[1];
-    float scale = Font_GetScaleForHeight(t->font, size[1]);
 
     int n = strlen(t->text);
     for (int i = 0; i < n; i++) {
@@ -46,16 +48,15 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
         float width = scale * Font_Advance(t->font, t->text[i]);
         float height = size[1];
 
-        float kerning = 0.0f;
-        if (i < n - 1) {kerning = scale * Font_Kerning(t->font, t->text[i], t->text[i+1]);}
-
-        Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
-        Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
-        Entity_AddComponent(entity, spriteRenderer);
-        Scene_AddEntity(scene, entity);
-        List_Push(&t->entities, &entity->id);
-
-        x += width + kerning;
+        if (t->text[i] != ' ') {
+            Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
+            Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
+            Entity_AddComponent(entity, spriteRenderer);
+            Scene_AddEntity(scene, entity);
+            List_Push(&t->entities, &entity->id);
+        }
+        
+        x += width;
     }
     t->isDirty = 0;
 }

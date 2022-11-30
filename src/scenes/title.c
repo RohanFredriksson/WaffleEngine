@@ -37,12 +37,14 @@ void Title_Init(Scene* s) {
 
     // Text Entity
     Font* pixellari = FontPool_Get("assets/fonts/pixellari.ttf", 64);
-    Entity* entityText = Entity_Init((vec2) {-3.0f, 0.0f}, (vec2) {1, 1}, 1);
-    Component* text = TextRenderer_Init("HELLO WORLD", pixellari, (vec4) {1, 1, 1, 1}, 0);
+    Entity* entityText = Entity_Init((vec2) {0.0f, 0.0f}, (vec2) {1, 1}, 1);
+    Component* text = TextRenderer_Init("The quick brown fox jumps over the lazy dog.", pixellari, (vec4) {1, 1, 1, 1}, 0);
     Entity_AddComponent(entityText, text);
     Scene_AddEntity(s, entityText);
 
     // Ainsley
+
+    /*
     Entity* entityAinsley = Entity_Init((vec2) {-4.0f, 0.0f}, (vec2) {1, 1}, 0);
 
     Sprite* spriteAinsley = SpritePool_Get("ainsley");
@@ -63,5 +65,6 @@ void Title_Init(Scene* s) {
     Entity_AddComponent(entityAinsley, spriteRendererAinsley);
     Entity_AddComponent(entityAinsley, eventAinsley);
     Scene_AddEntity(s, entityAinsley);
+    */
 
 }

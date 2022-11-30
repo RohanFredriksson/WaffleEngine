@@ -1,7 +1,7 @@
 #include "font.h"
 
-//#define STB_IMAGE_WRITE_IMPLEMENTATION
-//#include "stb_image_write.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
@@ -29,21 +29,25 @@ bool Font_Init(Font* font, char* filename, int size) {
     fclose(fontFile);
 
     // Prepare the font
-    if (!stbtt_InitFont(&font->info, fontBuffer, 0)) {
+    stbtt_fontinfo info;
+    if (!stbtt_InitFont(&info, fontBuffer, 0)) {
         printf("ERROR::FONT::INIT::FONT_LOADING_FAILED\n");
         return 0;
     }
 
-    // Store all sprites in an array.
+    // Create arrays to store info.
     font->sprites = malloc(FONT_NUM_CHARACTERS * sizeof(Sprite));
+    font->advances = malloc(FONT_NUM_CHARACTERS * sizeof(int));
 
     // Find the scale for a certain pixel height.
-    float scale = stbtt_ScaleForPixelHeight(&font->info, size);
-    
-    int ascent, descent, lineGap;
-    stbtt_GetFontVMetrics(&font->info, &ascent, &descent, &lineGap);
-    ascent = roundf(ascent * scale);
-    descent = roundf(descent * scale);
+    float scale = stbtt_ScaleForPixelHeight(&info, size);
+
+    // Create vertical spacing.
+    int vSpacing = size / 4;
+
+    // Get font's vertical metrics
+    stbtt_GetFontVMetrics(&info, &font->ascent, &font->descent, &font->lineGap);
+    int ascent = roundf(scale * font->ascent);
 
     // Determine the total width required to display all characters.
     int width = 0;
@@ -51,14 +55,14 @@ bool Font_Init(Font* font, char* filename, int size) {
     for (int i = 0; i < FONT_NUM_CHARACTERS; i++) {
         int ax;
 	    int lsb;
-        stbtt_GetCodepointHMetrics(&font->info, i, &ax, &lsb);
+        stbtt_GetCodepointHMetrics(&info, i, &ax, &lsb);
         width += roundf(ax * scale);
     }
 
     // Determine the most optimal square shape for the texture.
     int area = width * size;
     width = sqrtf(area) + 1;
-    height = ((width / size) + 2) * size;
+    height = ((width / size) + 2) * (size + vSpacing);
     
     // Allocate memory to store the grayscale image.
     unsigned char* mask = calloc(width * height, sizeof(unsigned char));
@@ -73,7 +77,8 @@ bool Font_Init(Font* font, char* filename, int size) {
 
         int ax;
 	    int lsb;
-        stbtt_GetCodepointHMetrics(&font->info, i, &ax, &lsb);
+        stbtt_GetCodepointHMetrics(&info, i, &ax, &lsb);
+        font->advances[i] = ax;
 
         // If the character is going out of the buffer, move to new line
         int advance = roundf(ax * scale);
@@ -84,16 +89,16 @@ bool Font_Init(Font* font, char* filename, int size) {
 
         // Get bounding box for characters.
         int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(&font->info, i, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+        stbtt_GetCodepointBitmapBox(&info, i, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
         // Compute the y value
-        int y = (line * size) + ascent + c_y1;
+        int y = (line * (size + vSpacing)) + ascent + c_y1;
         
         // Create the sprite object.
         float x0 = (float) (x) / (float) width;
         float x1 = (float) (x + advance) / (float) width;
         float y0 = (float) (y + size) / (float) height;
-        float y1 = (float) (y) / (float) height;
+        float y1 = (float) (y - ascent - c_y1) / (float) height;
         
         vec2 texCoords[4];
         texCoords[0][0] = x1;
@@ -112,7 +117,7 @@ bool Font_Init(Font* font, char* filename, int size) {
 
         // Render the character
         int byteOffset = x + roundf(lsb * scale) + (y * width);
-        stbtt_MakeCodepointBitmap(&font->info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, i);
+        stbtt_MakeCodepointBitmap(&info, mask + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, i);
 
         // Advance x
         x += advance;
@@ -147,7 +152,7 @@ bool Font_Init(Font* font, char* filename, int size) {
     }
 
     // Debug output
-    // stbi_write_png("out.png", width, height, 4, image, width * 4);
+    stbi_write_png("out.png", width, height, 4, image, width * 4);
 
     free(fontBuffer);
     free(mask);
@@ -158,6 +163,7 @@ bool Font_Init(Font* font, char* filename, int size) {
 
 void Font_Free(Font* font) {
     free(font->sprites);
+    free(font->advances);
     Texture_Free(&font->texture);
 }
 
@@ -168,18 +174,24 @@ Sprite* Font_Get(Font* font, char code) {
 }
 
 float Font_GetScaleForHeight(Font* font, float height) {
-    return stbtt_ScaleForPixelHeight(&font->info, height);
+    return height / (font->ascent - font->descent);
 }
 
 int Font_Advance(Font* font, char code) {
-    int ax;
-    int lsb;
-    stbtt_GetCodepointHMetrics(&font->info, code, &ax, &lsb);
-    return ax;
+    int index = (int) code;
+    return font->advances[index];
 }
 
-int Font_Kerning(Font* font, char current, char next) {
-    return stbtt_GetCodepointKernAdvance(&font->info, current, next);
+int Font_Ascent(Font* font) {
+    return font->ascent;
+}
+
+int Font_Descent(Font* font) {
+    return font->descent;
+}
+
+int Font_LineGap(Font* font) {
+    return font->lineGap;
 }
 
 Texture* Font_GetTexture(Font* font) {

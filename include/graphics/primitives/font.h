@@ -11,11 +11,18 @@
 #define FONT_H
 
 struct Font {
+    
     char* filename;
     int size;
+
+    int ascent;
+    int descent;
+    int lineGap;
+    int* advances;
+    
     Sprite* sprites;
     Texture texture;
-    stbtt_fontinfo info;
+
 };
 typedef struct Font Font;
 
@@ -29,7 +36,11 @@ float Font_GetScaleForHeight(Font* font, float height);
 
 int Font_Advance(Font* font, char code);
 
-int Font_Kerning(Font* font, char current, char next);
+int Font_Ascent(Font* font);
+
+int Font_Descent(Font* font);
+
+int Font_LineGap(Font* font);
 
 Texture* Font_GetTexture(Font* font);
 
