@@ -30,7 +30,35 @@
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
-Shader* Renderer_CurrentShader = NULL;
+static void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex);
+
+static void RenderBatch_Render(RenderBatch* r);
+
+static void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s);
+
+static void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s);
+
+static void RenderBatch_LoadVertexProperties(RenderBatch* r, int index);
+
+static void RenderBatch_GenerateIndices(int* elements);
+
+static void RenderBatch_LoadElementIndices(int* elements, int index);
+
+static bool RenderBatch_HasRoom(RenderBatch* r);
+
+static bool RenderBatch_HasTextureRoom(RenderBatch* r);
+
+static bool RenderBatch_HasTexture(RenderBatch* r, Texture* t);
+
+static void RenderBatch_AddTexture(RenderBatch* r, Texture* t);
+
+static void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t);
+
+static int RenderBatch_Compare(const void* a, const void* b);
+
+static void RenderBatch_Free(RenderBatch* r);
+
+static Shader* Renderer_CurrentShader = NULL;
 
 void Renderer_Init(Renderer* r) {
     r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
@@ -38,20 +66,7 @@ void Renderer_Init(Renderer* r) {
     r->sizeBatches = INITIAL_BATCHES_SIZE;
 }
 
-void Renderer_AddEntity(Renderer* r, Entity* entity) {
-
-    Component* component;
-    int n = List_Length(&entity->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&entity->components, i, &component);
-        if (strcmp(component->type, "SpriteRenderer") == 0) {
-            Renderer_AddSprite(r, (SpriteRenderer*) component->data);
-        }
-    }
-
-}
-
-void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
+static void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
 
     bool added = 0;
     for (int i = 0; i < r->numBatches; i++) {
@@ -116,9 +131,15 @@ void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
 
 }
 
-void Renderer_RemoveEntity(Renderer* r, Entity* entity) {
-    for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_RemoveEntity(r->batches + i, entity);
+void Renderer_AddComponent(Renderer* r, Component* component) {
+    if (strcmp(component->type, "SpriteRenderer") == 0) {
+        Renderer_AddSprite(r, (SpriteRenderer*) component->data);
+    }
+}
+
+void Renderer_RemoveComponent(Renderer* r, Component* component) {
+    if (strcmp(component->type, "SpriteRenderer") == 0) {
+        Renderer_RemoveSprite(r, (SpriteRenderer*) component->data);
     }
 }
 
@@ -150,7 +171,7 @@ void Renderer_Free(Renderer* r) {
     free(r->batches);
 }
 
-void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
+static void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
 
     r->renderer = renderer;
     r->sprites = (SpriteRenderer**) malloc(MAX_BATCH_SIZE * sizeof(SpriteRenderer*));
@@ -203,7 +224,7 @@ void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
 
 }
 
-void RenderBatch_Render(RenderBatch* r) {
+static void RenderBatch_Render(RenderBatch* r) {
 
     bool rebufferData = 0;
     for (int i = 0; i < r->numSprites; i++) {
@@ -272,20 +293,7 @@ void RenderBatch_Render(RenderBatch* r) {
 
 }
 
-void RenderBatch_AddEntity(RenderBatch* r, Entity* entity) {
-
-    Component* component;
-    int n = List_Length(&entity->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&entity->components, i, &component);
-        if (strcmp(component->type, "SpriteRenderer") == 0) {
-            RenderBatch_AddSprite(r, (SpriteRenderer*) component->data);
-        }
-    }
-
-}
-
-void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
+static void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
     // If full do not attempt to add.
     if (!r->hasRoom) {
@@ -313,20 +321,7 @@ void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
 }
 
-void RenderBatch_RemoveEntity(RenderBatch* r, Entity* entity) {
-
-    Component* component;
-    int n = List_Length(&entity->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&entity->components, i, &component);
-        if (strcmp(component->type, "SpriteRenderer") == 0) {
-            RenderBatch_RemoveSprite(r, (SpriteRenderer*) component->data);
-        }
-    }
-
-}
-
-void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
+static void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
     Texture* texture = s->sprite->texture;
     
@@ -348,7 +343,7 @@ void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
 
 }
 
-void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
+static void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
     
     SpriteRenderer* sprite = r->sprites[index];
 
@@ -440,13 +435,13 @@ void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
 
 }
 
-void RenderBatch_GenerateIndices(int* elements) {
+static void RenderBatch_GenerateIndices(int* elements) {
     for (int i = 0; i < MAX_BATCH_SIZE; i++) {
         RenderBatch_LoadElementIndices(elements, i);
     }
 }
 
-void RenderBatch_LoadElementIndices(int* elements, int index) {
+static void RenderBatch_LoadElementIndices(int* elements, int index) {
 
     int offsetArrayIndex = 6 * index;
     int offset = 4 * index;
@@ -463,15 +458,15 @@ void RenderBatch_LoadElementIndices(int* elements, int index) {
 
 }
 
-bool RenderBatch_HasRoom(RenderBatch* r) {
+static bool RenderBatch_HasRoom(RenderBatch* r) {
     return r->hasRoom;
 }
 
-bool RenderBatch_HasTextureRoom(RenderBatch* r) { 
+static bool RenderBatch_HasTextureRoom(RenderBatch* r) { 
     return r->hasTextureRoom;
 }
 
-bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
+static bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     
     // Check if the given texture pointer exists in the array.
     for (int i = 0; i < r->numTextures; i++) {
@@ -484,7 +479,7 @@ bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     return 0;
 }
 
-void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
+static void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
 
     if (!RenderBatch_HasTextureRoom(r)) {
         return;
@@ -500,7 +495,7 @@ void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
 
 }
 
-void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
+static void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
 
     // If the texture is NULL, we don't need to remove it.
     if (t == NULL) {return;}
@@ -523,13 +518,13 @@ void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
 
 }
 
-int RenderBatch_Compare(const void* a, const void* b) {
+static int RenderBatch_Compare(const void* a, const void* b) {
     int aIndex = (*(RenderBatch**) a)->zIndex;
     int bIndex = (*(RenderBatch**) b)->zIndex;
     return aIndex - bIndex;
 }
 
-void RenderBatch_Free(RenderBatch* r) {
+static void RenderBatch_Free(RenderBatch* r) {
     free(r->sprites);
     free(r->textures);
     free(r->vertices);

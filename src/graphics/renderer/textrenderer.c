@@ -7,16 +7,14 @@
 
 static void TextRenderer_ClearText(TextRenderer* t) {
 
-    Entity* entity;
-    int n = List_Length(&t->entities);
+    int n = List_Length(&t->components);
     for (int i = 0; i < n; i++) {
         int id;
-        List_Get(&t->entities, i, &id);
-        Scene* scene = Window_GetScene();
-        entity = Scene_GetEntityByID(scene, id);
-        Entity_Kill(entity);
+        List_Get(&t->components, i, &id);
+        Component* component = Entity_GetComponentByID(t->component->entity, id);
+        if (component != NULL) {Component_Kill(component);}
     }
-    List_Clear(&t->entities);
+    List_Clear(&t->components);
 
 }
 
@@ -24,8 +22,6 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
 
     // Clear the old text that was there.
     TextRenderer_ClearText(t);
-
-    Scene* scene = Window_GetScene();
 
     vec2 size;
     Component_GetSize(t->component, size);
@@ -55,11 +51,22 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
         else {
 
             if (t->text[i] != ' ') {
-                Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
+
+                //Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
                 Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
-                Entity_AddComponent(entity, spriteRenderer);
-                Scene_AddEntity(scene, entity);
-                List_Push(&t->entities, &entity->id);
+
+                vec2 offset;
+                glm_vec2_sub((vec2) {x + width * 0.5f, y + height * 0.5f}, t->component->entity->position, offset);
+                Component_SetPositionOffset(spriteRenderer, offset);
+
+                vec2 scale;
+                glm_vec2_div((vec2) {width, height}, size, scale);
+                Component_SetSizeScale(spriteRenderer, scale);
+
+                Component_SetRotationOffset(spriteRenderer, -t->component->entity->rotation);
+
+                Entity_AddComponent(t->component->entity, spriteRenderer);
+                List_Push(&t->components, &spriteRenderer->id);
             }
             
             x += width;
@@ -127,15 +134,15 @@ static cJSON* TextRenderer_Serialise(Component* c) {
     WIO_AddString(json, "text", t->text);
     WIO_AddString(json, "font", t->font->filename);
 
-    cJSON* entities = cJSON_CreateArray();
+    cJSON* components = cJSON_CreateArray();
     int id;
-    int n = List_Length(&t->entities);
+    int n = List_Length(&t->components);
     for (int i = 0; i < n; i++) {
-        List_Get(&t->entities, i, &id);
-        cJSON* entity = cJSON_CreateNumber(id);
-        cJSON_AddItemToArray(entities, entity);
+        List_Get(&t->components, i, &id);
+        cJSON* component = cJSON_CreateNumber(id);
+        cJSON_AddItemToArray(components, component);
     }
-    cJSON_AddItemToObject(json, "entities", entities);
+    cJSON_AddItemToObject(json, "components", components);
 
     WIO_AddVec4(json, "colour", t->colour);
     WIO_AddInt(json, "zIndex", t->zIndex);
@@ -149,16 +156,14 @@ static void TextRenderer_Free(Component* c) {
     free(t->lastText);
 
     // Kill all the other components.
-    Entity* entity;
-    int n = List_Length(&t->entities);
+    int n = List_Length(&t->components);
     for (int i = 0; i < n; i++) {
         int id;
-        List_Get(&t->entities, i, &id);
-        Scene* scene = Window_GetScene();
-        entity = Scene_GetEntityByID(scene, id);
-        Entity_Kill(entity);
+        List_Get(&t->components, i, &id);
+        Component* component = Entity_GetComponentByID(t->component->entity, id);
+        if (component != NULL) {Component_Kill(component);}
     }
-    List_Free(&t->entities);
+    List_Free(&t->components);
 
 }
 
@@ -166,7 +171,7 @@ TextRenderer* _TextRenderer_Init(Component* c, char* text, Font* font, vec4 colo
 
     TextRenderer* t = malloc(sizeof(TextRenderer));
     t->component = c;
-    List_Init(&t->entities, sizeof(int));
+    List_Init(&t->components, sizeof(int));
     t->text = text;
     t->font = font;
     glm_vec4_copy(colour, t->colour);
@@ -213,12 +218,12 @@ bool TextRenderer_Load(Component* c, cJSON* json) {
     // Initialise the textrenderer class.
     TextRenderer* t = _TextRenderer_Init(c, text, font, colour, zIndex);
 
-    cJSON* entities = cJSON_GetObjectItemCaseSensitive(json, "entities");
-    if (entities != NULL && cJSON_IsArray(entities)) {
+    cJSON* components = cJSON_GetObjectItemCaseSensitive(json, "components");
+    if (components != NULL && cJSON_IsArray(components)) {
         cJSON* id;
-        cJSON_ArrayForEach(id, entities) {
+        cJSON_ArrayForEach(id, components) {
             int value = id->valueint;
-            List_Push(&t->entities, &value);
+            List_Push(&t->components, &value);
         }
     }
 

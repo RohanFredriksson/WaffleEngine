@@ -6,7 +6,6 @@ static char extension[] = ".scene";
 void Scene_Init(Scene* s, char* name, void (*init)(Scene* scene)) {
 
     s->name = name;
-    s->isRunning = 0;
     List_Init(&s->entities, sizeof(Entity*));
     Camera_Init(&s->camera);
     Renderer_Init(&s->renderer);
@@ -18,22 +17,36 @@ void Scene_Init(Scene* s, char* name, void (*init)(Scene* scene)) {
 
 }
 
-void Scene_Start(Scene* s) {
+static void Scene_AddNewComponents(Scene* s) {
 
-    // Add all entities to the renderer.
-    Entity* entity;
+    
     int n = List_Length(&s->entities);
     for (int i = 0; i < n; i++) {
+        
+        Entity* entity;
         List_Get(&s->entities, i, &entity);
-        Renderer_AddEntity(&s->renderer, entity);
-        PhysicsSystem_AddEntity(&s->physics, entity);
+        
+        int m = List_Length(&entity->newComponents);
+        for (int j = 0; j < m; j++) {
+            
+            Component* component;
+            List_Get(&entity->newComponents, j, &component);
+
+            Renderer_AddComponent(&s->renderer, component);
+            PhysicsSystem_AddComponent(&s->physics, component);
+
+        }
+        Entity_ClearNewComponents(entity);
     }
-    s->isRunning = 1;
 
 }
 
 void Scene_Update(Scene* s, float dt) {
 
+    // Add all new components to the specific systems.
+    Scene_AddNewComponents(s);
+
+    // Adjust the projection and step the physics engine.
     Camera_AdjustProjection(&s->camera);
     PhysicsSystem_Update(&s->physics, dt);
 
@@ -126,7 +139,6 @@ bool Scene_Load(Scene* s, char* name) {
 
     // Initial scene initialisation.
     s->name = name;
-    s->isRunning = 0;
     bool success = 0;
 
     // Get the filename.
@@ -188,16 +200,7 @@ bool Scene_Load(Scene* s, char* name) {
 }
 
 void Scene_AddEntity(Scene* s, Entity* entity) {
-
-    // Add the entity.
     List_Push(&s->entities, &entity);
-    
-    // If the scene is running, add all renderable components to the renderer.
-    if (s->isRunning) {
-        Renderer_AddEntity(&s->renderer, entity);
-        PhysicsSystem_AddEntity(&s->physics, entity);
-    }
-
 }
 
 Entity* Scene_GetEntityByID(Scene* s, int id) {

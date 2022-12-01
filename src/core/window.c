@@ -95,7 +95,6 @@ int Window_Init() {
     // Set up the current scene.
     Scene_Init(&scene, "title", Title_Init);
     //Scene_Load(&scene, "title");
-    Scene_Start(&scene);
 
     DebugDraw_Init();
     DebugDraw_Start();

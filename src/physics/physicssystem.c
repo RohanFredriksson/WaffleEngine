@@ -249,7 +249,7 @@ void PhysicsSystem_FixedUpdate(PhysicsSystem* p) {
 
 }
 
-void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
+static void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
     if (p->numRigidbodies >= p->sizeRigidbodies) {
         p->rigidbodies = realloc(p->rigidbodies, p->sizeRigidbodies * 2 * sizeof(Rigidbody*));
@@ -264,7 +264,7 @@ void PhysicsSystem_AddRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 }
 
-void PhysicsSystem_RemoveRigidbody(PhysicsSystem* p, Rigidbody* rb) {
+static void PhysicsSystem_RemoveRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
     for (int i = 0; i < p->numRigidbodies; i++) {
         Rigidbody* current = p->rigidbodies[i];
@@ -278,30 +278,16 @@ void PhysicsSystem_RemoveRigidbody(PhysicsSystem* p, Rigidbody* rb) {
 
 }
 
-void PhysicsSystem_AddEntity(PhysicsSystem* p, Entity* entity) {
-
-    Component* component;
-    int n = List_Length(&entity->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&entity->components, i, &component);
-        if (strcmp(component->type, "Rigidbody") == 0) {
-            PhysicsSystem_AddRigidbody(p, (Rigidbody*) component->data);
-        }
+void PhysicsSystem_AddComponent(PhysicsSystem* p, Component* c) {
+    if (strcmp(c->type, "Rigidbody") == 0) {
+        PhysicsSystem_AddRigidbody(p, (Rigidbody*) c->data);
     }
-
 }
 
-void PhysicsSystem_RemoveEntity(PhysicsSystem* p, Entity* entity) {
-
-    Component* component;
-    int n = List_Length(&entity->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&entity->components, i, &component);
-        if (strcmp(component->type, "Rigidbody") == 0) {
-            PhysicsSystem_RemoveRigidbody(p, (Rigidbody*) component->data);
-        }
+void PhysicsSystem_RemoveComponent(PhysicsSystem* p, Component* c) {
+    if (strcmp(c->type, "Rigidbody") == 0) {
+        PhysicsSystem_RemoveRigidbody(p, (Rigidbody*) c->data);
     }
-
 }
 
 bool PhysicsSystem_Raycast(PhysicsSystem*p, Ray ray, RaycastResult* result) {

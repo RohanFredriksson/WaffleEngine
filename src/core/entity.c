@@ -8,6 +8,7 @@ static Entity* _Entity_Init(int id, bool dead, vec2 position, vec2 size, float r
     e->id = id;
     e->dead = dead;
     List_Init(&e->components, sizeof(Component*));
+    List_Init(&e->newComponents, sizeof(Component*));
     glm_vec2_copy(position, e->position);
     glm_vec2_copy(size, e->size);
     e->rotation = rotation;
@@ -67,6 +68,7 @@ void Entity_Free(Entity* e) {
 
     // Free the array itself.
     List_Free(&e->components);
+    List_Free(&e->newComponents);
 
 }
 
@@ -77,6 +79,15 @@ void Entity_Kill(Entity* e) {
 void Entity_AddComponent(Entity* e, Component* c) {
     c->entity = e;
     List_Push(&e->components, &c);
+    List_Push(&e->newComponents, &c);
+}
+
+bool Entity_HasNewComponents(Entity* e) {
+    return List_Length(&e->newComponents) != 0;
+}
+
+void Entity_ClearNewComponents(Entity* e) {
+    List_Clear(&e->newComponents);
 }
 
 Component* Entity_GetComponent(Entity* e, char* type) {

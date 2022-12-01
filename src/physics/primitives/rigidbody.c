@@ -18,11 +18,8 @@ static cJSON* Rigidbody_Serialise(Component* c) {
 }
 
 static void Rigidbody_Free(Component* c) {
-
-    Rigidbody* rb = (Rigidbody*) c->data;
     Scene* scene = Window_GetScene();
-    PhysicsSystem_RemoveRigidbody(&scene->physics, rb);
-
+    PhysicsSystem_RemoveComponent(&scene->physics, c);
 }
 
 static Rigidbody* _Rigidbody_Init(Component* c, 

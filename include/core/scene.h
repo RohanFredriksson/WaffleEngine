@@ -16,7 +16,6 @@
 
 struct Scene {
     char* name;
-    bool isRunning;
     List entities;
     Camera camera;
     Renderer renderer;

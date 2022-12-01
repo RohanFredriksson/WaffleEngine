@@ -15,21 +15,11 @@ struct Renderer {
 typedef struct Renderer Renderer;
 
 void Renderer_Init(Renderer* r);
-
-void Renderer_AddEntity(Renderer* r, Entity* entity);
-
-void Renderer_AddSprite(Renderer* r, SpriteRenderer* s);
-
-void Renderer_RemoveEntity(Renderer* r, Entity* entity);
-
-void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s);
-
+void Renderer_AddComponent(Renderer* r, Component* component);
+void Renderer_RemoveComponent(Renderer* r, Component* component);
 void Renderer_BindShader(Shader* s);
-
 Shader* Renderer_GetBoundShader();
-
 void Renderer_Render(Renderer* r);
-
 void Renderer_Free(Renderer* r);
 
 struct RenderBatch {
@@ -47,37 +37,5 @@ struct RenderBatch {
     int zIndex;
 };
 typedef struct RenderBatch RenderBatch;
-
-void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex);
-
-void RenderBatch_AddEntity(RenderBatch* r, Entity* entity);
-
-void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s);
-
-void RenderBatch_Render(RenderBatch* r);
-
-void RenderBatch_RemoveEntity(RenderBatch* r, Entity* entity);
-
-void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s);
-
-void RenderBatch_LoadVertexProperties(RenderBatch* r, int index);
-
-void RenderBatch_GenerateIndices(int* elements);
-
-void RenderBatch_LoadElementIndices(int* elements, int index);
-
-bool RenderBatch_HasRoom(RenderBatch* r);
-
-bool RenderBatch_HasTextureRoom(RenderBatch* r);
-
-bool RenderBatch_HasTexture(RenderBatch* r, Texture* t);
-
-void RenderBatch_AddTexture(RenderBatch* r, Texture* t);
-
-void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t);
-
-int RenderBatch_Compare(const void* a, const void* b);
-
-void RenderBatch_Free(RenderBatch* r);
 
 #endif

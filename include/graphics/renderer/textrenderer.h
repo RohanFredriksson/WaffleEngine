@@ -15,7 +15,7 @@ struct TextRenderer {
     vec4 colour;
     int zIndex;
 
-    List entities;
+    List components;
 
     char* lastText;
     Font lastFont;

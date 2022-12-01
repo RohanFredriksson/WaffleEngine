@@ -14,6 +14,7 @@ struct Entity {
     int id;
     bool dead;
     List components;
+    List newComponents;
     vec2 position;
     vec2 size;
     float rotation;
@@ -61,6 +62,10 @@ Component* Entity_GetComponent(Entity* e, char* type);
 Component* Entity_GetComponentByID(Entity* e, int id);
 
 void Entity_AddComponent(Entity* e, Component* c);
+
+bool Entity_HasNewComponents(Entity* e);
+
+void Entity_ClearNewComponents(Entity* e);
 
 Component* Component_Init(char* type);
 

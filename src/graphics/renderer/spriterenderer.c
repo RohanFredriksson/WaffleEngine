@@ -62,11 +62,8 @@ static cJSON* SpriteRenderer_Serialise(Component* c) {
 }
 
 static void SpriteRenderer_Free(Component* c) {
-
-    SpriteRenderer* s = (SpriteRenderer*) c->data;
     Scene* scene = Window_GetScene();
-    Renderer_RemoveSprite(&scene->renderer, s);
-
+    Renderer_RemoveComponent(&scene->renderer, c);
 }
 
 static SpriteRenderer* _SpriteRenderer_Init(Component* c, 
