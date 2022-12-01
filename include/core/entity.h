@@ -26,6 +26,7 @@ struct Component {
 
     int id;
     bool dead;
+    bool ignore;
     char* type;
     Entity* entity;
 
@@ -78,6 +79,10 @@ cJSON* Component_Serialise(Component* c);
 void Component_Free(Component* c);
 
 void Component_Kill(Component* c);
+
+void Component_Ignore(Component* c);
+
+void Component_Unignore(Component* c);
 
 void Component_GetPosition(Component* c, vec2 dest);
 

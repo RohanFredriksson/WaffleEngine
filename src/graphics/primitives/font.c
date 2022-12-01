@@ -170,16 +170,21 @@ cJSON* Font_Serialise(Font* font) {
     return json;
 }
 
-void Font_Load(cJSON* json) {
+Font* Font_Parse(cJSON* json) {
 
     char* filename;
     float size;
 
-    if (!WIO_ParseString(json, "filename", &filename)) {return;}
-    if (!WIO_ParseFloat(json, "size", &size)) {return;}
+    if (!WIO_ParseString(json, "filename", &filename)) {return NULL;}
+    if (!WIO_ParseFloat(json, "size", &size)) {return NULL;}
 
-    FontPool_Get(filename, size);
+    Font* font = FontPool_Get(filename, size);
+    return font;
 
+}
+
+void Font_Load(cJSON* json) {
+    Font_Parse(json);
 }
 
 void Font_Free(Font* font) {

@@ -155,8 +155,10 @@ cJSON* Entity_Serialise(Entity* e) {
     int n = List_Length(&e->components);
     for (int i = 0; i < n; i++) {
         List_Get(&e->components, i, &c);
-        cJSON* component = Component_Serialise(c);
-        cJSON_AddItemToArray(components, component);
+        if (!c->ignore) {
+            cJSON* component = Component_Serialise(c);
+            cJSON_AddItemToArray(components, component);
+        }
     }
     cJSON_AddItemToObject(json, "components", components);
     WIO_AddBool(json, "dead", e->dead);

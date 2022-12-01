@@ -14,6 +14,7 @@ Component* _Component_Init(int id, bool dead, char* type, vec2 positionOffset, v
 
     c->id = id;
     c->dead = dead;
+    c->ignore = 0;
     c->type = type;
     glm_vec2_copy(positionOffset, c->positionOffset);
     glm_vec2_copy(sizeScale, c->sizeScale);
@@ -43,6 +44,14 @@ void Component_Free(Component* c) {
 
 void Component_Kill(Component* c) {
     c->dead = 1; // Flags for the entity to remove this component at the end of its update call.
+}
+
+void Component_Ignore(Component* c) {
+    c->ignore = 1;
+}
+
+void Component_Unignore(Component* c) {
+    c->ignore = 0;
 }
 
 void Component_GetPosition(Component* c, vec2 dest) {
@@ -86,6 +95,7 @@ cJSON* Component_Serialise(Component* c) {
     cJSON* json = cJSON_CreateObject();
     WIO_AddInt(json, "id", c->id);
     WIO_AddString(json, "type", c->type);
+    WIO_AddBool(json, "dead", c->dead);
     cJSON* child;
     if (c->serialise != NULL) {child = c->serialise(c);}
     else {child = cJSON_CreateNull();}
@@ -100,18 +110,18 @@ cJSON* Component_Serialise(Component* c) {
 Component* Component_Load(cJSON* json) {
 
     int id;
-    bool dead;
     char* type;
+    bool dead;
     vec2 positionOffset;
     vec2 sizeScale;
     float rotationOffset;
 
-    if (!WIO_ParseInt(json, "id", &id)) {return NULL;}
-    if (!WIO_ParseBool(json, "dead", &dead)) {return NULL;}
-    if (!WIO_ParseVec2(json, "positionOffset", positionOffset)) {return NULL;}
-    if (!WIO_ParseVec2(json, "sizeScale", sizeScale)) {return NULL;}
-    if (!WIO_ParseFloat(json, "rotationOffset", &rotationOffset)) {return NULL;}
-    if (!WIO_ParseString(json, "type", &type)) {return NULL;}
+    if (!WIO_ParseInt(json, "id", &id)) {printf("A\n"); return NULL;}
+    if (!WIO_ParseBool(json, "dead", &dead)) {dead = 0;}
+    if (!WIO_ParseVec2(json, "positionOffset", positionOffset)) {glm_vec2_zero(positionOffset);}
+    if (!WIO_ParseVec2(json, "sizeScale", sizeScale)) {glm_vec2_one(sizeScale);}
+    if (!WIO_ParseFloat(json, "rotationOffset", &rotationOffset)) {rotationOffset = 0.0f;}
+    if (!WIO_ParseString(json, "type", &type)) {printf("F\n");return NULL;}
     if (type == NULL) {return NULL;}
 
     // Initialise the component class.

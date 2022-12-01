@@ -52,18 +52,17 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
 
             if (t->text[i] != ' ') {
 
-                //Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
                 Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
 
                 vec2 offset;
-                glm_vec2_sub((vec2) {x + width * 0.5f, y + height * 0.5f}, t->component->entity->position, offset);
-                Component_SetPositionOffset(spriteRenderer, offset);
-
                 vec2 scale;
+                glm_vec2_sub((vec2) {x + width * 0.5f, y + height * 0.5f}, t->component->entity->position, offset);
                 glm_vec2_div((vec2) {width, height}, size, scale);
-                Component_SetSizeScale(spriteRenderer, scale);
 
+                Component_SetPositionOffset(spriteRenderer, offset);
+                Component_SetSizeScale(spriteRenderer, scale);
                 Component_SetRotationOffset(spriteRenderer, -t->component->entity->rotation);
+                Component_Ignore(spriteRenderer); // Do not serialise this component.
 
                 Entity_AddComponent(t->component->entity, spriteRenderer);
                 List_Push(&t->components, &spriteRenderer->id);
@@ -132,17 +131,9 @@ static cJSON* TextRenderer_Serialise(Component* c) {
     TextRenderer* t = (TextRenderer*) c->data;
     cJSON* json = cJSON_CreateObject();
     WIO_AddString(json, "text", t->text);
-    WIO_AddString(json, "font", t->font->filename);
 
-    cJSON* components = cJSON_CreateArray();
-    int id;
-    int n = List_Length(&t->components);
-    for (int i = 0; i < n; i++) {
-        List_Get(&t->components, i, &id);
-        cJSON* component = cJSON_CreateNumber(id);
-        cJSON_AddItemToArray(components, component);
-    }
-    cJSON_AddItemToObject(json, "components", components);
+    cJSON* font = Font_Serialise(t->font);
+    cJSON_AddItemToObject(json, "font", font);
 
     WIO_AddVec4(json, "colour", t->colour);
     WIO_AddInt(json, "zIndex", t->zIndex);
@@ -204,28 +195,22 @@ Component* TextRenderer_Init(char* text, Font* font, vec4 colour, int zIndex) {
 bool TextRenderer_Load(Component* c, cJSON* json) {
 
     char* text;
-    char* fontName;
+    Font* font;
     vec4 colour;
     int zIndex;
 
     if (!WIO_ParseInt(json, "zIndex", &zIndex)) {return 0;}
     if (!WIO_ParseVec4(json, "colour", colour)) {return 0;}
     if (!WIO_ParseString(json, "text", &text)) {return 0;}
-    if (!WIO_ParseString(json, "font", &fontName)) {return 0;}
     
-    Font* font = FontPool_Get(fontName, 64);
+    cJSON* f = cJSON_GetObjectItemCaseSensitive(json, "font");
+    if (f == NULL) {return 0;}
+
+    font = Font_Parse(f);
+    if (font == NULL) {return 0;}
 
     // Initialise the textrenderer class.
     TextRenderer* t = _TextRenderer_Init(c, text, font, colour, zIndex);
-
-    cJSON* components = cJSON_GetObjectItemCaseSensitive(json, "components");
-    if (components != NULL && cJSON_IsArray(components)) {
-        cJSON* id;
-        cJSON_ArrayForEach(id, components) {
-            int value = id->valueint;
-            List_Push(&t->components, &value);
-        }
-    }
 
     return 1;
 }
