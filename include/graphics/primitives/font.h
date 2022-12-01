@@ -13,7 +13,7 @@
 struct Font {
     
     char* filename;
-    int size;
+    float size;
 
     int ascent;
     int descent;
@@ -26,7 +26,9 @@ struct Font {
 };
 typedef struct Font Font;
 
-bool Font_Init(Font* font, char* filename, int size);
+bool Font_Init(Font* font, char* filename, float size);
+
+cJSON* Font_Serialise(Font* font);
 
 void Font_Free(Font* font);
 

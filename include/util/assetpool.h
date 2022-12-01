@@ -47,7 +47,8 @@ void TexturePool_Put(Texture* texture);
 void FontPool_Init();
 void FontPool_Clear();
 void FontPool_Free();
+cJSON* FontPool_Serialise();
 
-Font* FontPool_Get(char* filename, int size);
+Font* FontPool_Get(char* filename, float size);
 
 #endif

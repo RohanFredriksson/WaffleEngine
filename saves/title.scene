@@ -1,4 +1,8 @@
 {
+	"fonts":	[{
+			"filename":	"assets/fonts/pixellari.ttf",
+			"size":	64
+		}],
 	"sprites":	[{
 			"name":	"empty",
 			"texture":	null,
@@ -17,9 +21,9 @@
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"camera":	{
-		"position":	[6.5301127433776855, 3.7000772953033447],
+		"position":	[0, 0],
 		"projectionSize":	[21.34375, 12],
-		"zoom":	0.3504939079284668
+		"zoom":	1
 	},
 	"entities":	[{
 			"id":	0,
@@ -66,13 +70,13 @@
 					"type":	"CameraController",
 					"child":	{
 						"isMoving":	false,
-						"initialPosition":	[1.5359506607055664, 0.14715719223022461],
-						"finalPosition":	[1, -1.5],
-						"timeCurrent":	1.0173032283782959,
-						"timeTotal":	1,
-						"timeHalf":	0.5,
-						"distance":	1.7321575880050659,
-						"maxVelocity":	2.205451488494873
+						"initialPosition":	[0, 0],
+						"finalPosition":	[0, 0],
+						"timeCurrent":	0,
+						"timeTotal":	0,
+						"timeHalf":	0,
+						"distance":	0,
+						"maxVelocity":	0
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],

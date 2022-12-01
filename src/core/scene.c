@@ -96,6 +96,9 @@ cJSON* Scene_Serialise(Scene* s) {
 
     cJSON* json = cJSON_CreateObject();
 
+    cJSON* fonts = FontPool_Serialise();
+    cJSON_AddItemToObject(json, "fonts", fonts);
+
     cJSON* sprites = SpritePool_Serialise();
     cJSON_AddItemToObject(json, "sprites", sprites);
 

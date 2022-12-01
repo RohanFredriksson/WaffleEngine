@@ -30,145 +30,27 @@
 #define INITIAL_BATCHES_SIZE 8
 #define MAX_BATCH_SIZE 1000
 
-static void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex);
+static void RenderBatch_LoadElementIndices(int* elements, int index) {
 
-static void RenderBatch_Render(RenderBatch* r);
+    int offsetArrayIndex = 6 * index;
+    int offset = 4 * index;
 
-static void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s);
+    // Triangle 1
+    elements[offsetArrayIndex] = offset + 3;
+    elements[offsetArrayIndex+1] = offset + 2;
+    elements[offsetArrayIndex+2] = offset + 0;
 
-static void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s);
+    // Triangle 2
+    elements[offsetArrayIndex+3] = offset + 0;
+    elements[offsetArrayIndex+4] = offset + 2;
+    elements[offsetArrayIndex+5] = offset + 1;
 
-static void RenderBatch_LoadVertexProperties(RenderBatch* r, int index);
-
-static void RenderBatch_GenerateIndices(int* elements);
-
-static void RenderBatch_LoadElementIndices(int* elements, int index);
-
-static bool RenderBatch_HasRoom(RenderBatch* r);
-
-static bool RenderBatch_HasTextureRoom(RenderBatch* r);
-
-static bool RenderBatch_HasTexture(RenderBatch* r, Texture* t);
-
-static void RenderBatch_AddTexture(RenderBatch* r, Texture* t);
-
-static void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t);
-
-static int RenderBatch_Compare(const void* a, const void* b);
-
-static void RenderBatch_Free(RenderBatch* r);
-
-static Shader* Renderer_CurrentShader = NULL;
-
-void Renderer_Init(Renderer* r) {
-    r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
-    r->numBatches = 0;
-    r->sizeBatches = INITIAL_BATCHES_SIZE;
 }
 
-static void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
-
-    bool added = 0;
-    for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch* currentBatch = r->batches + i;
-        if (RenderBatch_HasRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
-            if (s->sprite->texture == NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
-                RenderBatch_AddSprite(currentBatch, s);
-                added = 1;
-                break;
-            }
-        }
+static void RenderBatch_GenerateIndices(int* elements) {
+    for (int i = 0; i < MAX_BATCH_SIZE; i++) {
+        RenderBatch_LoadElementIndices(elements, i);
     }
-
-    if (!added) {
-
-        // If there is no more space, allocate some more.
-        if (r->numBatches == r->sizeBatches) {
-            r->batches = realloc(r->batches, r->sizeBatches * 2 * sizeof(RenderBatch));
-            r->sizeBatches = r->sizeBatches * 2;
-        }
-
-        // Initialise the new batch.
-
-        // If there are no renderbatches, add a new one to the front of the array.
-        if (r->numBatches == 0) {
-            RenderBatch_Init(r->batches, r, s->zIndex);
-            RenderBatch_AddSprite(r->batches, s);
-            r->numBatches++;
-        }
-
-        // If the new renderbatch has a z index less than the first one, then add it to the
-        // front of the array.
-        else if (r->batches[0].zIndex >= s->zIndex) {
-            memmove(r->batches + 1, r->batches, r->numBatches * sizeof(RenderBatch));
-            RenderBatch_Init(r->batches, r, s->zIndex);
-            RenderBatch_AddSprite(r->batches, s);
-            r->numBatches++;
-        }
-
-        // If the new renderbatch has a z index greater than the last one, append to the end.
-        else if (r->batches[r->numBatches-1].zIndex <= s->zIndex) {
-            RenderBatch_Init(r->batches + r->numBatches, r, s->zIndex);
-            RenderBatch_AddSprite(r->batches + r->numBatches, s);
-            r->numBatches++;
-        }  
-
-        // Maintain the sortedness.
-        else {
-            for (int i = 1; i < r->numBatches; i++) {
-                RenderBatch* previousBatch = r->batches + i - 1;
-                RenderBatch* currentBatch = r->batches + i;
-                if (previousBatch->zIndex < s->zIndex && currentBatch->zIndex >= s->zIndex) {
-                    memmove(r->batches + i + 1, r->batches + i, (r->numBatches - i) * sizeof(RenderBatch));
-                    RenderBatch_Init(r->batches + i, r, s->zIndex);
-                    RenderBatch_AddSprite(r->batches + i, s);
-                    r->numBatches++;
-                    break;
-                }
-            }
-        }
-    }
-
-}
-
-void Renderer_AddComponent(Renderer* r, Component* component) {
-    if (strcmp(component->type, "SpriteRenderer") == 0) {
-        Renderer_AddSprite(r, (SpriteRenderer*) component->data);
-    }
-}
-
-void Renderer_RemoveComponent(Renderer* r, Component* component) {
-    if (strcmp(component->type, "SpriteRenderer") == 0) {
-        Renderer_RemoveSprite(r, (SpriteRenderer*) component->data);
-    }
-}
-
-void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s) {
-    for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_RemoveSprite(r->batches + i, s);
-    }
-}
-
-void Renderer_BindShader(Shader* s) {
-    Renderer_CurrentShader = s;
-}
-
-Shader* Renderer_GetBoundShader() {
-    return Renderer_CurrentShader;
-}
-
-void Renderer_Render(Renderer* r) {
-    Shader_Use(Renderer_CurrentShader);
-    for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_Render(r->batches + i);
-    }
-}
-
-void Renderer_Free(Renderer* r) {
-    for (int i = 0; i < r->numBatches; i++) {
-        RenderBatch_Free(r->batches + i);
-    }
-    free(r->batches);
 }
 
 static void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
@@ -224,123 +106,40 @@ static void RenderBatch_Init(RenderBatch* r, Renderer* renderer, int zIndex) {
 
 }
 
-static void RenderBatch_Render(RenderBatch* r) {
+static void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
 
-    bool rebufferData = 0;
+    // If the texture is NULL, we don't need to remove it.
+    if (t == NULL) {return;}
+
+    // Check if any sprite in the batch, uses the texture,
+    // If not we can remove it.
     for (int i = 0; i < r->numSprites; i++) {
-
-        if(r->sprites[i]->isDirty) {
-            
-            if (r->sprites[i]->lastTexture != NULL) {
-                RenderBatch_RemoveTextureIfNotUsed(r, r->sprites[i]->lastTexture);
-                r->sprites[i]->lastTexture = NULL;
-            }
-
-            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture != NULL) {
-                Renderer_RemoveSprite(r->renderer, r->sprites[i]);
-                Renderer_AddSprite(r->renderer, r->sprites[i]);
-                i--;
-            } 
-            
-            else {
-                RenderBatch_LoadVertexProperties(r, i);
-                r->sprites[i]->isDirty = 0;
-                rebufferData = 1;
-            }
-
-        }
-
-        if (r->sprites[i]->zIndex != r->zIndex) {
-            RenderBatch_RemoveSprite(r, r->sprites[i]);
-            Renderer_AddSprite(r->renderer, r->sprites[i]);
-            i--;
-        }
-
+        if (r->sprites[i]->sprite->texture == t) {return;}
     }
 
-    if (rebufferData) {
-        glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices);
-    }
-
-    // Use shader
-    Shader* shader = Renderer_GetBoundShader(r->renderer);
-    Shader_Use(shader);
-
-    mat4 view;
-    mat4 projection;
-    Camera_GetProjection(&(Window_GetScene()->camera), projection);
-    Camera_GetView(&(Window_GetScene()->camera), view);
-    Shader_UploadMat4(shader, "uProjection", projection);
-    Shader_UploadMat4(shader, "uView", view);
-
+    // Remove the texture.
     for (int i = 0; i < r->numTextures; i++) {
-        glActiveTexture(GL_TEXTURE0 + i + 1);
-        Texture_Bind(r->textures[i]);
-    }
-    int slots[] = {0, 1, 2, 3, 4, 5, 6, 7};
-    Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE+1, slots);
-
-    glBindVertexArray(r->vao);
-    glDrawElements(GL_TRIANGLES, r->numSprites * 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-
-    for (int i = 0; i < r->numTextures; i++) {
-        glActiveTexture(GL_TEXTURE0 + i + 1);
-        Texture_Unbind(r->textures[i]);
-    }
-    Shader_Detach(shader);
-
-}
-
-static void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
-
-    // If full do not attempt to add.
-    if (!r->hasRoom) {
-        return;
-    }
-
-    // Get index and add the render object
-    int index = r->numSprites;
-    r->sprites[index] = s;
-    r->numSprites = r->numSprites + 1;
-
-    // Add the sprites texture, if the batch does not have it.
-    if (s->sprite->texture != NULL) {
-        if (!RenderBatch_HasTexture(r, s->sprite->texture)) {
-            RenderBatch_AddTexture(r, s->sprite->texture);
+        if (r->textures[i] == t) {
+            memmove(r->textures + i, r->textures + i + 1, (r->numTextures - i - 1) * sizeof(Texture*));
+            r->numTextures--;
+            r->hasTextureRoom = 1;
+            return;
         }
-    }
-
-    // Add properites to local vertices array.
-    RenderBatch_LoadVertexProperties(r, index);
-
-    if (r->numSprites >= MAX_BATCH_SIZE) {
-        r->hasRoom = 0;
     }
 
 }
 
-static void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
-
-    Texture* texture = s->sprite->texture;
+static bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
     
-    // Remove the sprite from the batch if in the batch.
-    bool removed = 0;
-    for (int i = 0; i < r->numSprites; i++) {
-        if (r->sprites[i] == s) {
-            memmove(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
-            r->numSprites--;
-            removed = 1;
-            break;
+    // Check if the given texture pointer exists in the array.
+    for (int i = 0; i < r->numTextures; i++) {
+        Texture* current = r->textures[i];
+        if (current == t) {
+            return 1;
         }
     }
 
-    // If removed a sprite, remove the texture if it is not being used by another sprite.
-    if (removed) {
-        RenderBatch_RemoveTextureIfNotUsed(r, texture);
-    }
-
+    return 0;
 }
 
 static void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
@@ -435,27 +234,32 @@ static void RenderBatch_LoadVertexProperties(RenderBatch* r, int index) {
 
 }
 
-static void RenderBatch_GenerateIndices(int* elements) {
-    for (int i = 0; i < MAX_BATCH_SIZE; i++) {
-        RenderBatch_LoadElementIndices(elements, i);
+static void RenderBatch_RemoveSprite(RenderBatch* r, SpriteRenderer* s) {
+
+    Texture* texture = s->sprite->texture;
+    
+    // Remove the sprite from the batch if in the batch.
+    bool removed = 0;
+    for (int i = 0; i < r->numSprites; i++) {
+        if (r->sprites[i] == s) {
+            memmove(r->sprites + i, r->sprites + i + 1, (r->numSprites - i - 1) * sizeof(SpriteRenderer*));
+            r->numSprites--;
+            removed = 1;
+            break;
+        }
     }
+
+    // If removed a sprite, remove the texture if it is not being used by another sprite.
+    if (removed) {
+        RenderBatch_RemoveTextureIfNotUsed(r, texture);
+    }
+
 }
 
-static void RenderBatch_LoadElementIndices(int* elements, int index) {
-
-    int offsetArrayIndex = 6 * index;
-    int offset = 4 * index;
-
-    // Triangle 1
-    elements[offsetArrayIndex] = offset + 3;
-    elements[offsetArrayIndex+1] = offset + 2;
-    elements[offsetArrayIndex+2] = offset + 0;
-
-    // Triangle 2
-    elements[offsetArrayIndex+3] = offset + 0;
-    elements[offsetArrayIndex+4] = offset + 2;
-    elements[offsetArrayIndex+5] = offset + 1;
-
+static void Renderer_RemoveSprite(Renderer* r, SpriteRenderer* s) {
+    for (int i = 0; i < r->numBatches; i++) {
+        RenderBatch_RemoveSprite(r->batches + i, s);
+    }
 }
 
 static bool RenderBatch_HasRoom(RenderBatch* r) {
@@ -464,19 +268,6 @@ static bool RenderBatch_HasRoom(RenderBatch* r) {
 
 static bool RenderBatch_HasTextureRoom(RenderBatch* r) { 
     return r->hasTextureRoom;
-}
-
-static bool RenderBatch_HasTexture(RenderBatch* r, Texture* t) {
-    
-    // Check if the given texture pointer exists in the array.
-    for (int i = 0; i < r->numTextures; i++) {
-        Texture* current = r->textures[i];
-        if (current == t) {
-            return 1;
-        }
-    }
-
-    return 0;
 }
 
 static void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
@@ -495,37 +286,212 @@ static void RenderBatch_AddTexture(RenderBatch* r, Texture* t) {
 
 }
 
-static void RenderBatch_RemoveTextureIfNotUsed(RenderBatch* r, Texture* t) {
+static void RenderBatch_AddSprite(RenderBatch* r, SpriteRenderer* s) {
 
-    // If the texture is NULL, we don't need to remove it.
-    if (t == NULL) {return;}
-
-    // Check if any sprite in the batch, uses the texture,
-    // If not we can remove it.
-    for (int i = 0; i < r->numSprites; i++) {
-        if (r->sprites[i]->sprite->texture == t) {return;}
+    // If full do not attempt to add.
+    if (!r->hasRoom) {
+        return;
     }
 
-    // Remove the texture.
-    for (int i = 0; i < r->numTextures; i++) {
-        if (r->textures[i] == t) {
-            memmove(r->textures + i, r->textures + i + 1, (r->numTextures - i - 1) * sizeof(Texture*));
-            r->numTextures--;
-            r->hasTextureRoom = 1;
-            return;
+    // Get index and add the render object
+    int index = r->numSprites;
+    r->sprites[index] = s;
+    r->numSprites = r->numSprites + 1;
+
+    // Add the sprites texture, if the batch does not have it.
+    if (s->sprite->texture != NULL) {
+        if (!RenderBatch_HasTexture(r, s->sprite->texture)) {
+            RenderBatch_AddTexture(r, s->sprite->texture);
+        }
+    }
+
+    // Add properites to local vertices array.
+    RenderBatch_LoadVertexProperties(r, index);
+
+    if (r->numSprites >= MAX_BATCH_SIZE) {
+        r->hasRoom = 0;
+    }
+
+}
+
+static void Renderer_AddSprite(Renderer* r, SpriteRenderer* s) {
+
+    bool added = 0;
+    for (int i = 0; i < r->numBatches; i++) {
+        RenderBatch* currentBatch = r->batches + i;
+        if (RenderBatch_HasRoom(currentBatch) && currentBatch->zIndex == s->zIndex) {
+            if (s->sprite->texture == NULL || (RenderBatch_HasTexture(currentBatch, s->sprite->texture) || RenderBatch_HasTextureRoom(currentBatch))) {
+                RenderBatch_AddSprite(currentBatch, s);
+                added = 1;
+                break;
+            }
+        }
+    }
+
+    if (!added) {
+
+        // If there is no more space, allocate some more.
+        if (r->numBatches == r->sizeBatches) {
+            r->batches = realloc(r->batches, r->sizeBatches * 2 * sizeof(RenderBatch));
+            r->sizeBatches = r->sizeBatches * 2;
+        }
+
+        // Initialise the new batch.
+
+        // If there are no renderbatches, add a new one to the front of the array.
+        if (r->numBatches == 0) {
+            RenderBatch_Init(r->batches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches, s);
+            r->numBatches++;
+        }
+
+        // If the new renderbatch has a z index less than the first one, then add it to the
+        // front of the array.
+        else if (r->batches[0].zIndex >= s->zIndex) {
+            memmove(r->batches + 1, r->batches, r->numBatches * sizeof(RenderBatch));
+            RenderBatch_Init(r->batches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches, s);
+            r->numBatches++;
+        }
+
+        // If the new renderbatch has a z index greater than the last one, append to the end.
+        else if (r->batches[r->numBatches-1].zIndex <= s->zIndex) {
+            RenderBatch_Init(r->batches + r->numBatches, r, s->zIndex);
+            RenderBatch_AddSprite(r->batches + r->numBatches, s);
+            r->numBatches++;
+        }  
+
+        // Maintain the sortedness.
+        else {
+            for (int i = 1; i < r->numBatches; i++) {
+                RenderBatch* previousBatch = r->batches + i - 1;
+                RenderBatch* currentBatch = r->batches + i;
+                if (previousBatch->zIndex < s->zIndex && currentBatch->zIndex >= s->zIndex) {
+                    memmove(r->batches + i + 1, r->batches + i, (r->numBatches - i) * sizeof(RenderBatch));
+                    RenderBatch_Init(r->batches + i, r, s->zIndex);
+                    RenderBatch_AddSprite(r->batches + i, s);
+                    r->numBatches++;
+                    break;
+                }
+            }
         }
     }
 
 }
 
-static int RenderBatch_Compare(const void* a, const void* b) {
-    int aIndex = (*(RenderBatch**) a)->zIndex;
-    int bIndex = (*(RenderBatch**) b)->zIndex;
-    return aIndex - bIndex;
+static void RenderBatch_Render(RenderBatch* r) {
+
+    bool rebufferData = 0;
+    for (int i = 0; i < r->numSprites; i++) {
+
+        if(r->sprites[i]->isDirty) {
+            
+            if (r->sprites[i]->lastTexture != NULL) {
+                RenderBatch_RemoveTextureIfNotUsed(r, r->sprites[i]->lastTexture);
+                r->sprites[i]->lastTexture = NULL;
+            }
+
+            if (!RenderBatch_HasTexture(r, r->sprites[i]->sprite->texture) && r->sprites[i]->sprite->texture != NULL) {
+                Renderer_RemoveSprite(r->renderer, r->sprites[i]);
+                Renderer_AddSprite(r->renderer, r->sprites[i]);
+                i--;
+            } 
+            
+            else {
+                RenderBatch_LoadVertexProperties(r, i);
+                r->sprites[i]->isDirty = 0;
+                rebufferData = 1;
+            }
+
+        }
+
+        if (r->sprites[i]->zIndex != r->zIndex) {
+            RenderBatch_RemoveSprite(r, r->sprites[i]);
+            Renderer_AddSprite(r->renderer, r->sprites[i]);
+            i--;
+        }
+
+    }
+
+    if (rebufferData) {
+        glBindBuffer(GL_ARRAY_BUFFER, r->vbo);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_BATCH_SIZE * 4 * VERTEX_SIZE * sizeof(float), r->vertices);
+    }
+
+    // Use shader
+    Shader* shader = Renderer_GetBoundShader(r->renderer);
+    Shader_Use(shader);
+
+    mat4 view;
+    mat4 projection;
+    Camera_GetProjection(&(Window_GetScene()->camera), projection);
+    Camera_GetView(&(Window_GetScene()->camera), view);
+    Shader_UploadMat4(shader, "uProjection", projection);
+    Shader_UploadMat4(shader, "uView", view);
+
+    for (int i = 0; i < r->numTextures; i++) {
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        Texture_Bind(r->textures[i]);
+    }
+    int slots[] = {0, 1, 2, 3, 4, 5, 6, 7};
+    Shader_UploadIntArray(shader, "uTextures", TEXTURES_SIZE+1, slots);
+
+    glBindVertexArray(r->vao);
+    glDrawElements(GL_TRIANGLES, r->numSprites * 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    for (int i = 0; i < r->numTextures; i++) {
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        Texture_Unbind(r->textures[i]);
+    }
+    Shader_Detach(shader);
+
 }
 
 static void RenderBatch_Free(RenderBatch* r) {
     free(r->sprites);
     free(r->textures);
     free(r->vertices);
+}
+
+static Shader* Renderer_CurrentShader = NULL;
+
+void Renderer_Init(Renderer* r) {
+    r->batches = malloc(INITIAL_BATCHES_SIZE * sizeof(struct RenderBatch));
+    r->numBatches = 0;
+    r->sizeBatches = INITIAL_BATCHES_SIZE;
+}
+
+void Renderer_AddComponent(Renderer* r, Component* component) {
+    if (strcmp(component->type, "SpriteRenderer") == 0) {
+        Renderer_AddSprite(r, (SpriteRenderer*) component->data);
+    }
+}
+
+void Renderer_RemoveComponent(Renderer* r, Component* component) {
+    if (strcmp(component->type, "SpriteRenderer") == 0) {
+        Renderer_RemoveSprite(r, (SpriteRenderer*) component->data);
+    }
+}
+
+void Renderer_BindShader(Shader* s) {
+    Renderer_CurrentShader = s;
+}
+
+Shader* Renderer_GetBoundShader() {
+    return Renderer_CurrentShader;
+}
+
+void Renderer_Render(Renderer* r) {
+    Shader_Use(Renderer_CurrentShader);
+    for (int i = 0; i < r->numBatches; i++) {
+        RenderBatch_Render(r->batches + i);
+    }
+}
+
+void Renderer_Free(Renderer* r) {
+    for (int i = 0; i < r->numBatches; i++) {
+        RenderBatch_Free(r->batches + i);
+    }
+    free(r->batches);
 }

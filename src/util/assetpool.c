@@ -313,15 +313,15 @@ static HashMap FontPool;
 
 struct FontHash {
     uint64_t filename;
-    uint64_t size;
+    double size;
 };
 typedef struct FontHash FontHash;
 
-FontHash FontPool_Hash(char* filename, int size) {
+FontHash FontPool_Hash(char* filename, float size) {
 
     FontHash result;
     result.filename = OAAT(filename);
-    result.size = (uint64_t) size;
+    result.size = (double) size;
     return result;
 
 }
@@ -357,7 +357,20 @@ void FontPool_Free() {
 
 }
 
-Font* FontPool_Get(char* filename, int size) {
+cJSON* FontPool_Serialise() {
+
+    cJSON* json = cJSON_CreateArray();
+    KeyValue* current = HashMap_Elements(&FontPool);
+    while (current != NULL) {
+        cJSON* font = Font_Serialise(*((Font**) current->value));
+        cJSON_AddItemToArray(json, font);
+        current = current->next;
+    }
+    return json;
+
+}
+
+Font* FontPool_Get(char* filename, float size) {
 
     // Create the ShaderHash object.
     FontHash hash = FontPool_Hash(filename, size);

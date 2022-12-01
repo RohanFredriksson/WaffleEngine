@@ -1,4 +1,5 @@
 #include "font.h"
+#include "wio.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -8,7 +9,7 @@
 
 #define FONT_NUM_CHARACTERS 128
 
-bool Font_Init(Font* font, char* filename, int size) {
+bool Font_Init(Font* font, char* filename, float size) {
 
     font->filename = filename;
     font->size = size;
@@ -159,6 +160,13 @@ bool Font_Init(Font* font, char* filename, int size) {
     free(image);
 
     return 1;
+}
+
+cJSON* Font_Serialise(Font* font) {
+    cJSON* json = cJSON_CreateObject();
+    WIO_AddString(json, "filename", font->filename);
+    WIO_AddFloat(json, "size", font->size);
+    return json;
 }
 
 void Font_Free(Font* font) {
