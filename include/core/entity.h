@@ -13,6 +13,7 @@ struct Entity {
 
     int id;
     bool dead;
+    bool ignore;
     List components;
     List newComponents;
     vec2 position;
@@ -55,6 +56,10 @@ cJSON* Entity_Serialise(Entity* e);
 void Entity_Free(Entity* e);
 
 void Entity_Kill(Entity* e);
+
+void Entity_Ignore(Entity* e);
+
+void Entity_Unignore(Entity* e);
 
 Entity* Entity_Parse(cJSON* json);
 

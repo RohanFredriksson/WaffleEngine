@@ -110,8 +110,10 @@ cJSON* Scene_Serialise(Scene* s) {
     int n = List_Length(&s->entities);
     for (int i = 0; i < n; i++) {
         List_Get(&s->entities, i, &e);
-        cJSON* entity = Entity_Serialise(e);
-        cJSON_AddItemToArray(entities, entity);
+        if (!e->ignore) {
+            cJSON* entity = Entity_Serialise(e);
+            cJSON_AddItemToArray(entities, entity);
+        }
     }
     cJSON_AddItemToObject(json, "entities", entities);
 

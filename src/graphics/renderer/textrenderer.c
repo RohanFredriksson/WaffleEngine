@@ -210,7 +210,7 @@ bool TextRenderer_Load(Component* c, cJSON* json) {
     if (font == NULL) {return 0;}
 
     // Initialise the textrenderer class.
-    TextRenderer* t = _TextRenderer_Init(c, text, font, colour, zIndex);
+    _TextRenderer_Init(c, text, font, colour, zIndex);
 
     return 1;
 }

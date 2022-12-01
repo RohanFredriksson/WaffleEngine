@@ -7,6 +7,7 @@ static Entity* _Entity_Init(int id, bool dead, vec2 position, vec2 size, float r
     Entity* e = (Entity*) malloc(sizeof(Entity));
     e->id = id;
     e->dead = dead;
+    e->ignore = 0;
     List_Init(&e->components, sizeof(Component*));
     List_Init(&e->newComponents, sizeof(Component*));
     glm_vec2_copy(position, e->position);
@@ -74,6 +75,14 @@ void Entity_Free(Entity* e) {
 
 void Entity_Kill(Entity* e) {
     e->dead = 1; // Flags for the scene to remove this entity at the end of its update call.
+}
+
+void Entity_Ignore(Entity* e) {
+    e->ignore = 1;
+}
+
+void Entity_Unignore(Entity* e) {
+    e->ignore = 0;
 }
 
 void Entity_AddComponent(Entity* e, Component* c) {

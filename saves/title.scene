@@ -21,9 +21,9 @@
 			"texCoords":	[[1, 1], [1, 0], [0.5, 0], [0.5, 1]]
 		}],
 	"camera":	{
-		"position":	[-42.317459106445312, -101.65872955322266],
+		"position":	[1.3115136623382568, -0.27169382572174072],
 		"projectionSize":	[21.34375, 12],
-		"zoom":	0.026734856888651848
+		"zoom":	1.948717474937439
 	},
 	"entities":	[{
 			"id":	0,
@@ -74,13 +74,13 @@
 					"dead":	false,
 					"child":	{
 						"isMoving":	false,
-						"initialPosition":	[0, 0],
-						"finalPosition":	[0, 0],
-						"timeCurrent":	0,
-						"timeTotal":	0,
-						"timeHalf":	0,
-						"distance":	0,
-						"maxVelocity":	0
+						"initialPosition":	[-0.37305101752281189, 0.37803694605827332],
+						"finalPosition":	[1, -1.5],
+						"timeCurrent":	1.0332660675048828,
+						"timeTotal":	1,
+						"timeHalf":	0.5,
+						"distance":	2.3264334201812744,
+						"maxVelocity":	2.9621069431304932
 					},
 					"positionOffset":	[0, 0],
 					"sizeScale":	[1, 1],
@@ -148,7 +148,7 @@
 						"collider":	7,
 						"mass":	1,
 						"forceAccum":	[0, -10],
-						"velocity":	[1.3927987813949585, -65.774810791015625],
+						"velocity":	[1.3927987813949585, -446.26614379882812],
 						"sensor":	false,
 						"cor":	0.75
 					},
@@ -208,7 +208,7 @@
 					"rotationOffset":	0
 				}],
 			"dead":	false,
-			"position":	[11.821516036987305, -215.9031982421875],
+			"position":	[64.815811157226562, -9960.7744140625],
 			"size":	[1, 1],
 			"rotation":	0
 		}]
