@@ -19,7 +19,6 @@ void Scene_Init(Scene* s, char* name, void (*init)(Scene* scene)) {
 
 static void Scene_AddNewComponents(Scene* s) {
 
-    
     int n = List_Length(&s->entities);
     for (int i = 0; i < n; i++) {
         
@@ -140,17 +139,11 @@ void Scene_Save(Scene* s) {
 
 }
 
-bool Scene_Load(Scene* s, char* name) {
+bool Scene_Load(Scene* s, char* name, char* filename) {
 
     // Initial scene initialisation.
     s->name = name;
     bool success = 0;
-
-    // Get the filename.
-    char* filename = malloc(strlen(path) + strlen(name) + strlen(extension) + 1);
-    memcpy(filename, path, strlen(path));
-    memcpy(filename + strlen(path), name, strlen(name));
-    memcpy(filename + strlen(path) + strlen(name), extension, strlen(extension) + 1);
 
     // Get the contents of the save file.
     char* contents = WIO_LoadSource(filename);

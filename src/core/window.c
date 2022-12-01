@@ -1,10 +1,7 @@
 #include <stdio.h>
-
 #include "external.h"
 #include "window.h"
 #include "debugdraw.h"
-#include "cameracontroller.h"
-#include "font.h"
 
 #define MAX_VERTEX_BUFFER 512 * 1024
 #define MAX_ELEMENT_BUFFER 128 * 1024
@@ -94,7 +91,7 @@ int Window_Init() {
 
     // Set up the current scene.
     //Scene_Init(&scene, "title", Title_Init);
-    Scene_Load(&scene, "title");
+    Scene_Load(&scene, "title", "saves/title.scene");
 
     DebugDraw_Init();
     DebugDraw_Start();

@@ -37,7 +37,7 @@ cJSON* Scene_Serialise(Scene* s);
 
 void Scene_Save(Scene* s);
 
-bool Scene_Load(Scene* s, char* name);
+bool Scene_Load(Scene* s, char* name, char* filename);
 
 void Scene_AddEntity(Scene* s, Entity* entity);
 
