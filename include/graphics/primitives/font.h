@@ -30,6 +30,8 @@ bool Font_Init(Font* font, char* filename, float size);
 
 cJSON* Font_Serialise(Font* font);
 
+void Font_Load(cJSON* json);
+
 void Font_Free(Font* font);
 
 Sprite* Font_Get(Font* font, char code);

@@ -1,4 +1,5 @@
 #include "font.h"
+#include "assetpool.h"
 #include "wio.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -167,6 +168,18 @@ cJSON* Font_Serialise(Font* font) {
     WIO_AddString(json, "filename", font->filename);
     WIO_AddFloat(json, "size", font->size);
     return json;
+}
+
+void Font_Load(cJSON* json) {
+
+    char* filename;
+    float size;
+
+    if (!WIO_ParseString(json, "filename", &filename)) {return;}
+    if (!WIO_ParseFloat(json, "size", &size)) {return;}
+
+    FontPool_Get(filename, size);
+
 }
 
 void Font_Free(Font* font) {

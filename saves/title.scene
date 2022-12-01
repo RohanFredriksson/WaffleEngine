@@ -118,7 +118,7 @@
 					"child":	{
 						"text":	"The quick brown fox jumps over the lazy dog.\nWe the best music, DJ Khaled.",
 						"font":	"assets/fonts/pixellari.ttf",
-						"components":	[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65],
+						"components":	[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69],
 						"colour":	[1, 1, 1, 1],
 						"zIndex":	0
 					},
@@ -126,7 +126,7 @@
 					"sizeScale":	[1, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	6,
+					"id":	10,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"T",
@@ -137,7 +137,7 @@
 					"sizeScale":	[0.625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	7,
+					"id":	11,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"h",
@@ -148,7 +148,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	8,
+					"id":	12,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -159,7 +159,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	9,
+					"id":	13,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"q",
@@ -170,7 +170,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	10,
+					"id":	14,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"u",
@@ -181,7 +181,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	11,
+					"id":	15,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"i",
@@ -192,7 +192,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	12,
+					"id":	16,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"c",
@@ -203,7 +203,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	13,
+					"id":	17,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"k",
@@ -214,7 +214,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	14,
+					"id":	18,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"b",
@@ -225,7 +225,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	15,
+					"id":	19,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"r",
@@ -236,7 +236,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	16,
+					"id":	20,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"o",
@@ -247,7 +247,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	17,
+					"id":	21,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"w",
@@ -258,7 +258,7 @@
 					"sizeScale":	[0.75, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	18,
+					"id":	22,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"n",
@@ -269,7 +269,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	19,
+					"id":	23,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"f",
@@ -280,7 +280,7 @@
 					"sizeScale":	[0.375, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	20,
+					"id":	24,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"o",
@@ -291,7 +291,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	21,
+					"id":	25,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"x",
@@ -302,7 +302,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	22,
+					"id":	26,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"j",
@@ -313,7 +313,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	23,
+					"id":	27,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"u",
@@ -324,7 +324,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	24,
+					"id":	28,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"m",
@@ -335,7 +335,7 @@
 					"sizeScale":	[0.75, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	25,
+					"id":	29,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"p",
@@ -346,7 +346,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	26,
+					"id":	30,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"s",
@@ -357,7 +357,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	27,
+					"id":	31,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"o",
@@ -368,7 +368,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	28,
+					"id":	32,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"v",
@@ -379,7 +379,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	29,
+					"id":	33,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -390,7 +390,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	30,
+					"id":	34,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"r",
@@ -401,7 +401,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	31,
+					"id":	35,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"t",
@@ -412,7 +412,7 @@
 					"sizeScale":	[0.3125, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	32,
+					"id":	36,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"h",
@@ -423,7 +423,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	33,
+					"id":	37,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -434,7 +434,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	34,
+					"id":	38,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"l",
@@ -445,7 +445,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	35,
+					"id":	39,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"a",
@@ -456,7 +456,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	36,
+					"id":	40,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"z",
@@ -467,7 +467,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	37,
+					"id":	41,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"y",
@@ -478,7 +478,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	38,
+					"id":	42,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"d",
@@ -489,7 +489,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	39,
+					"id":	43,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"o",
@@ -500,7 +500,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	40,
+					"id":	44,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"g",
@@ -511,7 +511,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	41,
+					"id":	45,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	".",
@@ -522,7 +522,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	42,
+					"id":	46,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"W",
@@ -533,7 +533,7 @@
 					"sizeScale":	[0.75, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	43,
+					"id":	47,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -544,7 +544,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	44,
+					"id":	48,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"t",
@@ -555,7 +555,7 @@
 					"sizeScale":	[0.3125, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	45,
+					"id":	49,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"h",
@@ -566,7 +566,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	46,
+					"id":	50,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -577,7 +577,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	47,
+					"id":	51,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"b",
@@ -588,7 +588,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	48,
+					"id":	52,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -599,7 +599,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	49,
+					"id":	53,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"s",
@@ -610,7 +610,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	50,
+					"id":	54,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"t",
@@ -621,7 +621,7 @@
 					"sizeScale":	[0.3125, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	51,
+					"id":	55,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"m",
@@ -632,7 +632,7 @@
 					"sizeScale":	[0.75, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	52,
+					"id":	56,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"u",
@@ -643,7 +643,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	53,
+					"id":	57,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"s",
@@ -654,7 +654,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	54,
+					"id":	58,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"i",
@@ -665,7 +665,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	55,
+					"id":	59,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"c",
@@ -676,7 +676,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	56,
+					"id":	60,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	",",
@@ -687,7 +687,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	57,
+					"id":	61,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"D",
@@ -698,7 +698,7 @@
 					"sizeScale":	[0.6875, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	58,
+					"id":	62,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"J",
@@ -709,7 +709,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	59,
+					"id":	63,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"K",
@@ -720,7 +720,7 @@
 					"sizeScale":	[0.625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	60,
+					"id":	64,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"h",
@@ -731,7 +731,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	61,
+					"id":	65,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"a",
@@ -742,7 +742,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	62,
+					"id":	66,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"l",
@@ -753,7 +753,7 @@
 					"sizeScale":	[0.25, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	63,
+					"id":	67,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"e",
@@ -764,7 +764,7 @@
 					"sizeScale":	[0.5, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	64,
+					"id":	68,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	"d",
@@ -775,7 +775,7 @@
 					"sizeScale":	[0.5625, 1],
 					"rotationOffset":	0
 				}, {
-					"id":	65,
+					"id":	69,
 					"type":	"SpriteRenderer",
 					"child":	{
 						"sprite":	".",
@@ -788,6 +788,75 @@
 				}],
 			"dead":	false,
 			"position":	[0, 0],
+			"size":	[1, 1],
+			"rotation":	0
+		}, {
+			"id":	2,
+			"components":	[{
+					"id":	6,
+					"type":	"Rigidbody",
+					"child":	{
+						"collider":	7,
+						"mass":	1,
+						"forceAccum":	[0, -10],
+						"velocity":	[1, 5.08333396911621],
+						"sensor":	false,
+						"cor":	0.75
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	7,
+					"type":	"Collider",
+					"child":	{
+						"type":	"Circle",
+						"child":	{
+							"radius":	0.5
+						},
+						"rigidbody":	6
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	8,
+					"type":	"SpriteRenderer",
+					"child":	{
+						"sprite":	"ainsley",
+						"colour":	[1, 1, 1, 1],
+						"zIndex":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}, {
+					"id":	9,
+					"type":	"Event",
+					"child":	{
+						"type":	"Trigger",
+						"child":	{
+							"withType":	0,
+							"entityId":	-1,
+							"componentType":	null,
+							"flag":	false
+						},
+						"commands":	[{
+								"type":	"Console",
+								"child":	{
+									"message":	"COLLISION\n"
+								}
+							}],
+						"multi":	true,
+						"cooldown":	0,
+						"cooldownTimeLeft":	0
+					},
+					"positionOffset":	[0, 0],
+					"sizeScale":	[1, 1],
+					"rotationOffset":	0
+				}],
+			"dead":	false,
+			"position":	[-1.9166686534881592, 1.9722223281860352],
 			"size":	[1, 1],
 			"rotation":	0
 		}]

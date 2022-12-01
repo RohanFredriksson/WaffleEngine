@@ -166,7 +166,18 @@ bool Scene_Load(Scene* s, char* name) {
         return 0;
     }
     
-    // Load the sprites required.
+    // Load the required fonts.
+    cJSON* fonts = cJSON_GetObjectItemCaseSensitive(json, "fonts");
+    if (fonts != NULL && cJSON_IsArray(fonts)) {
+        cJSON* font = NULL;
+        cJSON_ArrayForEach(font, fonts) {
+            Font_Load(font);
+        }
+    } else {
+        printf("ERROR::SCENE::LOAD::JSON_PARSE_ERROR: \"fonts\" could not be loaded.\n");
+    }
+
+    // Load the required sprites.
     cJSON* sprites = cJSON_GetObjectItemCaseSensitive(json, "sprites");
     if (sprites != NULL && cJSON_IsArray(sprites)) {
         cJSON* sprite = NULL;
