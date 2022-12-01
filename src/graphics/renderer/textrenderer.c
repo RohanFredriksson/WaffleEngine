@@ -47,15 +47,24 @@ static void TextRenderer_UpdateText(TextRenderer* t) {
         float width = scale * Font_Advance(t->font, t->text[i]);
         float height = size[1];
 
-        if (t->text[i] != ' ') {
-            Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
-            Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
-            Entity_AddComponent(entity, spriteRenderer);
-            Scene_AddEntity(scene, entity);
-            List_Push(&t->entities, &entity->id);
+        if (t->text[i] == '\n') {
+            x = min[0];
+            y -= size[1];
         }
-        
-        x += width;
+
+        else {
+
+            if (t->text[i] != ' ') {
+                Entity* entity = Entity_Init((vec2) { x + width * 0.5f, y + height * 0.5f }, (vec2){ width, height }, 0);
+                Component* spriteRenderer = SpriteRenderer_Init(Font_Get(t->font, t->text[i]), t->colour, t->zIndex);
+                Entity_AddComponent(entity, spriteRenderer);
+                Scene_AddEntity(scene, entity);
+                List_Push(&t->entities, &entity->id);
+            }
+            
+            x += width;
+        }
+
     }
     t->isDirty = 0;
 }
